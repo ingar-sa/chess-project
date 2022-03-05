@@ -4,10 +4,24 @@ public class Piece {
     
     private String name;
     private char color;
+    private boolean captured = false;
+    private boolean hasMoved = false;
 
     protected Piece (String name, char color) {
         this.name = name;
         this.color = color;
+    }
+
+    public void capture() {
+        this.captured = true;
+    }
+
+    public void setHasMoved() {
+        this.hasMoved = true;
+    }
+    
+    public boolean getHasMoved() {
+        return this.hasMoved;
     }
 
     public String getName() {

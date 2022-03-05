@@ -19,11 +19,12 @@ public class Tile {
 
 
     public Piece getPiece() {
-        return piece;
+        return this.piece;
     }
 
 
     public void setPiece(Piece piece) {
+        this.occupied = true;
         this.piece = piece;
     }
 

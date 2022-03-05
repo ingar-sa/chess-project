@@ -2,7 +2,6 @@ package project;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import project.pieces.Bishop;
 import project.pieces.King;
@@ -22,6 +21,19 @@ public class Board {
     
     // Use for release version
     //private Tile[][] boardTiles;
+
+    Board () {
+        makeBoard();
+        placePieces();
+    }
+
+    public ArrayList<ArrayList<Tile>> getBoardTiles() {
+        return boardTiles;
+    }
+
+    public void setBoardTiles(ArrayList<ArrayList<Tile>> boardTiles) {
+        this.boardTiles = boardTiles;
+    }
 
     private ArrayList<ArrayList<Tile>> boardTiles = new ArrayList<ArrayList<Tile>>();
     private final Character[] columnLetters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
@@ -60,12 +72,16 @@ public class Board {
         //White
 
         for (Tile tile : boardTiles.get(1)) {
+            tile.setOccupied(true);
+
             String name = "wP" +tile.getCol();
             Pawn pawn = new Pawn(name, 'w');
             tile.setPiece(pawn);
         }
         
         for (Tile tile : boardTiles.get(0)) {
+            tile.setOccupied(true);
+
             if (tile.getCol() == 1 || tile.getCol() == 8) {
                 String name = "wR" + tile.getCol();
                 Rook rook = new Rook(name, 'w');
@@ -98,12 +114,16 @@ public class Board {
         //Black
 
         for (Tile tile : boardTiles.get(6)) {
+            tile.setOccupied(true);
+
             String name = "bP" + tile.getCol();
             Pawn pawn = new Pawn(name, 'b');
             tile.setPiece(pawn);
         }
 
         for (Tile tile : boardTiles.get(7)) {
+            tile.setOccupied(true); 
+
             if (tile.getCol() == 1 || tile.getCol() == 8) {
                 String name = "bR" + tile.getCol();
                 Rook rook = new Rook(name, 'b');
@@ -135,7 +155,7 @@ public class Board {
     }
 
     
-    private void printBoard() {
+    public void printBoard() {
     
         //Collections.reverse(boardTiles);
         for (int row = 7; row >= 0; row--) {
@@ -161,7 +181,7 @@ public class Board {
         for (char columnLetter : columnLetters) {
             colLetters += "   " + columnLetter + "  ";
         }
-        System.out.println(colLetters + '\n');
+        System.out.println(colLetters + "\n\n");
 
     }
 

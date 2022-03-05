@@ -2,6 +2,11 @@ package project.pieces;
 
 import project.Piece;
 
+
+/*
+
+*/
+
 public class Pawn extends Piece {
     
     public Pawn (String name, char color) {
