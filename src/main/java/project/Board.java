@@ -3,6 +3,8 @@ package project;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import project.pieces.Pawn;
+
 /* --INITIAL IDEA OF THE CLASS. SUBJECT TO CHANGE--
  * Class representing the chess board.
  * This is where game logic and state is handled,
@@ -16,9 +18,9 @@ public class Board {
     //private Tile[][] boardTiles;
 
     private ArrayList<ArrayList<Tile>> boardTiles = new ArrayList<ArrayList<Tile>>();
-    private final Character[] tileLetters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
+    private final Character[] columnLetters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 
-    public void makeBoard() {
+    private void makeBoard() {
         for (int row = 1; row < 9; row++) {
             ArrayList<Tile> rowTiles = new ArrayList<Tile>();   
             
@@ -46,11 +48,36 @@ public class Board {
             boardTiles.add(rowTiles);
         }
     }
+
+    private void placePieces() {
+
+        for (Tile tile : boardTiles.get(0)) {
+                    
+        }
+
+        for (Tile tile : boardTiles.get(1)) {
+            
+        }
+
+        for (Tile tile : boardTiles.get(6)) {
+            
+            Pawn pawn = new Pawn(name, 'b')
+        }
+
+        for (Tile tile : boardTiles.get(7)) {
+            
+        }
+
+        
+    }
     
 
     public static void main(String[] args) {
         Board gameBoard = new Board();
         gameBoard.makeBoard();
+
+        Pawn testPawn = new Pawn("pawn", 'w');
+        String foo = testPawn.getName();
         
     }
 }
