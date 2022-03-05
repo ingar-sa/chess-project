@@ -1,9 +1,12 @@
-package project.Pieces;
-
-/* --INITIAL IDEA OF THE CLASS. SUBJECT TO CHANGE--
- * Parent class for the different chess pieces 
- */
+package project.pieces;
 
 public class Piece {
     
+    private String name;
+    private char color;
+
+    Piece (String name, char color) {
+        this.name = name;
+        this.color = color;
+    }
 }
