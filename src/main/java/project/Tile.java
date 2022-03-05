@@ -1,33 +1,25 @@
 package project;
 import project.pieces.*;
 
-/**
- * Spot
- */
+
 public class Tile {
 
     private Piece piece;
-    private int x;
-    private int y;
+    private int row;
+    private int col;
     private char color; 
     private boolean occupied;
     
     
-    public Tile(int x, int y, char color) {
-        this.x = x;
-        this.y = y;
+    public Tile(int row, int col, char color) {
+        this.row = row;
+        this.col = col;
         this.color = color;
     }
 
 
-    
-
-    /* 
-    * GETTERS AND SETTERS
-    */    
-    
     public Piece getPiece() {
-        return piece;    
+        return piece;
     }
 
 
@@ -36,39 +28,49 @@ public class Tile {
     }
 
 
-    public int getX() {
-        return x;
+    public int getRow() {
+        return this.row;
     }
 
 
-    public void setX(int x) {
-        this.x = x;
+    public void setRow(int row) {
+        this.row = row;
     }
 
 
-    public int getY() {
-        return y;
+    public int getCol() {
+        return this.col;
     }
 
 
-    public void setY(int y) {
-        this.y = y;
+    public void setCol(int col) {
+        this.col = col;
+    }
+
+
+    public char getColor() {
+        return this.color;
+    }
+
+
+    public void setColor(char color) {
+        this.color = color;
     }
 
 
     public boolean isOccupied() {
-        return occupied;
+        return this.occupied;
     }
 
 
     public void setOccupied(boolean occupied) {
         this.occupied = occupied;
     }
-
-    public char getColor() {
-        return this.color;
+    
+    @Override
+    public String toString() {
+        return(this.row + ", " + this.col);
     }
-
 }
     
     

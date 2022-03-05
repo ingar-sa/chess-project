@@ -5,7 +5,7 @@ public class Piece {
     private String name;
     private char color;
 
-    protected Piece (String name, char color) {
+    Piece (String name, char color) {
         this.name = name;
         this.color = color;
     }
@@ -25,7 +25,7 @@ public class Piece {
     public void setColor(char color) {
         this.color = color;
     }
-        
+
 }
 
 

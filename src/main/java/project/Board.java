@@ -2,8 +2,14 @@ package project;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 
+import project.pieces.Bishop;
+import project.pieces.King;
+import project.pieces.Knight;
 import project.pieces.Pawn;
+import project.pieces.Queen;
+import project.pieces.Rook;
 
 /* --INITIAL IDEA OF THE CLASS. SUBJECT TO CHANGE--
  * Class representing the chess board.
@@ -50,34 +56,121 @@ public class Board {
     }
 
     private void placePieces() {
-
-        for (Tile tile : boardTiles.get(0)) {
-                    
-        }
+        
+        //White
 
         for (Tile tile : boardTiles.get(1)) {
+            String name = "wP" +tile.getCol();
+            Pawn pawn = new Pawn(name, 'w');
+            tile.setPiece(pawn);
+        }
+        
+        for (Tile tile : boardTiles.get(0)) {
+            if (tile.getCol() == 1 || tile.getCol() == 8) {
+                String name = "wR" + tile.getCol();
+                Rook rook = new Rook(name, 'w');
+                tile.setPiece(rook);
+            }
+            if (tile.getCol() == 2 || tile.getCol() == 7) {
+                String name = "wK" + tile.getCol();
+                Knight knight = new Knight(name, 'w');
+                tile.setPiece(knight);
+            }
+            if (tile.getCol() == 3 || tile.getCol() == 6) {
+                String name = "wB" + tile.getCol();
+                Bishop bishop = new Bishop(name, 'w');
+                tile.setPiece(bishop);
+            }
             
+            if (tile.getCol() == 4) {
+                String name = "wQ" + tile.getCol();
+                Queen queen = new Queen(name, 'w');
+                tile.setPiece(queen);
+            }
+            
+            if (tile.getCol() == 5) {
+                String name = "wX" + tile.getCol();
+                King king = new King(name, 'w');
+                tile.setPiece(king);        
+            }
         }
 
+        //Black
+
         for (Tile tile : boardTiles.get(6)) {
-            
-            Pawn pawn = new Pawn(name, 'b')
+            String name = "bP" + tile.getCol();
+            Pawn pawn = new Pawn(name, 'b');
+            tile.setPiece(pawn);
         }
 
         for (Tile tile : boardTiles.get(7)) {
+            if (tile.getCol() == 1 || tile.getCol() == 8) {
+                String name = "bR" + tile.getCol();
+                Rook rook = new Rook(name, 'b');
+                tile.setPiece(rook);
+            }
+            if (tile.getCol() == 2 || tile.getCol() == 7) {
+                String name = "bK" + tile.getCol();
+                Knight knight = new Knight(name, 'b');
+                tile.setPiece(knight);
+            }
+            if (tile.getCol() == 3 || tile.getCol() == 6) {
+                String name = "bB" + tile.getCol();
+                Bishop bishop = new Bishop(name, 'b');
+                tile.setPiece(bishop);
+            }
             
+            if (tile.getCol() == 4) {
+                String name = "bQ" + tile.getCol();
+                Queen queen = new Queen(name, 'b');
+                tile.setPiece(queen);
+            }
+            
+            if (tile.getCol() == 5) {
+                String name = "bX" + tile.getCol();
+                King king = new King(name, 'b');
+                tile.setPiece(king);        
+            }
+        }
+    }
+
+    
+    private void printBoard() {
+    
+        //Collections.reverse(boardTiles);
+        for (int row = 7; row >= 0; row--) {
+            String ofRow = (row + 1) + " ";
+            for (int col = 0; col < 8; col++) {
+                
+                Tile tile = boardTiles.get(row).get(col);
+                try {
+                    String piece = tile.getPiece().getName();
+                    ofRow += "| " + piece + ' ';
+                }
+                catch(Exception e) {
+                    ofRow += "| --- "; 
+                }
+            }
+
+            System.out.println(ofRow);
+            //System.out.println();
         }
 
-        
+        String colLetters = "";
+
+        for (char columnLetter : columnLetters) {
+            colLetters += "   " + columnLetter + "  ";
+        }
+        System.out.println(colLetters + '\n');
+
     }
-    
+
 
     public static void main(String[] args) {
         Board gameBoard = new Board();
         gameBoard.makeBoard();
+        gameBoard.placePieces();
 
-        Pawn testPawn = new Pawn("pawn", 'w');
-        String foo = testPawn.getName();
-        
+        gameBoard.printBoard();
     }
 }
