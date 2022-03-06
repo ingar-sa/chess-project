@@ -25,7 +25,6 @@ public class Board {
     }
 
 
-
     private void makeBoard() {
         for (int row = 1; row < 9; row++) {
             for (int column = 1; column < 9; column++) {
@@ -170,15 +169,9 @@ public class Board {
 
     }
 
-
     public Tile[][] getBoardTiles() {
         return boardTiles;
     }
-
-    public void setBoardTiles(Tile[][] boardTiles) {
-        this.boardTiles = boardTiles;
-    }
-    
 
     public static void main(String[] args) {
         Board gameBoard = new Board();

@@ -12,59 +12,42 @@ import project.pieces.Rook;
 
 public class PlayerMove {
 
-    public void checkAvailableMoves(Tile tileFrom) {
-        
-    }
-    
-    public void playerMove(Tile tileFrom, Tile tileTo) {
-        Piece piece = tileFrom.getPiece();
-        tileTo.setPiece(piece);
-        tileFrom.setPiece(null);
+    private Board board;
+    private char color;
 
-        switch (piece) {
-            case piece.equals():
-                
-                break;
-        
-            default:
-                break;
-        }
+    PlayerMove (Board board, char color) {
+        this.board = board;
+        this.color = color;
     }
 
-    public void legalPawnMove(Tile tileFrom, ArrayList<ArrayList<Tile>> chessBoard) {
-        Piece piece = tileFrom.getPiece();
-        int row = tileFrom.getRow();
-        int col = tileFrom.getCol();
-        int maxMoveDistance = 1;
+    public void moveHandler() {
+        //This method calls all the other methods needed to check
+        //for valid moves
+    }
 
+    private int[] getTile() {
+        return 
+    }
 
-        if (piece.getHasMoved()) {
-
-        }
-        if (!piece.getHasMoved()) {
-            maxMoveDistance = 2;
-            chessBoard.get(row + 1).get(col);
-            chessBoard.get(row + 2).get(col);
-        }
+    private void legalPawnMove(Tile tile) {
         
     }
 
     public static void main(String[] args) {
         Board testBoard = new Board();
-        PlayerMove testMover = new PlayerMove();
-        testBoard.printBoard();
+        PlayerMove white = new PlayerMove(testBoard, 'w');
+        PlayerMove black = new PlayerMove(testBoard, 'b');
+        Pawn testPawn = new Pawn("foo", 'w');
 
-        /*Tile tileFrom = testBoard.getBoardTiles().get(0).get(0);
-        Tile tileTo = testBoard.getBoardTiles().get(2).get(4);
-        testMover.playerMove(tileFrom, tileTo);
-        testBoard.printBoard();
-        */
+        Tile[][] whiteTiles = white.board.getBoardTiles();
+        whiteTiles[3][4].setPiece(testPawn);
 
-        Piece piece;
-        Pawn pawn = new Pawn("foo", 'w');
+        black.board.printBoard();
+        
+        
 
-        piece = pawn;
-        System.out.println(piece.getClass());
-
+        //Game
+        
+        
     }
 }
