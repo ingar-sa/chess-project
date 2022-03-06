@@ -3,12 +3,15 @@ package project;
 public class Piece {
     
     private String name;
+    private char pieceType;
     private char color;
     private boolean captured = false;
     private boolean hasMoved = false;
 
-    protected Piece (String name, char color) {
+
+    protected Piece (String name,  char color) {
         this.name = name;
+        //this.pieceType = pieceType;
         this.color = color;
     }
 
@@ -20,7 +23,7 @@ public class Piece {
         this.hasMoved = true;
     }
     
-    public boolean getHasMoved() {
+    public boolean hasMoved() {
         return this.hasMoved;
     }
 
@@ -39,7 +42,22 @@ public class Piece {
     public void setColor(char color) {
         this.color = color;
     }
-        
+
+    public char getPieceType() {
+        return pieceType;
+    }
+
+    public void setPieceType(char pieceType) {
+        this.pieceType = pieceType;
+    }
+
+    public boolean isCaptured() {
+        return captured;
+    }
+
+    public void setCaptured(boolean captured) {
+        this.captured = captured;
+    }    
 }
 
 

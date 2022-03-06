@@ -15,8 +15,8 @@ public class Pawn extends Piece {
         super(name, color);
     }
 
-    
-    public boolean isMovedTwo() {
+
+    public boolean hasMovedTwo() {
         return this.movedTwo;
     }
 

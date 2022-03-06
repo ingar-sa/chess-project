@@ -26,26 +26,26 @@ public class Board {
 
 
     private void makeBoard() {
-        for (int row = 1; row < 9; row++) {
-            for (int column = 1; column < 9; column++) {
+        for (int row = 0; row < 8; row++) {
+            for (int column = 0; column < 8; column++) {
                 
                 char firstColor;
                 char secondColor; 
                 char tileColor;
 
                 if (row % 2 == 1) {
-                    firstColor = 'b';
-                    secondColor = 'w';
-                } 
-                else {
                     firstColor = 'w';
                     secondColor = 'b';
+                } 
+                else {
+                    firstColor = 'b';
+                    secondColor = 'w';
                 }
 
                 tileColor = (column % 2 == 1) ? firstColor : secondColor;
 
                 Tile tile = new Tile(row, column, tileColor);
-                boardTiles[row - 1][column - 1] = tile;
+                boardTiles[row][column] = tile;
             }
         }
     }
@@ -58,7 +58,7 @@ public class Board {
         for (Tile tile : boardTiles[1]) {
             tile.setOccupied(true);
 
-            String name = "wP" +tile.getCol();
+            String name = "wP" + tile.getCol();
             Pawn pawn = new Pawn(name, 'w');
             tile.setPiece(pawn);
         }
@@ -66,29 +66,29 @@ public class Board {
         for (Tile tile : boardTiles[0]) {
             tile.setOccupied(true);
 
-            if (tile.getCol() == 1 || tile.getCol() == 8) {
+            if (tile.getCol() == 0 || tile.getCol() == 7) {
                 String name = "wR" + tile.getCol();
                 Rook rook = new Rook(name, 'w');
                 tile.setPiece(rook);
             }
-            if (tile.getCol() == 2 || tile.getCol() == 7) {
+            if (tile.getCol() == 1 || tile.getCol() == 6) {
                 String name = "wK" + tile.getCol();
                 Knight knight = new Knight(name, 'w');
                 tile.setPiece(knight);
             }
-            if (tile.getCol() == 3 || tile.getCol() == 6) {
+            if (tile.getCol() == 2 || tile.getCol() == 5) {
                 String name = "wB" + tile.getCol();
                 Bishop bishop = new Bishop(name, 'w');
                 tile.setPiece(bishop);
             }
             
-            if (tile.getCol() == 4) {
+            if (tile.getCol() == 3) {
                 String name = "wQ" + tile.getCol();
                 Queen queen = new Queen(name, 'w');
                 tile.setPiece(queen);
             }
             
-            if (tile.getCol() == 5) {
+            if (tile.getCol() == 4) {
                 String name = "wX" + tile.getCol();
                 King king = new King(name, 'w');
                 tile.setPiece(king);        
@@ -108,29 +108,29 @@ public class Board {
         for (Tile tile : boardTiles[7]) {
             tile.setOccupied(true); 
 
-            if (tile.getCol() == 1 || tile.getCol() == 8) {
+            if (tile.getCol() == 0 || tile.getCol() == 7) {
                 String name = "bR" + tile.getCol();
                 Rook rook = new Rook(name, 'b');
                 tile.setPiece(rook);
             }
-            if (tile.getCol() == 2 || tile.getCol() == 7) {
+            if (tile.getCol() == 1 || tile.getCol() == 6) {
                 String name = "bK" + tile.getCol();
                 Knight knight = new Knight(name, 'b');
                 tile.setPiece(knight);
             }
-            if (tile.getCol() == 3 || tile.getCol() == 6) {
+            if (tile.getCol() == 2 || tile.getCol() == 5) {
                 String name = "bB" + tile.getCol();
                 Bishop bishop = new Bishop(name, 'b');
                 tile.setPiece(bishop);
             }
             
-            if (tile.getCol() == 4) {
+            if (tile.getCol() == 3) {
                 String name = "bQ" + tile.getCol();
                 Queen queen = new Queen(name, 'b');
                 tile.setPiece(queen);
             }
             
-            if (tile.getCol() == 5) {
+            if (tile.getCol() == 4) {
                 String name = "bX" + tile.getCol();
                 King king = new King(name, 'b');
                 tile.setPiece(king);        
@@ -143,7 +143,7 @@ public class Board {
     
         //Collections.reverse(boardTiles);
         for (int row = 7; row >= 0; row--) {
-            String ofRow = (row + 1) + " ";
+            String ofRow = (row) + " ";
             for (int col = 0; col < 8; col++) {
                 
                 Tile tile = boardTiles[row][col];
