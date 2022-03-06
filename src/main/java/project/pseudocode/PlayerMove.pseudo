@@ -1,0 +1,19 @@
+
+
+Person clicks on a tile in GUI -> 
+interface calls getTile() in PlayerMove to get tile
+
+private Tile getTile(int row, int col) {
+    return boardTiles[row][col]
+}
+
+private void MoveHandler() {
+    Tile tile = getTile(input from user interface);
+    Piece piece;
+
+    if (tile.isOccupied()) {
+
+    }
+}
+
+

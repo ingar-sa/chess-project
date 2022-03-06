@@ -9,6 +9,7 @@ import project.pieces.Pawn;
 import project.pieces.Queen;
 import project.pieces.Rook;
 
+
 public class PlayerMove {
 
     public void checkAvailableMoves(Tile tileFrom) {
@@ -53,10 +54,17 @@ public class PlayerMove {
         PlayerMove testMover = new PlayerMove();
         testBoard.printBoard();
 
-        Tile tileFrom = testBoard.getBoardTiles().get(0).get(0);
+        /*Tile tileFrom = testBoard.getBoardTiles().get(0).get(0);
         Tile tileTo = testBoard.getBoardTiles().get(2).get(4);
         testMover.playerMove(tileFrom, tileTo);
         testBoard.printBoard();
+        */
+
+        Piece piece;
+        Pawn pawn = new Pawn("foo", 'w');
+
+        piece = pawn;
+        System.out.println(piece.getClass());
 
     }
 }

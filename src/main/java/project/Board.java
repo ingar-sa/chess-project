@@ -1,8 +1,5 @@
 package project;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-
 import project.pieces.Bishop;
 import project.pieces.King;
 import project.pieces.Knight;
@@ -18,30 +15,19 @@ import project.pieces.Rook;
 
 
 public class Board {
-    
-    // Use for release version
-    //private Tile[][] boardTiles;
+
+    private Tile[][] boardTiles = new Tile[8][8];
+    private final Character[] columnLetters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 
     Board () {
         makeBoard();
         placePieces();
     }
 
-    public ArrayList<ArrayList<Tile>> getBoardTiles() {
-        return boardTiles;
-    }
 
-    public void setBoardTiles(ArrayList<ArrayList<Tile>> boardTiles) {
-        this.boardTiles = boardTiles;
-    }
-
-    private ArrayList<ArrayList<Tile>> boardTiles = new ArrayList<ArrayList<Tile>>();
-    private final Character[] columnLetters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 
     private void makeBoard() {
         for (int row = 1; row < 9; row++) {
-            ArrayList<Tile> rowTiles = new ArrayList<Tile>();   
-            
             for (int column = 1; column < 9; column++) {
                 
                 char firstColor;
@@ -60,18 +46,17 @@ public class Board {
                 tileColor = (column % 2 == 1) ? firstColor : secondColor;
 
                 Tile tile = new Tile(row, column, tileColor);
-                rowTiles.add(tile);       
+                boardTiles[row - 1][column - 1] = tile;
             }
-
-            boardTiles.add(rowTiles);
         }
     }
+
 
     private void placePieces() {
         
         //White
 
-        for (Tile tile : boardTiles.get(1)) {
+        for (Tile tile : boardTiles[1]) {
             tile.setOccupied(true);
 
             String name = "wP" +tile.getCol();
@@ -79,7 +64,7 @@ public class Board {
             tile.setPiece(pawn);
         }
         
-        for (Tile tile : boardTiles.get(0)) {
+        for (Tile tile : boardTiles[0]) {
             tile.setOccupied(true);
 
             if (tile.getCol() == 1 || tile.getCol() == 8) {
@@ -113,7 +98,7 @@ public class Board {
 
         //Black
 
-        for (Tile tile : boardTiles.get(6)) {
+        for (Tile tile : boardTiles[6]) {
             tile.setOccupied(true);
 
             String name = "bP" + tile.getCol();
@@ -121,7 +106,7 @@ public class Board {
             tile.setPiece(pawn);
         }
 
-        for (Tile tile : boardTiles.get(7)) {
+        for (Tile tile : boardTiles[7]) {
             tile.setOccupied(true); 
 
             if (tile.getCol() == 1 || tile.getCol() == 8) {
@@ -162,7 +147,7 @@ public class Board {
             String ofRow = (row + 1) + " ";
             for (int col = 0; col < 8; col++) {
                 
-                Tile tile = boardTiles.get(row).get(col);
+                Tile tile = boardTiles[row][col];
                 try {
                     String piece = tile.getPiece().getName();
                     ofRow += "| " + piece + ' ';
@@ -176,7 +161,7 @@ public class Board {
             //System.out.println();
         }
 
-        String colLetters = "";
+        String colLetters = "  ";
 
         for (char columnLetter : columnLetters) {
             colLetters += "   " + columnLetter + "  ";
@@ -185,6 +170,15 @@ public class Board {
 
     }
 
+
+    public Tile[][] getBoardTiles() {
+        return boardTiles;
+    }
+
+    public void setBoardTiles(Tile[][] boardTiles) {
+        this.boardTiles = boardTiles;
+    }
+    
 
     public static void main(String[] args) {
         Board gameBoard = new Board();
