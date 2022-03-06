@@ -90,7 +90,7 @@ public class PlayerMove {
         if (attackRight.isOccupied() && attackRight.getPiece().getColor() != this.color) {
             legalPawnMoves.add(new int[]{attackRight.getRow(), attackRight.getCol()});
         }
-        
+
         // if (passantLeft.isOccupied() && passantLeft.getPiece().getColor() != this.color && passantLeft.getPiece().hasMovedTwo()){
         //     legalPawnMoves.add(new int[]{passantLeft.getRow(), passantLeft.getCol()});
         // }
@@ -117,6 +117,8 @@ public class PlayerMove {
 
     private ArrayList<int[]> legalQueenMove(Tile tile) {
     }
+
+    Does this push to Erlend?
     */
 
     public static void main(String[] args) {
