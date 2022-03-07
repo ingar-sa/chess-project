@@ -17,7 +17,7 @@ import project.pieces.Rook;
 public class Board {
 
     private Tile[][] boardTiles = new Tile[8][8];
-    private final Character[] columnLetters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
+    private final int[] columnLetters = {0, 1, 2, 3, 4, 5, 6, 7};
 
     Board () {
         makeBoard();
@@ -162,7 +162,7 @@ public class Board {
 
         String colLetters = "  ";
 
-        for (char columnLetter : columnLetters) {
+        for (int columnLetter : columnLetters) {
             colLetters += "   " + columnLetter + "  ";
         }
         System.out.println(colLetters + "\n\n");

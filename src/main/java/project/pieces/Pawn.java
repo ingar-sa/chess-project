@@ -11,24 +11,21 @@ public class Pawn extends Piece {
 
     private boolean movedTwo = false;
     //private boolean movedTwoLastTurn = false;
-    private int moveNumber;
+    //private int moveNumber;
     
     public Pawn (String name, char color) {
         super(name, color);
     }
 
-
     public boolean hasMovedTwo() {
         return this.movedTwo;
     }
-    //endre
-    public void setMovedTwo(boolean movedTwo) {
-        this.movedTwo = movedTwo;
-        //legg til 
-        //this.movedTwoLastTurn = true;
+    
+    public void setMovedTwo() {
+        this.movedTwo = true;
     }
 
-    public void setmoveNumber(int moveNumber) {
+    public void setMoveNumber(int moveNumber) {
         this.moveNumber = moveNumber;
     }
 

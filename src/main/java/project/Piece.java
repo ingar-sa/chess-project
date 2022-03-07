@@ -7,6 +7,7 @@ public class Piece {
     private char color;
     private boolean captured = false;
     private boolean hasMoved = false;
+    private int moveNumber;
 
 
     protected Piece (String name,  char color) {

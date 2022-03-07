@@ -49,12 +49,12 @@ public class Tile {
     }
 
 
-    public char getColor() {
+    public char getTileColor() {
         return this.color;
     }
 
 
-    public void setColor(char color) {
+    public void setTileColor(char color) {
         this.color = color;
     }
 
