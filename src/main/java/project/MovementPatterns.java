@@ -19,12 +19,13 @@ public class MovementPatterns {
 
     private Board board;
     private char color;
-    private Tile[][] boardTiles = board.getBoardTiles();
+    private Tile[][] boardTiles;
     
 
     MovementPatterns (Board board, char color) {
         this.board = board;
         this.color = color;
+        this.boardTiles = board.getBoardTiles();
     }
 
    
@@ -34,11 +35,11 @@ public class MovementPatterns {
         Piece piece = tile.getPiece();
         
         if (piece instanceof Pawn) legalMoves = pawnMoves(tile);
-        else if (piece instanceof Bishop) bishopMoves(tile);
-        else if (piece instanceof Rook) rookMoves(tile);
-        // else if (piece instanceof Knight) legalKnightMove(tile);
-        // else if (piece instanceof King) legalKingMove(tile);
-        // else if (piece instanceof Queen) legalQueenMove(tile);
+        else if (piece instanceof Bishop) legalMoves = bishopMoves(tile);
+        else if (piece instanceof Rook) legalMoves = rookMoves(tile);
+        else if (piece instanceof Knight) legalMoves = knightMoves(tile);
+        else if (piece instanceof King) legalMoves = kingMoves(tile);
+        else if (piece instanceof Queen) legalMoves = queenMoves(tile);
     }
 
     private Tile getTile(Tile tile) {
@@ -355,7 +356,7 @@ public class MovementPatterns {
         
     }
 
-    private ArrayList<int[]> kingMove(Tile tile) {
+    private ArrayList<int[]> kingMoves(Tile tile) {
 
         ArrayList<int[]> legalMoves = new ArrayList<int[]>();
 
@@ -421,7 +422,7 @@ public class MovementPatterns {
         return legalMoves;
     }   
 
-    private ArrayList<int[]> knightMove(Tile tile) {
+    private ArrayList<int[]> knightMoves(Tile tile) {
 
         ArrayList<int[]> legalMoves = new ArrayList<int[]>();
         ArrayList<int[]> moveCoordinates = new ArrayList<int[]>();        
@@ -453,7 +454,7 @@ public class MovementPatterns {
     
 
     
-void makeMove(Tile ourTile, ArrayList<int[]> legalMoves, int[] debugChoice) {
+    void makeMove(Tile ourTile, ArrayList<int[]> legalMoves, int[] debugChoice) {
         //Some code to choose which move the player picks from the interface
         Tile[][] boardTiles = board.getBoardTiles();
         Tile newTile = boardTiles[debugChoice[0]][debugChoice[1]];
@@ -466,7 +467,6 @@ void makeMove(Tile ourTile, ArrayList<int[]> legalMoves, int[] debugChoice) {
         Board testBoard = new Board();
 
         MovementPatterns white = new MovementPatterns(testBoard, 'w');
-        MovementPatterns black = new MovementPatterns(testBoard, 'b');
 
         Tile[][] boardTiles = testBoard.getBoardTiles();
 
@@ -474,7 +474,7 @@ void makeMove(Tile ourTile, ArrayList<int[]> legalMoves, int[] debugChoice) {
 
         boardTiles[3][3].setPiece(q1);
         testBoard.printBoard();
-        black.moveHandler(boardTiles[3][3]);
+        white.moveHandler(boardTiles[3][3]);
         
 
         /* PAWN
