@@ -1,6 +1,8 @@
 package project;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 import project.Piece;
 import project.pieces.Bishop;
@@ -13,31 +15,31 @@ import project.pieces.Rook;
 // Husk en passant må skje rett etter motstander har flyttet + queen promotion
 
 
-public class PlayerMove {
+public class MovementPatterns {
 
     private Board board;
     private char color;
+    private Tile[][] boardTiles = board.getBoardTiles();
+    
 
-    PlayerMove (Board board, char color) {
+    MovementPatterns (Board board, char color) {
         this.board = board;
         this.color = color;
     }
 
+   
     public void moveHandler(Tile tile) {
         if (!(tile.isOccupied() && tile.getPiece().getColor() == this.color)) return;
         ArrayList<int[]> legalMoves = new ArrayList<int[]>();
         Piece piece = tile.getPiece();
         
-        if (piece instanceof Pawn) legalMoves = legalPawnMove(tile);
-        else if (piece instanceof Bishop) legalBishopMove(tile);
-        System.out.println(legalMoves);
-        // else if (piece instanceof Rook) legalRookMove(tile);
+        if (piece instanceof Pawn) legalMoves = pawnMoves(tile);
+        else if (piece instanceof Bishop) bishopMoves(tile);
+        else if (piece instanceof Rook) rookMoves(tile);
         // else if (piece instanceof Knight) legalKnightMove(tile);
         // else if (piece instanceof King) legalKingMove(tile);
         // else if (piece instanceof Queen) legalQueenMove(tile);
     }
-
-    
 
     private Tile getTile(Tile tile) {
         if (tile.isOccupied() && tile.getPiece().getColor() == this.color) {
@@ -47,7 +49,7 @@ public class PlayerMove {
         return null;
     }
 
-    private ArrayList<int[]> legalPawnMove(Tile tile) {     
+    private ArrayList<int[]> pawnMoves(Tile tile) {     
         ArrayList<int[]> legalPawnMoves = new ArrayList<int[]>();
         
         Tile[][] boardTiles = board.getBoardTiles();
@@ -148,14 +150,12 @@ public class PlayerMove {
         return legalPawnMoves;
     }
 
-
-    private ArrayList<int[]> legalBishopMove(Tile tile) {
+    private ArrayList<int[]> bishopMoves(Tile tile) {
         
         ArrayList<int[]> legalMoves = new ArrayList<int[]>();
 
         Tile[][] boardTiles = board.getBoardTiles();
         
-        Bishop bishop = (Bishop)tile.getPiece(); 
         int row = tile.getRow();
         int col = tile.getCol();
 
@@ -184,7 +184,7 @@ public class PlayerMove {
 
         whileRow = row + 1;
         whileCol = col - 1;
-        while(whileRow < 8 && whileCol > 0) {
+        while(whileRow < 8 && whileCol >= 0) {
             
             Tile checkedTile = boardTiles[whileRow][whileCol]; 
             
@@ -206,7 +206,7 @@ public class PlayerMove {
 
         whileRow = row - 1;
         whileCol = col + 1;
-        while(whileRow > 0 && whileCol < 8) {
+        while(whileRow >= 0 && whileCol < 8) {
             
             Tile checkedTile = boardTiles[whileRow][whileCol]; 
             
@@ -228,7 +228,7 @@ public class PlayerMove {
         
         whileRow = row - 1;
         whileCol = col - 1; 
-        while(whileRow > 0 && whileCol > 0) {
+        while(whileRow >= 0 && whileCol >= 0) {
             
             Tile checkedTile = boardTiles[whileRow][whileCol]; 
             
@@ -251,23 +251,209 @@ public class PlayerMove {
         return legalMoves;
     }
 
+    private ArrayList<int[]> rookMoves(Tile tile) {
+        
+        ArrayList<int[]> legalMoves = new ArrayList<int[]>();
 
-    /*
-    private ArrayList<int[]> legalRookMove(Tile tile) {
+        Tile[][] boardTiles = board.getBoardTiles();
+        
+        int row = tile.getRow();
+        int col = tile.getCol();
+
+        int whileRow = row + 1;
+          
+        while(whileRow < 8) {
+            
+            Tile checkedTile = boardTiles[whileRow][col]; 
+            
+            if (checkedTile.isOccupied() 
+                && checkedTile.getPiece().getColor() == this.color) {
+                break;
+            }
+            if (checkedTile.isOccupied() 
+                && checkedTile.getPiece().getColor() != this.color) {
+                legalMoves.add(new int[]{whileRow, col});
+                break;
+                }
+
+            legalMoves.add(new int[]{whileRow, col});
+            
+            whileRow++;
+        }
+
+        whileRow = row - 1;
+        while(whileRow >= 0) {
+            
+            Tile checkedTile = boardTiles[whileRow][col]; 
+            
+            if (checkedTile.isOccupied() 
+                && checkedTile.getPiece().getColor() == this.color) {
+                break;
+            }
+            if (checkedTile.isOccupied() 
+                && checkedTile.getPiece().getColor() != this.color) {
+                legalMoves.add(new int[]{whileRow, col});
+                break;
+                }
+
+            legalMoves.add(new int[]{whileRow, col});
+
+            whileRow--;
+        }
+
+        int whileCol = col + 1;
+        while(whileCol < 8) {
+            
+            Tile checkedTile = boardTiles[row][whileCol]; 
+            
+            if (checkedTile.isOccupied() 
+                && checkedTile.getPiece().getColor() == this.color) {
+                break;
+            }
+            if (checkedTile.isOccupied() 
+                && checkedTile.getPiece().getColor() != this.color) {
+                legalMoves.add(new int[]{row, whileCol});
+                break;
+                }
+
+            legalMoves.add(new int[]{row, whileCol});
+
+            whileCol++;
+        }
+        
+        whileCol = col - 1; 
+        while(whileCol >= 0) {
+            
+            Tile checkedTile = boardTiles[row][whileCol]; 
+            
+            if (checkedTile.isOccupied() 
+                && checkedTile.getPiece().getColor() == this.color) {
+                break;
+            }
+            if (checkedTile.isOccupied() 
+                && checkedTile.getPiece().getColor() != this.color) {
+                legalMoves.add(new int[]{row, whileCol});
+                break;
+                }
+
+            legalMoves.add(new int[]{row, whileCol});
+
+            whileCol--;
+        }
+
+        return legalMoves;
     }
 
-    private ArrayList<int[]> legalKnightMove(Tile tile) {
+    private ArrayList<int[]> queenMoves(Tile tile) {
+
+        ArrayList<int[]> legalMoves = new ArrayList<int[]>();
+
+        legalMoves.addAll(this.bishopMoves(tile));
+        legalMoves.addAll(this.rookMoves(tile));
+
+        return legalMoves;
+        
     }
 
+    private ArrayList<int[]> kingMove(Tile tile) {
+
+        ArrayList<int[]> legalMoves = new ArrayList<int[]>();
+
+        Tile[][] boardTiles = board.getBoardTiles();
+        King king = (King)tile.getPiece();
+
+        int row = tile.getRow();
+        int col = tile.getCol();
+
+        if(!king.hasMoved()) {
+            int castleRow = 0;
+            if (this.color == 'b') castleRow = 7;
+            
+            Tile leftCorner = boardTiles[castleRow][0];
+            Tile rightCorner = boardTiles[castleRow][7];
+
+            if (leftCorner.isOccupied() 
+                && leftCorner.getPiece() instanceof Rook 
+                && !leftCorner.getPiece().hasMoved()
+                && !boardTiles[castleRow][1].isOccupied()
+                && !boardTiles[castleRow][2].isOccupied()
+                && !boardTiles[castleRow][3].isOccupied()) {
+
+                    legalMoves.add(new int[]{castleRow, 2});
+                
+            }
+        
+            if (rightCorner.isOccupied() 
+                && rightCorner.getPiece() instanceof Rook 
+                && !rightCorner.getPiece().hasMoved()
+                && !boardTiles[castleRow][5].isOccupied()
+                && !boardTiles[castleRow][6].isOccupied()) {
+                    
+                    legalMoves.add(new int[]{castleRow, 6});
+            }
+
+        }
+        
+        for (int boundedRow = row + 1; boundedRow >= row - 1; boundedRow--) {
+
+            if (boundedRow < 8 && boundedRow >= 0) {
+
+                for (int boundedCol = col - 1; boundedCol <= col + 1; boundedCol++) {
+
+                    if (boundedCol >= 0 
+                        && boundedCol < 8 
+                        && boundedRow != row 
+                        && boundedCol != col) {
+
+                            Tile checkedTile = boardTiles[boundedRow][boundedCol];
+
+                            if (checkedTile.isOccupied() 
+                                && checkedTile.getPiece().getColor() == this.color) {
+                                break;
+                            }
+                            
+                            legalMoves.add(new int[]{boundedRow, boundedCol});
+                    }
+                }
+            }
+        }
+
+        return legalMoves;
+    }   
+
+    private ArrayList<int[]> knightMove(Tile tile) {
+
+        ArrayList<int[]> legalMoves = new ArrayList<int[]>();
+        ArrayList<int[]> moveCoordinates = new ArrayList<int[]>();        
+        int row = tile.getRow();
+        int col = tile.getCol();
+
+        Collections.addAll(moveCoordinates, 
+                           new int[]{row + 1, col - 2},
+                           new int[]{row + 2, col - 1},
+                           new int[]{row + 1, col + 2},
+                           new int[]{row + 2, col + 1},
+                           new int[]{row - 1, col - 2},
+                           new int[]{row - 2, col - 1},
+                           new int[]{row - 1, col + 2},
+                           new int[]{row - 2, col + 1});
+
+        for (int[] coordinate : moveCoordinates) {
+            if (coordinate[0] < 8 && coordinate[0] >= 0 && coordinate[1] < 8 && coordinate[1] >= 0) {
+                Tile checkedTile = boardTiles[coordinate[0]][coordinate[1]];
+                if (!checkedTile.isOccupied() || checkedTile.getPiece().getColor() != this.color) {
+                    legalMoves.add(coordinate);
+                }
+                
+            }
+        }
+
+        return legalMoves;
+    }
     
 
-    private ArrayList<int[]> legalKingMove(Tile tile) {
-    }
-
-    private ArrayList<int[]> legalQueenMove(Tile tile) {
-    }
-    */
-e void makeMove(Tile ourTile, ArrayList<int[]> legalMoves, int[] debugChoice) {
+    
+void makeMove(Tile ourTile, ArrayList<int[]> legalMoves, int[] debugChoice) {
         //Some code to choose which move the player picks from the interface
         Tile[][] boardTiles = board.getBoardTiles();
         Tile newTile = boardTiles[debugChoice[0]][debugChoice[1]];
@@ -279,19 +465,16 @@ e void makeMove(Tile ourTile, ArrayList<int[]> legalMoves, int[] debugChoice) {
     public static void main(String[] args) {
         Board testBoard = new Board();
 
-        PlayerMove white = new PlayerMove(testBoard, 'w');
-        PlayerMove black = new PlayerMove(testBoard, 'b');
+        MovementPatterns white = new MovementPatterns(testBoard, 'w');
+        MovementPatterns black = new MovementPatterns(testBoard, 'b');
 
         Tile[][] boardTiles = testBoard.getBoardTiles();
 
-        Bishop b1 = new Bishop("bB1", 'b');
-        Bishop b2 = new Bishop("bB2", 'b');
-        Bishop w1 = new Bishop("wB1", 'w');
-        Bishop w2 = new Bishop("wB1", 'w');
+        Queen q1 = new Queen("wQ1", 'w');
 
-        boardTiles[0][0].setPiece(b1);
+        boardTiles[3][3].setPiece(q1);
         testBoard.printBoard();
-        black.moveHandler(boardTiles[0][0]);
+        black.moveHandler(boardTiles[3][3]);
         
 
         /* PAWN

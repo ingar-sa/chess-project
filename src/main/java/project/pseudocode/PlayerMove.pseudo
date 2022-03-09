@@ -1,3 +1,41 @@
+// Test for all legal moves and checks 
+List of tiles 
+
+During the check of what moves might set the players king in check,
+when we check the player's king's move, we have to update the position of the tile
+that contains the king so that black will look for that
+
+for tile in list of tiles:
+    tile/piece -> legal moves for the specific tile/piece 
+    -> adds to hashmap of ints/tiles 
+
+
+
+
+
+
+//Knight
+
+moves<int[]> = {[1, -2], [2, -1]}
+
+for (int[] xy : moves) {
+    moves.add()
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //Piece the player wants to move

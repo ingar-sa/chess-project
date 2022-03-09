@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch MovementPatterns",
+            "request": "launch",
+            "mainClass": "TDT4100_project/project.MovementPatterns",
+            "projectName": "tdt4100_v2022_prosjekt_boilerplate"
+        },
+        {
+            "type": "java",
             "name": "Launch PlayerMove",
             "request": "launch",
             "mainClass": "TDT4100_project/project.PlayerMove",

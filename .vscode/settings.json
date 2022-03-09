@@ -2,7 +2,6 @@
     "java.configuration.updateBuildConfiguration": "automatic",
     "java.debug.settings.forceBuildBeforeLaunch": false,
     "java.debug.settings.console": "internalConsole",
-    "liveshare.allowGuestDebugControl": true,
     "liveshare.languages.allowGuestCommandControl": true,
     "liveshare.notebooks.allowGuestExecuteCells": true
   }
