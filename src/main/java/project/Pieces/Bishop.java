@@ -1,6 +1,4 @@
-package project.pieces;
-
-import project.Piece;
+package project.Pieces;
 
 public class Bishop extends Piece{
 

@@ -1,16 +1,18 @@
-package project;
+package project.Movement;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import project.Piece;
-import project.pieces.Bishop;
-import project.pieces.King;
-import project.pieces.Knight;
-import project.pieces.Pawn;
-import project.pieces.Queen;
-import project.pieces.Rook;
+import project.Board.Board;
+import project.Board.Tile;
+import project.Pieces.Bishop;
+import project.Pieces.King;
+import project.Pieces.Knight;
+import project.Pieces.Pawn;
+import project.Pieces.Piece;
+import project.Pieces.Queen;
+import project.Pieces.Rook;
 
 // Husk en passant må skje rett etter motstander har flyttet + queen promotion
 

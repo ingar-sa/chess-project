@@ -1,4 +1,4 @@
-package project;
+package project.Pieces;
 
 public class Piece {
     
@@ -7,7 +7,7 @@ public class Piece {
     private char color;
     private boolean captured = false;
     private boolean hasMoved = false;
-    private int moveNumber;
+    protected int moveNumber;
 
 
     protected Piece (String name,  char color) {

@@ -1,14 +1,16 @@
-package project;
+package project.Movement;
 
 import java.util.ArrayList;
 
-import project.Piece;
-import project.pieces.Bishop;
-import project.pieces.King;
-import project.pieces.Knight;
-import project.pieces.Pawn;
-import project.pieces.Queen;
-import project.pieces.Rook;
+import project.Board.Board;
+import project.Board.Tile;
+import project.Pieces.Piece;
+import project.Pieces.Bishop;
+import project.Pieces.King;
+import project.Pieces.Knight;
+import project.Pieces.Pawn;
+import project.Pieces.Queen;
+import project.Pieces.Rook;
 
 // Husk en passant må skje rett etter motstander har flyttet + queen promotion
 
@@ -267,7 +269,7 @@ public class PlayerMove {
     private ArrayList<int[]> legalQueenMove(Tile tile) {
     }
     */
-e void makeMove(Tile ourTile, ArrayList<int[]> legalMoves, int[] debugChoice) {
+    private void makeMove(Tile ourTile, ArrayList<int[]> legalMoves, int[] debugChoice) {
         //Some code to choose which move the player picks from the interface
         Tile[][] boardTiles = board.getBoardTiles();
         Tile newTile = boardTiles[debugChoice[0]][debugChoice[1]];

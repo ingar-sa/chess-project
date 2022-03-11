@@ -1,11 +1,11 @@
-package project;
+package project.Board;
 
-import project.pieces.Bishop;
-import project.pieces.King;
-import project.pieces.Knight;
-import project.pieces.Pawn;
-import project.pieces.Queen;
-import project.pieces.Rook;
+import project.Pieces.Bishop;
+import project.Pieces.King;
+import project.Pieces.Knight;
+import project.Pieces.Pawn;
+import project.Pieces.Queen;
+import project.Pieces.Rook;
 
 /* --INITIAL IDEA OF THE CLASS. SUBJECT TO CHANGE--
  * Class representing the chess board.
@@ -19,7 +19,7 @@ public class Board {
     private Tile[][] boardTiles = new Tile[8][8];
     private final int[] columnLetters = {0, 1, 2, 3, 4, 5, 6, 7};
 
-    Board () {
+    public Board () {
         makeBoard();
         placePieces();
     }

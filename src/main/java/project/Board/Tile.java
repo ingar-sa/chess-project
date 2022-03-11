@@ -1,5 +1,5 @@
-package project;
-import project.pieces.*;
+package project.Board;
+import project.Pieces.*;
 
 
 public class Tile {

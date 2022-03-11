@@ -1,4 +1,4 @@
-package project.files;
+package project.Files;
 
 
 /* --INITIAL IDEA OF THE CLASS. SUBJECT TO CHANGE--

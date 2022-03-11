@@ -1,7 +1,4 @@
-package project.pieces;
-
-import project.Piece;
-
+package project.Pieces;
 
 /*
 
