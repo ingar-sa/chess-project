@@ -2,10 +2,10 @@ package project;
 
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
-import project.Board.Board;
+import project.Board.Chessboard;
 
 public class BoardController {
-    Board board;
+    Chessboard board;
 
     @FXML
     public GridPane boardTiles;
