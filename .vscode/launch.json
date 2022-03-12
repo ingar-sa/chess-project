@@ -6,6 +6,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch PlayerMove",
+            "request": "launch",
+            "mainClass": "TDT4100_project/project.Movement.PlayerMove",
+            "projectName": "tdt4100_v2022_prosjekt_boilerplate"
+        },
+        {
+            "type": "java",
+            "name": "Launch MovementPatterns",
+            "request": "launch",
+            "mainClass": "TDT4100_project/project.Movement.MovementPatterns",
+            "projectName": "tdt4100_v2022_prosjekt_boilerplate"
+        },
+        {
+            "type": "java",
+            "name": "Launch ChessApp",
+            "request": "launch",
+            "mainClass": "TDT4100_project/project.ChessApp",
+            "projectName": "tdt4100_v2022_prosjekt_boilerplate"
+        },
+        {
+            "type": "java",
             "name": "Launch MovementPatterns",
             "request": "launch",
             "mainClass": "TDT4100_project/project.MovementPatterns",
