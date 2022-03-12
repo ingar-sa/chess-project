@@ -1,0 +1,25 @@
+"filename", "language", "XML", "Java", "Generic Pseudocode", "Markdown", "comment", "blank", "total"
+"c:\School\oop\TDT4100_prosjekt_ingara\README.md", "Markdown", 0, 0, 0, 60, 0, 29, 89
+"c:\School\oop\TDT4100_prosjekt_ingara\pom.xml", "XML", 47, 0, 0, 0, 1, 9, 57
+"c:\School\oop\TDT4100_prosjekt_ingara\src\main\java\exampleproject\Calculator.java", "Java", 0, 10, 0, 0, 22, 4, 36
+"c:\School\oop\TDT4100_prosjekt_ingara\src\main\java\exampleproject\ExampleProjectApp.java", "Java", 0, 17, 0, 0, 0, 7, 24
+"c:\School\oop\TDT4100_prosjekt_ingara\src\main\java\exampleproject\ExampleProjectController.java", "Java", 0, 26, 0, 0, 0, 8, 34
+"c:\School\oop\TDT4100_prosjekt_ingara\src\main\java\module-info.java", "Java", 0, 6, 0, 0, 0, 1, 7
+"c:\School\oop\TDT4100_prosjekt_ingara\src\main\java\project\Board.java", "Java", 0, 135, 0, 0, 9, 40, 184
+"c:\School\oop\TDT4100_prosjekt_ingara\src\main\java\project\CheckLegalMoves.java", "Java", 0, 3, 0, 0, 0, 3, 6
+"c:\School\oop\TDT4100_prosjekt_ingara\src\main\java\project\Game.java", "Java", 0, 8, 0, 0, 0, 5, 13
+"c:\School\oop\TDT4100_prosjekt_ingara\src\main\java\project\MovementPatterns.java", "Java", 0, 339, 0, 0, 26, 137, 502
+"c:\School\oop\TDT4100_prosjekt_ingara\src\main\java\project\Piece.java", "Java", 0, 46, 0, 0, 1, 18, 65
+"c:\School\oop\TDT4100_prosjekt_ingara\src\main\java\project\PlayerMove.java", "Java", 0, 194, 0, 0, 45, 80, 319
+"c:\School\oop\TDT4100_prosjekt_ingara\src\main\java\project\Tile.java", "Java", 0, 49, 0, 0, 0, 29, 78
+"c:\School\oop\TDT4100_prosjekt_ingara\src\main\java\project\files\FileHandler.java", "Java", 0, 3, 0, 0, 3, 5, 11
+"c:\School\oop\TDT4100_prosjekt_ingara\src\main\java\project\pieces\Bishop.java", "Java", 0, 7, 0, 0, 0, 5, 12
+"c:\School\oop\TDT4100_prosjekt_ingara\src\main\java\project\pieces\King.java", "Java", 0, 7, 0, 0, 0, 5, 12
+"c:\School\oop\TDT4100_prosjekt_ingara\src\main\java\project\pieces\Knight.java", "Java", 0, 7, 0, 0, 0, 3, 10
+"c:\School\oop\TDT4100_prosjekt_ingara\src\main\java\project\pieces\Pawn.java", "Java", 0, 24, 0, 0, 5, 14, 43
+"c:\School\oop\TDT4100_prosjekt_ingara\src\main\java\project\pieces\Queen.java", "Java", 0, 7, 0, 0, 0, 4, 11
+"c:\School\oop\TDT4100_prosjekt_ingara\src\main\java\project\pieces\Rook.java", "Java", 0, 7, 0, 0, 0, 5, 12
+"c:\School\oop\TDT4100_prosjekt_ingara\src\main\java\project\pseudocode\PlayerMove.pseudo", "Generic Pseudocode", 0, 0, 67, 0, 7, 48, 122
+"c:\School\oop\TDT4100_prosjekt_ingara\src\main\resources\exampleproject\App.fxml", "XML", 18, 0, 0, 0, 0, 3, 21
+"c:\School\oop\TDT4100_prosjekt_ingara\src\test\java\exampleproject\CalculatorTest.java", "Java", 0, 25, 0, 0, 0, 9, 34
+"Total", "-", 65, 920, 67, 60, 119, 471, 1702
