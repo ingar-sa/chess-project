@@ -7,21 +7,20 @@ import project.Pieces.Pawn;
 import project.Pieces.Queen;
 import project.Pieces.Rook;
 
-/* --INITIAL IDEA OF THE CLASS. SUBJECT TO CHANGE--
- * Class representing the chess board.
- * This is where game logic and state is handled,
- * as well as passing board state to file handling classes 
- */
 
+public class Chessboard {
 
-public class Board {
-
+    // Make hashmap
     private Tile[][] boardTiles = new Tile[8][8];
     private final int[] columnLetters = {0, 1, 2, 3, 4, 5, 6, 7};
 
-    public Board () {
+    public Chessboard () {
         makeBoard();
         placePieces();
+    }
+
+    public Chessboard(Tile[][] boardTiles) {
+        this.boardTiles = boardTiles;
     }
 
 
@@ -103,7 +102,7 @@ public class Board {
             String name = "bP" + tile.getCol();
             Pawn pawn = new Pawn(name, 'b');
             tile.setPiece(pawn);
-        }
+            }
 
         for (Tile tile : boardTiles[7]) {
             tile.setOccupied(true); 
@@ -170,14 +169,13 @@ public class Board {
     }
 
     public Tile[][] getBoardTiles() {
-        return boardTiles;
+        return this.boardTiles;
     }
 
     public static void main(String[] args) {
-        Board gameBoard = new Board();
+        Chessboard gameBoard = new Chessboard();
         gameBoard.makeBoard();
         gameBoard.placePieces();
-
         gameBoard.printBoard();
     }
 }

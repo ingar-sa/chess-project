@@ -6,9 +6,15 @@
     "configurations": [
         {
             "type": "java",
+<<<<<<< HEAD
             "name": "Launch PlayerMove",
             "request": "launch",
             "mainClass": "TDT4100_project/project.Movement.PlayerMove",
+=======
+            "name": "Launch Chessboard",
+            "request": "launch",
+            "mainClass": "TDT4100_project/project.Board.Chessboard",
+>>>>>>> 1bfccd3d54663645d1a2f0d8cb43bb7b2db45bb3
             "projectName": "tdt4100_v2022_prosjekt_boilerplate"
         },
         {

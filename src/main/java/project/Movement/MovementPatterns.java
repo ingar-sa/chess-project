@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import project.Board.Board;
+import project.Board.Chessboard;
 import project.Board.Tile;
 import project.Pieces.Bishop;
 import project.Pieces.King;
@@ -19,62 +19,43 @@ import project.Pieces.Rook;
 
 public class MovementPatterns {
 
-    private Board board;
     private char color;
     private Tile[][] boardTiles;
     
 
-    MovementPatterns (Board board, char color) {
-        this.board = board;
+    MovementPatterns (char color) {
         this.color = color;
-        this.boardTiles = board.getBoardTiles();
     }
 
    
-    public void moveHandler(Tile tile) {
-        if (!(tile.isOccupied() && tile.getPiece().getColor() == this.color)) return;
-        ArrayList<int[]> legalMoves = new ArrayList<int[]>();
+    public ArrayList<int[]> moveHandler(Tile tile) {
+        ArrayList<int[]> allMoves = new ArrayList<int[]>();
         Piece piece = tile.getPiece();
         
-        if (piece instanceof Pawn) legalMoves = pawnMoves(tile);
-        else if (piece instanceof Bishop) legalMoves = bishopMoves(tile);
-        else if (piece instanceof Rook) legalMoves = rookMoves(tile);
-        else if (piece instanceof Knight) legalMoves = knightMoves(tile);
-        else if (piece instanceof King) legalMoves = kingMoves(tile);
-        else if (piece instanceof Queen) legalMoves = queenMoves(tile);
+        if (piece instanceof Pawn) allMoves = pawnMoves(tile);
+        else if (piece instanceof Bishop) allMoves = bishopMoves(tile);
+        else if (piece instanceof Rook) allMoves = rookMoves(tile);
+        else if (piece instanceof Knight) allMoves = knightMoves(tile);
+        else if (piece instanceof King) allMoves = kingMoves(tile);
+        else if (piece instanceof Queen) allMoves = queenMoves(tile);
+
+        return allMoves;
     }
 
-    private Tile getTile(Tile tile) {
-        if (tile.isOccupied() && tile.getPiece().getColor() == this.color) {
-            return tile;
-        }
-        
-        return null;
-    }
 
     private ArrayList<int[]> pawnMoves(Tile tile) {     
         ArrayList<int[]> legalPawnMoves = new ArrayList<int[]>();
-        
-        Tile[][] boardTiles = board.getBoardTiles();
-        
         Pawn pawn = (Pawn)tile.getPiece(); 
         int row = tile.getRow();
         int col = tile.getCol();
-
-        //Check what the move number is, how should this be handeled? There is a attribute in pawn linked to this right now   
         int moveNumber = ((Pawn)tile.getPiece()).getMoveNumber();
 
-        //A possible solution is implementing a prepass check on just the coordinates
-        //of the possible moves, and discarding any that fall outside of the bounds of the board
-        //ArrayList<int[]> legalCoordinates = new ArrayList<int[]>();
-        
         int moveDirection = 1; 
         if (this.color == 'b') moveDirection = -1;
         
         Tile inFront  = boardTiles[row+(1*moveDirection)][col];
         Tile twoInFront  = boardTiles[row+(2*moveDirection)][col]; 
 
-        //Need to handle edge cases for pawns on column 0 and 7
         Tile attackLeft = null;
         Tile attackRight = null;
         
@@ -157,8 +138,6 @@ public class MovementPatterns {
         
         ArrayList<int[]> legalMoves = new ArrayList<int[]>();
 
-        Tile[][] boardTiles = board.getBoardTiles();
-        
         int row = tile.getRow();
         int col = tile.getCol();
 
@@ -258,8 +237,6 @@ public class MovementPatterns {
         
         ArrayList<int[]> legalMoves = new ArrayList<int[]>();
 
-        Tile[][] boardTiles = board.getBoardTiles();
-        
         int row = tile.getRow();
         int col = tile.getCol();
 
@@ -362,7 +339,6 @@ public class MovementPatterns {
 
         ArrayList<int[]> legalMoves = new ArrayList<int[]>();
 
-        Tile[][] boardTiles = board.getBoardTiles();
         King king = (King)tile.getPiece();
 
         int row = tile.getRow();
@@ -424,6 +400,16 @@ public class MovementPatterns {
         return legalMoves;
     }   
 
+    public Tile[][] getBoardTiles() {
+        return boardTiles;
+    }
+
+
+    public void setBoardTiles(Tile[][] boardTiles) {
+        this.boardTiles = boardTiles;
+    }
+
+
     private ArrayList<int[]> knightMoves(Tile tile) {
 
         ArrayList<int[]> legalMoves = new ArrayList<int[]>();
@@ -454,50 +440,19 @@ public class MovementPatterns {
         return legalMoves;
     }
     
-
-    
     void makeMove(Tile ourTile, ArrayList<int[]> legalMoves, int[] debugChoice) {
         //Some code to choose which move the player picks from the interface
-        Tile[][] boardTiles = board.getBoardTiles();
         Tile newTile = boardTiles[debugChoice[0]][debugChoice[1]];
         
         newTile.setPiece(ourTile.getPiece());
         ourTile.setPiece(null);
     }
 
+    public char getColor() {
+        return this.color;
+    }
+
     public static void main(String[] args) {
-        Board testBoard = new Board();
-
-        MovementPatterns white = new MovementPatterns(testBoard, 'w');
-
-        Tile[][] boardTiles = testBoard.getBoardTiles();
-
-        Queen q1 = new Queen("wQ1", 'w');
-
-        boardTiles[3][3].setPiece(q1);
-        testBoard.printBoard();
-        white.moveHandler(boardTiles[3][3]);
         
-
-        /* PAWN
-        Pawn testPawn2 = new Pawn("yes", 'w');
-        testPawn2.setMovedTwo();
-        Pawn testPawn3 = new Pawn("fri", 'w');
-
-        Pawn testPawn = new Pawn("wEp", 'w');
-        testPawn.setMovedTwo(); 
-        testPawn.setMoveNumber(2);
-
-        Pawn testPawn4 = new Pawn("bEP", 'b');
-        testPawn4.setMovedTwo();
-        testPawn4.setHasMoved();
-        testPawn4.setMoveNumber(1);
-
-        boardTiles[4][6].setPiece(testPawn);
-        boardTiles[3][7].setPiece(testPawn2);
-        boardTiles[5][3].setPiece(testPawn3);
-        boardTiles[4][7].setPiece(testPawn4);
-        */
-
     }
 }
