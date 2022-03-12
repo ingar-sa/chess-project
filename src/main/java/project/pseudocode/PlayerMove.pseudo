@@ -23,6 +23,42 @@ for (int[] xy : moves) {
 }
 
 
+Create chessboard in Game
+Each turn game creates a shadowcopy of chessboard 
+Pass shadowboard to CheckLegalMoves
+//CheckLegalMoves creates a shadowcopy of chessboard (shadowboard)
+CheckLegalMoves uses MovementPatterns to manipulate shadowboard
+The final hashmap of the legal moves is passed back to Game
+Game uses this to update chessboard
+
+
+CheckLegalMoves first creates a copy of the 2d array of the board tiles
+CheckLegalMoves sends the copy to MovementPatterns to get a hashmap of all possible moves 
+
+whitehashmap with all moves for white 
+
+CheckLegalMoves then iterates over the hashmap and updates the 2d array for every move
+
+CheckLegalMoves removes these moves from the hashmap:
+for key, value in hashmap: b1 = [[1,2],[3,2]]
+    *2d array = shadowboard
+    move piece from keytile to MovementPatterns value tile:
+
+    if piece is king:
+        if king is moved to castling tile test for check at both tiles:
+            castlingKingTile = update
+            shadowbard orginal king
+        else: 
+            update king position
+
+    update all associated atttributes
+    MovementPatterns(*2d array) - for black
+
+    for values in opposite hashmap:
+        if value == white king position
+            whitehashmap.remove(this value from key)
+        
+//Figuring out java bullshit
 
 
 
