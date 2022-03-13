@@ -160,8 +160,8 @@ public class MovementPatterns {
 
             legalMoves.add(new int[]{whileRow, whileCol});
             
-            whileRow++;
-            whileCol++;
+            ++whileRow;
+            ++whileCol;
         }
 
         whileRow = row + 1;
@@ -182,8 +182,8 @@ public class MovementPatterns {
 
             legalMoves.add(new int[]{whileRow, whileCol});    
 
-            whileRow++;
-            whileCol--;
+            ++whileRow;
+            --whileCol;
         }
 
         whileRow = row - 1;
@@ -204,8 +204,8 @@ public class MovementPatterns {
 
             legalMoves.add(new int[]{whileRow, whileCol});
 
-            whileRow--;
-            whileCol++;
+            --whileRow;
+            ++whileCol;
         }
         
         whileRow = row - 1;
@@ -226,8 +226,8 @@ public class MovementPatterns {
 
             legalMoves.add(new int[]{whileRow, whileCol});
 
-            whileRow--;
-            whileCol--;
+            --whileRow;
+            --whileCol;
         }
 
         return legalMoves;
@@ -258,7 +258,7 @@ public class MovementPatterns {
 
             legalMoves.add(new int[]{whileRow, col});
             
-            whileRow++;
+            ++whileRow;
         }
 
         whileRow = row - 1;
@@ -278,7 +278,7 @@ public class MovementPatterns {
 
             legalMoves.add(new int[]{whileRow, col});
 
-            whileRow--;
+            --whileRow;
         }
 
         int whileCol = col + 1;
@@ -298,7 +298,7 @@ public class MovementPatterns {
 
             legalMoves.add(new int[]{row, whileCol});
 
-            whileCol++;
+            ++whileCol;
         }
         
         whileCol = col - 1; 
@@ -318,7 +318,7 @@ public class MovementPatterns {
 
             legalMoves.add(new int[]{row, whileCol});
 
-            whileCol--;
+            --whileCol;
         }
 
         return legalMoves;
