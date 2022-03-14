@@ -241,89 +241,51 @@ public class Movement {
     private ArrayList<int[]> rookMoves(Tile tile) {
         
         ArrayList<int[]> legalMoves = new ArrayList<int[]>();
+        ArrayList<int[]> allMoves = new ArrayList<int[]>();
 
         int row = tile.getRow();
         int col = tile.getCol();
-
+        
         int whileRow = row + 1;
-          
-        while(whileRow < 8) {
-            
-            Tile checkedTile = boardTiles[whileRow][col]; 
-            
-            if (checkedTile.isOccupied() 
-                && checkedTile.getPiece().getColor() == this.color) {
-                break;
-            }
-            if (checkedTile.isOccupied() 
-                && checkedTile.getPiece().getColor() != this.color) {
-                legalMoves.add(new int[]{whileRow, col});
-                break;
-                }
+        while (whileRow < 8) {
+            allMoves.add(new int[]{whileRow, col});
 
-            legalMoves.add(new int[]{whileRow, col});
-            
-            whileRow++;
+            ++whileRow;
         }
-
+            
         whileRow = row - 1;
-        while(whileRow >= 0) {
-            
-            Tile checkedTile = boardTiles[whileRow][col]; 
-            
-            if (checkedTile.isOccupied() 
-                && checkedTile.getPiece().getColor() == this.color) {
-                break;
-            }
-            if (checkedTile.isOccupied() 
-                && checkedTile.getPiece().getColor() != this.color) {
-                legalMoves.add(new int[]{whileRow, col});
-                break;
-                }
+        while (whileRow >= 0) {
+            allMoves.add(new int[]{whileRow, col});
 
-            legalMoves.add(new int[]{whileRow, col});
-
-            whileRow--;
-        }
+            --whileRow;
+        } 
 
         int whileCol = col + 1;
-        while(whileCol < 8) {
+        while (whileCol < 8) {
+            allMoves.add(new int[]{row, whileCol});
             
-            Tile checkedTile = boardTiles[row][whileCol]; 
-            
-            if (checkedTile.isOccupied() 
-                && checkedTile.getPiece().getColor() == this.color) {
-                break;
-            }
-            if (checkedTile.isOccupied() 
-                && checkedTile.getPiece().getColor() != this.color) {
-                legalMoves.add(new int[]{row, whileCol});
-                break;
-                }
-
-            legalMoves.add(new int[]{row, whileCol});
-
-            whileCol++;
+            ++whileCol;
         }
-        
-        whileCol = col - 1; 
-        while(whileCol >= 0) {
+
+        whileCol = col - 1;
+        while (whileCol >= 0) {
+            allMoves.add(new int[]{row, whileCol});
+
+            --whileCol;
+        }
+
+        for (int[] move : allMoves) {
+            Tile checkIfLegalTile = boardTiles[move[0]][move[1]]; 
             
-            Tile checkedTile = boardTiles[row][whileCol]; 
+            if (!checkIfLegalTile.isOccupied())
+                legalMoves.add(move);
             
-            if (checkedTile.isOccupied() 
-                && checkedTile.getPiece().getColor() == this.color) {
-                break;
-            }
-            if (checkedTile.isOccupied() 
-                && checkedTile.getPiece().getColor() != this.color) {
-                legalMoves.add(new int[]{row, whileCol});
-                break;
+
+            if (checkIfLegalTile.isOccupied() 
+                && checkIfLegalTile.getPiece().getColor() != this.color)
+                {
+                    legalMoves.add(move);
                 }
-
-            legalMoves.add(new int[]{row, whileCol});
-
-            whileCol--;
         }
 
         return legalMoves;
@@ -461,13 +423,15 @@ public class Movement {
         Chessboard chessboard = new Chessboard();
         
         Tile[][] tiles = chessboard.getBoardTiles();
-        Rook rook = new Rook("bR1",'b');
+        Rook rook = new Rook("wR1",'w');
+        /* 
         Rook rook2 = new Rook("bR2",'b');
         Bishop bishop = new Bishop("bBi", 'b');
         Bishop bishop2 = new Bishop("bBi", 'b');
         Pawn enpawn = new Pawn("bP1", 'b');
         Pawn enpawn2 = new Pawn("wP2", 'w');
         King testKing = new King("wK2", 'w');
+            
         //tiles[0][3].setPiece(rook);
         //tiles[2][6].setPiece(bishop);
         //tiles[1][4].setPiece(bishop);
@@ -492,18 +456,15 @@ public class Movement {
         // ((Pawn)tiles[4][5].getPiece()).setMovedTwo();
 
         tiles[4][4].setPiece(enpawn2);
-
+        */
         
-        
+        chessboard.getBoardTiles()[2][3].setPiece(rook);
 
-
-                
-        tiles[0][6].removePiece();
         chessboard.printBoard();
 
 
         Movement white = new Movement('w');
         white.setBoardTiles(tiles);
-        white.moveHandler(tiles[7][2]);
+        white.moveHandler(tiles[2][3]);
     }
 }

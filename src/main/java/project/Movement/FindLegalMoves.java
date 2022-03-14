@@ -325,7 +325,7 @@ public class FindLegalMoves {
         tiles[7][3].removePiece();
         tiles[7][5].removePiece();
         tiles[7][6].removePiece();
-        tiles[7][4].removePiece();
+        tiles[7][4].removePiece(); 
         //tiles[4][4].setPiece(rook2);
         tiles[4][5].setPiece(enpawn);
         tiles[2][2].setPiece(bishop);
@@ -336,11 +336,6 @@ public class FindLegalMoves {
 
         tiles[4][4].setPiece(enpawn2);
 
-        
-        
-
-
-                
         tiles[0][6].removePiece();
         chessboard.printBoard();
 
