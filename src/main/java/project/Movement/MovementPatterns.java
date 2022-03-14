@@ -48,7 +48,7 @@ public class MovementPatterns {
         Pawn pawn = (Pawn)tile.getPiece(); 
         int row = tile.getRow();
         int col = tile.getCol();
-        int moveNumber = ((Pawn)tile.getPiece()).getMoveNumber();
+        //int moveNumber = ((Pawn)tile.getPiece()).getMoveNumber();
 
         int moveDirection = 1; 
         if (this.color == 'b') moveDirection = -1;
@@ -115,18 +115,23 @@ public class MovementPatterns {
 
         if (passantLeft != null 
             && passantLeft.isOccupied() 
-            && ((moveNumber - 1) == (((Pawn)passantLeft.getPiece()).getMoveNumber())) 
-            && passantLeft.getPiece().getColor() != this.color 
-            && ((Pawn)passantLeft.getPiece()).hasMovedTwo()) {
+            //&& ((moveNumber - 1) == (((Pawn)passantLeft.getPiece()).getMoveNumber())) 
+            && ((Pawn)passantLeft.getPiece()).getMovedTwoLastTurn()
+            && passantLeft.getPiece().getColor() != this.color
+            //Overflødig? under 
+            // && ((Pawn)passantLeft.getPiece()).hasMovedTwo()
+            ){
 
             legalPawnMoves.add(new int[]{passantLeft.getRow() + 1 * moveDirection, passantLeft.getCol()});
         }
 
         if (passantRight != null 
             && passantRight.isOccupied() 
-            && ((moveNumber - 1) == (((Pawn)passantRight.getPiece()).getMoveNumber())) 
+            //&& ((moveNumber - 1) == (((Pawn)passantRight.getPiece()).getMoveNumber())) 
+            && ((Pawn)passantRight.getPiece()).getMovedTwoLastTurn()
             && passantRight.getPiece().getColor() != this.color 
-            && ((Pawn)passantRight.getPiece()).hasMovedTwo()) {
+            //&& ((Pawn)passantRight.getPiece()).hasMovedTwo()) 
+            ){
                 
             legalPawnMoves.add(new int[]{passantRight.getRow() + 1 * moveDirection, passantRight.getCol()});
         } 
@@ -379,19 +384,19 @@ public class MovementPatterns {
 
                 for (int boundedCol = col - 1; boundedCol <= col + 1; boundedCol++) {
 
-                    if (boundedCol >= 0 
-                        && boundedCol < 8 
-                        && boundedRow != row 
-                        && boundedCol != col) {
+                    if (boundedCol >= 0 && boundedCol < 8) {
 
                             Tile checkedTile = boardTiles[boundedRow][boundedCol];
 
                             if (checkedTile.isOccupied() 
-                                && checkedTile.getPiece().getColor() == this.color) {
-                                break;
+                                && !(checkedTile.getPiece().getColor() == this.color)) {
+                                    legalMoves.add(new int[]{boundedRow, boundedCol});
                             }
                             
-                            legalMoves.add(new int[]{boundedRow, boundedCol});
+                            if (!checkedTile.isOccupied()) {
+                                    legalMoves.add(new int[]{boundedRow, boundedCol});
+                            }
+                    
                     }
                 }
             }
@@ -453,6 +458,52 @@ public class MovementPatterns {
     }
 
     public static void main(String[] args) {
+        Chessboard chessboard = new Chessboard();
         
+        Tile[][] tiles = chessboard.getBoardTiles();
+        Rook rook = new Rook("bR1",'b');
+        Rook rook2 = new Rook("bR2",'b');
+        Bishop bishop = new Bishop("bBi", 'b');
+        Bishop bishop2 = new Bishop("bBi", 'b');
+        Pawn enpawn = new Pawn("bP1", 'b');
+        Pawn enpawn2 = new Pawn("wP2", 'w');
+        King testKing = new King("wK2", 'w');
+        //tiles[0][3].setPiece(rook);
+        //tiles[2][6].setPiece(bishop);
+        //tiles[1][4].setPiece(bishop);
+        tiles[0][5].removePiece();
+        tiles[1][4].removePiece();
+        tiles[1][6].removePiece();
+        //tiles[5][4].setPiece(rook);
+        //tiles[0][7].setPiece(rook2);
+        //tiles[4][4].setOccupied(true);
+        tiles[7][1].removePiece();
+        tiles[7][2].removePiece();
+        tiles[7][3].removePiece();
+        tiles[7][5].removePiece();
+        tiles[7][6].removePiece();
+        tiles[0][4].removePiece();
+        //tiles[4][4].setPiece(rook2);
+        tiles[4][5].setPiece(enpawn);
+        tiles[2][2].setPiece(bishop);
+        tiles[7][2].setPiece(testKing);
+        tiles[7][2].getPiece().setHasMoved();
+        ((Pawn)tiles[4][5].getPiece()).setMovedTwoLastTurn(true);
+        // ((Pawn)tiles[4][5].getPiece()).setMovedTwo();
+
+        tiles[4][4].setPiece(enpawn2);
+
+        
+        
+
+
+                
+        tiles[0][6].removePiece();
+        chessboard.printBoard();
+
+
+        MovementPatterns white = new MovementPatterns('w');
+        white.setBoardTiles(tiles);
+        white.moveHandler(tiles[7][2]);
     }
 }

@@ -70,6 +70,12 @@ public class Tile {
         this.occupied = occupied;
     }
     
+    //ny
+    public void removePiece() {
+        this.piece = null;
+        this.occupied = false;
+    }
+    
     @Override
     public String toString() {
         return(this.row + ", " + this.col);
