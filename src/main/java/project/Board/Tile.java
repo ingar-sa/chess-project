@@ -73,6 +73,7 @@ public class Tile {
     //ny
     public void removePiece() {
         this.piece = null;
+        this.occupied = false;
     }
     
     @Override

@@ -379,19 +379,19 @@ public class MovementPatterns {
 
                 for (int boundedCol = col - 1; boundedCol <= col + 1; boundedCol++) {
 
-                    if (boundedCol >= 0 
-                        && boundedCol < 8 
-                        && boundedRow != row 
-                        && boundedCol != col) {
+                    if (boundedCol >= 0 && boundedCol < 8) {
 
                             Tile checkedTile = boardTiles[boundedRow][boundedCol];
 
                             if (checkedTile.isOccupied() 
-                                && checkedTile.getPiece().getColor() == this.color) {
-                                break;
+                                && !(checkedTile.getPiece().getColor() == this.color)) {
+                                    legalMoves.add(new int[]{boundedRow, boundedCol});
                             }
                             
-                            legalMoves.add(new int[]{boundedRow, boundedCol});
+                            if (!checkedTile.isOccupied()) {
+                                    legalMoves.add(new int[]{boundedRow, boundedCol});
+                            }
+                    
                     }
                 }
             }
@@ -453,6 +453,37 @@ public class MovementPatterns {
     }
 
     public static void main(String[] args) {
+        Chessboard chessboard = new Chessboard();
         
+        Tile[][] tiles = chessboard.getBoardTiles();
+        Rook rook = new Rook("bR1",'b');
+        Rook rook2 = new Rook("bR2",'b');
+        Bishop bishop = new Bishop("bBi", 'b');
+        Bishop bishop2 = new Bishop("bBi", 'b');
+        //tiles[0][3].setPiece(rook);
+        //tiles[2][6].setPiece(bishop);
+        //tiles[1][4].setPiece(bishop);
+        tiles[0][5].removePiece();
+        tiles[1][4].removePiece();
+        tiles[1][6].removePiece();
+        tiles[4][4].setPiece(rook);
+        tiles[0][7].setPiece(rook2);
+        tiles[4][4].setOccupied(true);
+        tiles[0][1].removePiece();
+        tiles[0][2].removePiece();
+        tiles[0][3].removePiece();
+        tiles[1][3].removePiece();
+        tiles[1][5].removePiece();
+        
+        
+
+
+                
+        tiles[0][6].removePiece();
+        chessboard.printBoard();
+
+        MovementPatterns white = new MovementPatterns('w');
+        white.setBoardTiles(tiles);
+        white.moveHandler(tiles[0][4]);
     }
 }

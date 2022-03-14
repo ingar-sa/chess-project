@@ -19,11 +19,6 @@ public class Chessboard {
         placePieces();
     }
 
-    public Chessboard(Tile[][] boardTiles) {
-        this.boardTiles = boardTiles;
-    }
-
-
     private void makeBoard() {
         for (int row = 0; row < 8; row++) {
             for (int column = 0; column < 8; column++) {
