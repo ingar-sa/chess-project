@@ -13,6 +13,7 @@ import project.Pieces.Bishop;
 import project.Pieces.King;
 import project.Pieces.Piece;
 import project.Pieces.Rook;
+import project.Pieces.Pawn;
 
 public class CheckLegalMoves {
     
@@ -26,7 +27,7 @@ public class CheckLegalMoves {
     private int[] blackKing= new int[]{7, 4};
     
     //se hvordan dette skal gjøres
-    int moveNumber = 1; 
+    int moveNumber = 0; 
 
 
     //Sjekk om vi trenger chessboard
@@ -98,6 +99,10 @@ public class CheckLegalMoves {
                 int yValue = coordinates[1];
                 
                 Piece pieceToMove = shadowBoardTiles[xKey][yKey].getPiece();
+
+                if (pieceToMove instanceof Pawn && Math.abs(yValue - yKey) == 2) {
+                    ((Pawn)pieceToMove).setMovedTwoLastTurn(true);
+                }
 
 
                 //sjekk for kongen, skal oppdatere område hvis han flytter 
@@ -240,10 +245,15 @@ public class CheckLegalMoves {
                 //flytt brikken tilbake, den som ble flyttet på 
                 Piece pieceToMoveBack = shadowBoardTiles[xValue][yValue].getPiece();
 
+                if (pieceToMoveBack instanceof Pawn && Math.abs(yValue - yKey) == 2) {
+                    ((Pawn)pieceToMoveBack).setMovedTwoLastTurn(false);
+                }
+
                 shadowBoardTiles[xValue][yValue].removePiece();
                 shadowBoardTiles[xValue][yValue].setPiece(placeBackPiece);
                 if (shadowBoardTiles[xValue][yValue].getPiece() == null) {
                     shadowBoardTiles[xValue][yValue].setOccupied(false);
+                    //overkill etter fix? - se på?
                 }
                 
                 
@@ -271,16 +281,18 @@ public class CheckLegalMoves {
         
         Tile[][] tiles = chessboard.getBoardTiles();
         Rook rook = new Rook("bR1",'b');
-        Rook rook2 = new Rook("bR2",'w');
+        Rook rook2 = new Rook("bR2",'b');
         Bishop bishop = new Bishop("bBi", 'b');
         Bishop bishop2 = new Bishop("bBi", 'b');
+        Pawn enpawn = new Pawn("bP1", 'b');
+        Pawn enpawn2 = new Pawn("wP2", 'w');
         //tiles[0][3].setPiece(rook);
         //tiles[2][6].setPiece(bishop);
         //tiles[1][4].setPiece(bishop);
         tiles[0][5].removePiece();
         tiles[1][4].removePiece();
         tiles[1][6].removePiece();
-        //tiles[4][3].setPiece(rook);
+        tiles[5][4].setPiece(rook);
         //tiles[0][7].setPiece(rook2);
         //tiles[4][4].setOccupied(true);
         tiles[7][1].removePiece();
@@ -289,7 +301,13 @@ public class CheckLegalMoves {
         tiles[7][5].removePiece();
         tiles[7][6].removePiece();
         tiles[6][2].removePiece();
-        tiles[4][2].setPiece(rook2);
+        //tiles[4][4].setPiece(rook2);
+        tiles[4][5].setPiece(enpawn);
+        ((Pawn)tiles[4][5].getPiece()).setMovedTwoLastTurn(true);
+        // ((Pawn)tiles[4][5].getPiece()).setMovedTwo();
+
+        tiles[4][4].setPiece(enpawn2);
+
         
         
 
