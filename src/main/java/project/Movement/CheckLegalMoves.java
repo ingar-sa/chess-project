@@ -22,17 +22,31 @@ public class CheckLegalMoves {
     private MovementPatterns blackMovement;
     //private Chessboard currentChessBoard;
 
-    //må vell egentlig hentes fra hovedbrettet 
-    private int[] whiteKing= new int[]{0, 4};
-    private int[] blackKing= new int[]{7, 4};
+    //må vell egentlig hentes fra hovedbrettet
+    private int[] whiteKing;
+    private int[] blackKing;
+    // private int[] whiteKing = new int[]{0, 4};
+    // private int[] blackKing = new int[]{7, 4};
     
     //se hvordan dette skal gjøres
-    int moveNumber = 0; 
+    //Tur
+    int moveNumber = 1; 
 
 
     //Sjekk om vi trenger chessboard
     CheckLegalMoves(Tile[][] boardTiles, Chessboard board) {
         this.currentGamePositionTiles = boardTiles;
+
+        for (Tile[] tileRow : boardTiles) {
+            for (Tile tile: tileRow) {
+                if (tile.getPiece() instanceof King && ((King)tile.getPiece()).getColor() == 'w') {
+                    this.whiteKing = new int[]{tile.getRow(), tile.getCol()};
+                }
+                else if (tile.getPiece() instanceof King && ((King)tile.getPiece()).getColor() == 'b') {
+                    this.blackKing = new int[]{tile.getRow(), tile.getCol()};
+                } //Bytte rekkefølge raskere?
+            }
+        }
         //this.currentChessBoard = board;
         //currentChessBoard.printBoard();
         
@@ -90,8 +104,7 @@ public class CheckLegalMoves {
                 //Chessboard shadowChessboardObject = new Chessboard();
 
                 Tile[][] shadowBoardTiles = this.currentGamePositionTiles;
-
-                
+ 
                 int xKey = key[0];
                 int yKey = key[1];
 
@@ -100,9 +113,10 @@ public class CheckLegalMoves {
                 
                 Piece pieceToMove = shadowBoardTiles[xKey][yKey].getPiece();
 
-                if (pieceToMove instanceof Pawn && Math.abs(yValue - yKey) == 2) {
-                    ((Pawn)pieceToMove).setMovedTwoLastTurn(true);
-                }
+                // Tror ikke dette er nødvendig  
+                // if (pieceToMove instanceof Pawn && Math.abs(yValue - yKey) == 2) {
+                //     ((Pawn)pieceToMove).setMovedTwoLastTurn(true);
+                // }
 
 
                 //sjekk for kongen, skal oppdatere område hvis han flytter 
@@ -245,15 +259,17 @@ public class CheckLegalMoves {
                 //flytt brikken tilbake, den som ble flyttet på 
                 Piece pieceToMoveBack = shadowBoardTiles[xValue][yValue].getPiece();
 
-                if (pieceToMoveBack instanceof Pawn && Math.abs(yValue - yKey) == 2) {
-                    ((Pawn)pieceToMoveBack).setMovedTwoLastTurn(false);
-                }
+
+                //Tror ikke dette trengs til noe egentlig
+                // if (pieceToMoveBack instanceof Pawn && Math.abs(yValue - yKey) == 2) {
+                //     ((Pawn)pieceToMoveBack).setMovedTwoLastTurn(false);
+                // }
 
                 shadowBoardTiles[xValue][yValue].removePiece();
                 shadowBoardTiles[xValue][yValue].setPiece(placeBackPiece);
                 if (shadowBoardTiles[xValue][yValue].getPiece() == null) {
                     shadowBoardTiles[xValue][yValue].setOccupied(false);
-                    //overkill etter fix? - se på?
+                    //overkill etter fix? - se på - setOccupied
                 }
                 
                 
@@ -286,13 +302,14 @@ public class CheckLegalMoves {
         Bishop bishop2 = new Bishop("bBi", 'b');
         Pawn enpawn = new Pawn("bP1", 'b');
         Pawn enpawn2 = new Pawn("wP2", 'w');
-        //tiles[0][3].setPiece(rook);
+        King testKing = new King("wK2", 'b');
+        tiles[0][2].setPiece(rook);
         //tiles[2][6].setPiece(bishop);
         //tiles[1][4].setPiece(bishop);
         tiles[0][5].removePiece();
         tiles[1][4].removePiece();
         tiles[1][6].removePiece();
-        tiles[5][4].setPiece(rook);
+        //tiles[5][4].setPiece(rook);
         //tiles[0][7].setPiece(rook2);
         //tiles[4][4].setOccupied(true);
         tiles[7][1].removePiece();
@@ -300,9 +317,12 @@ public class CheckLegalMoves {
         tiles[7][3].removePiece();
         tiles[7][5].removePiece();
         tiles[7][6].removePiece();
-        tiles[6][2].removePiece();
+        tiles[7][4].removePiece();
         //tiles[4][4].setPiece(rook2);
         tiles[4][5].setPiece(enpawn);
+        tiles[2][2].setPiece(bishop);
+        tiles[2][5].setPiece(testKing);
+        tiles[2][5].getPiece().setHasMoved();
         ((Pawn)tiles[4][5].getPiece()).setMovedTwoLastTurn(true);
         // ((Pawn)tiles[4][5].getPiece()).setMovedTwo();
 

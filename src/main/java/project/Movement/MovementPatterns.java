@@ -467,13 +467,14 @@ public class MovementPatterns {
         Bishop bishop2 = new Bishop("bBi", 'b');
         Pawn enpawn = new Pawn("bP1", 'b');
         Pawn enpawn2 = new Pawn("wP2", 'w');
+        King testKing = new King("wK2", 'w');
         //tiles[0][3].setPiece(rook);
         //tiles[2][6].setPiece(bishop);
         //tiles[1][4].setPiece(bishop);
         tiles[0][5].removePiece();
         tiles[1][4].removePiece();
         tiles[1][6].removePiece();
-        //tiles[4][3].setPiece(rook);
+        //tiles[5][4].setPiece(rook);
         //tiles[0][7].setPiece(rook2);
         //tiles[4][4].setOccupied(true);
         tiles[7][1].removePiece();
@@ -481,12 +482,16 @@ public class MovementPatterns {
         tiles[7][3].removePiece();
         tiles[7][5].removePiece();
         tiles[7][6].removePiece();
-        tiles[6][2].removePiece();
+        tiles[0][4].removePiece();
         //tiles[4][4].setPiece(rook2);
-        tiles[4][4].setPiece(enpawn);
-        ((Pawn)tiles[4][4].getPiece()).setMovedTwoLastTurn(true);
-        tiles[4][3].setPiece(enpawn2);
-        //((Pawn)tiles[4][4].getPiece()).setMovedTwo();
+        tiles[4][5].setPiece(enpawn);
+        tiles[2][2].setPiece(bishop);
+        tiles[7][2].setPiece(testKing);
+        tiles[7][2].getPiece().setHasMoved();
+        ((Pawn)tiles[4][5].getPiece()).setMovedTwoLastTurn(true);
+        // ((Pawn)tiles[4][5].getPiece()).setMovedTwo();
+
+        tiles[4][4].setPiece(enpawn2);
 
         
         
@@ -499,6 +504,6 @@ public class MovementPatterns {
 
         MovementPatterns white = new MovementPatterns('w');
         white.setBoardTiles(tiles);
-        white.moveHandler(tiles[4][3]);
+        white.moveHandler(tiles[7][2]);
     }
 }
