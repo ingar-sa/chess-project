@@ -300,6 +300,7 @@ public class FindLegalMoves {
         return legalMoves;
     }
     public static void main(String[] args) {
+        /*
         Chessboard chessboard = new Chessboard();
         
         Tile[][] tiles = chessboard.getBoardTiles();
@@ -346,5 +347,7 @@ public class FindLegalMoves {
         FindLegalMoves checklegalmoves = new FindLegalMoves(tiles, chessboard);
 
         checklegalmoves.eliminateChecks();
+
+        */
     }
 }
