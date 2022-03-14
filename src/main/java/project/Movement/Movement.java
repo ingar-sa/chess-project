@@ -17,13 +17,13 @@ import project.Pieces.Rook;
 // Husk en passant må skje rett etter motstander har flyttet + queen promotion
 
 
-public class MovementPatterns {
+public class Movement {
 
     private char color;
     private Tile[][] boardTiles;
     
 
-    MovementPatterns (char color) {
+    Movement (char color) {
         this.color = color;
     }
 
@@ -502,7 +502,7 @@ public class MovementPatterns {
         chessboard.printBoard();
 
 
-        MovementPatterns white = new MovementPatterns('w');
+        Movement white = new Movement('w');
         white.setBoardTiles(tiles);
         white.moveHandler(tiles[7][2]);
     }
