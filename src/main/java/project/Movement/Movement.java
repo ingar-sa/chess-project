@@ -142,97 +142,74 @@ public class Movement {
     private ArrayList<int[]> bishopMoves(Tile tile) {
         
         ArrayList<int[]> legalMoves = new ArrayList<int[]>();
+        ArrayList<int[]> allMoves = new ArrayList<int[]>();
 
         int row = tile.getRow();
         int col = tile.getCol();
-
+        
         int whileRow = row + 1;
         int whileCol = col + 1;
-          
-        while(whileRow < 8 && whileCol < 8) {
-            
-            Tile checkedTile = boardTiles[whileRow][whileCol]; 
-            
-            if (checkedTile.isOccupied() 
-                && checkedTile.getPiece().getColor() == this.color) {
+        while (whileRow < 8 && whileCol < 8) {
+            if (boardTiles[whileRow][whileCol].isOccupied()) {
+                allMoves.add(new int[]{whileRow, whileCol});
                 break;
             }
-            if (checkedTile.isOccupied() 
-                && checkedTile.getPiece().getColor() != this.color) {
-                legalMoves.add(new int[]{whileRow, whileCol});
-                break;
-                }
-
-            legalMoves.add(new int[]{whileRow, whileCol});
+            allMoves.add(new int[]{whileRow, whileCol});
             
-            whileRow++;
-            whileCol++;
+            ++whileRow;
+            ++whileCol;
         }
+            
+        whileRow = row - 1;
+        whileCol = row - 1;
+        while (whileRow >= 0 && whileCol >= 0) {
+            if (boardTiles[whileRow][whileCol].isOccupied()) {
+                allMoves.add(new int[]{whileRow, whileCol});
+                break;
+            }
+            allMoves.add(new int[]{whileRow, whileCol});
+                 
+            --whileRow;
+            --whileCol;
+        } 
 
         whileRow = row + 1;
         whileCol = col - 1;
-        while(whileRow < 8 && whileCol >= 0) {
-            
-            Tile checkedTile = boardTiles[whileRow][whileCol]; 
-            
-            if (checkedTile.isOccupied() 
-                && checkedTile.getPiece().getColor() == this.color) {
+        while (whileRow < 8 && whileCol >= 0) {
+            if (boardTiles[whileRow][whileCol].isOccupied()) {
+                allMoves.add(new int[]{whileRow, whileCol});
                 break;
             }
-            if (checkedTile.isOccupied() 
-                && checkedTile.getPiece().getColor() != this.color) {
-                legalMoves.add(new int[]{whileRow, whileCol});
-                break;
-                }
-
-            legalMoves.add(new int[]{whileRow, whileCol});    
-
-            whileRow++;
-            whileCol--;
+            allMoves.add(new int[]{whileRow, whileCol});
+            
+            ++whileRow;
+            --whileCol;
         }
 
         whileRow = row - 1;
         whileCol = col + 1;
-        while(whileRow >= 0 && whileCol < 8) {
-            
-            Tile checkedTile = boardTiles[whileRow][whileCol]; 
-            
-            if (checkedTile.isOccupied() 
-                && checkedTile.getPiece().getColor() == this.color) {
+        while (whileRow >= 0 && whileCol > 8) {
+            if (boardTiles[whileRow][whileCol].isOccupied()) {
+                allMoves.add(new int[]{whileRow, whileCol});
                 break;
             }
-            if (checkedTile.isOccupied() 
-                && checkedTile.getPiece().getColor() != this.color) {
-                legalMoves.add(new int[]{whileRow, whileCol});
-                break;
-                }
+            allMoves.add(new int[]{whileRow, whileCol});
 
-            legalMoves.add(new int[]{whileRow, whileCol});
-
-            whileRow--;
-            whileCol++;
+            --whileRow;
+            ++whileCol;
         }
-        
-        whileRow = row - 1;
-        whileCol = col - 1; 
-        while(whileRow >= 0 && whileCol >= 0) {
+
+        for (int[] move : allMoves) {
+            Tile checkIfLegalTile = boardTiles[move[0]][move[1]]; 
             
-            Tile checkedTile = boardTiles[whileRow][whileCol]; 
-            
-            if (checkedTile.isOccupied() 
-                && checkedTile.getPiece().getColor() == this.color) {
-                break;
-            }
-            if (checkedTile.isOccupied() 
-                && checkedTile.getPiece().getColor() != this.color) {
-                legalMoves.add(new int[]{whileRow, whileCol});
-                break;
+            if (!checkIfLegalTile.isOccupied())
+                legalMoves.add(move);
+
+            if (checkIfLegalTile.isOccupied() 
+                && checkIfLegalTile.getPiece().getColor() != this.color)
+                {
+                    legalMoves.add(move);
                 }
-
-            legalMoves.add(new int[]{whileRow, whileCol});
-
-            whileRow--;
-            whileCol--;
         }
 
         return legalMoves;
@@ -248,20 +225,32 @@ public class Movement {
         
         int whileRow = row + 1;
         while (whileRow < 8) {
+            if (boardTiles[whileRow][col].isOccupied()) {
+                allMoves.add(new int[]{whileRow, col});
+                break;
+            }
             allMoves.add(new int[]{whileRow, col});
-
+            
             ++whileRow;
         }
             
         whileRow = row - 1;
-        while (whileRow >= 0) {
+        while (whileRow < 8) {
+            if (boardTiles[whileRow][col].isOccupied()) {
+                allMoves.add(new int[]{whileRow, col});
+                break;
+            }
             allMoves.add(new int[]{whileRow, col});
-
+            
             --whileRow;
-        } 
+        }
 
         int whileCol = col + 1;
-        while (whileCol < 8) {
+        while (row < 8) {
+            if (boardTiles[row][whileCol].isOccupied()) {
+                allMoves.add(new int[]{row, whileCol});
+                break;
+            }
             allMoves.add(new int[]{row, whileCol});
             
             ++whileCol;
@@ -269,8 +258,12 @@ public class Movement {
 
         whileCol = col - 1;
         while (whileCol >= 0) {
+            if (boardTiles[row][whileCol].isOccupied()) {
+                allMoves.add(new int[]{row, whileCol});
+                break;
+            }
             allMoves.add(new int[]{row, whileCol});
-
+            
             --whileCol;
         }
 
@@ -279,7 +272,6 @@ public class Movement {
             
             if (!checkIfLegalTile.isOccupied())
                 legalMoves.add(move);
-            
 
             if (checkIfLegalTile.isOccupied() 
                 && checkIfLegalTile.getPiece().getColor() != this.color)
@@ -423,10 +415,13 @@ public class Movement {
         Chessboard chessboard = new Chessboard();
         
         Tile[][] tiles = chessboard.getBoardTiles();
+
+        Bishop bishop = new Bishop("wBi", 'w');
+        /*
         Rook rook = new Rook("wR1",'w');
-        /* 
+        
         Rook rook2 = new Rook("bR2",'b');
-        Bishop bishop = new Bishop("bBi", 'b');
+        
         Bishop bishop2 = new Bishop("bBi", 'b');
         Pawn enpawn = new Pawn("bP1", 'b');
         Pawn enpawn2 = new Pawn("wP2", 'w');
@@ -458,7 +453,7 @@ public class Movement {
         tiles[4][4].setPiece(enpawn2);
         */
         
-        chessboard.getBoardTiles()[2][3].setPiece(rook);
+        chessboard.getBoardTiles()[2][3].setPiece(bishop);
 
         chessboard.printBoard();
 
