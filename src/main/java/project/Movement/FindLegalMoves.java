@@ -6,22 +6,22 @@ import java.util.HashMap;
 import project.Board.Chessboard;
 import project.Board.Tile;
 
-public class CheckLegalMoves {
+public class FindLegalMoves {
     
     private Tile[][] currentGamePositionTiles;
 
     private HashMap<int[], ArrayList<int[]>> legalMoves = new HashMap<int[], ArrayList<int[]>>();
-    private MovementPatterns whiteMovement;
-    private MovementPatterns blackMovement;    
+    private Movement whiteMovement;
+    private Movement blackMovement;    
 
-    CheckLegalMoves(Tile[][] boardTiles) {
+    FindLegalMoves(Tile[][] boardTiles) {
         this.currentGamePositionTiles = boardTiles;
         
-        this.whiteMovement = new MovementPatterns('w');
-        this.blackMovement = new MovementPatterns('b');
+        this.whiteMovement = new Movement('w');
+        this.blackMovement = new Movement('b');
     }
 
-    private void populateAllMoves(MovementPatterns movementPattern) {
+    private void populateAllMoves(Movement movementPattern) {
         movementPattern.setBoardTiles(currentGamePositionTiles);
 
         for (Tile[] row : currentGamePositionTiles) {
