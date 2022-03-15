@@ -48,7 +48,7 @@ public class Movement {
         Pawn pawn = (Pawn)tile.getPiece(); 
         int row = tile.getRow();
         int col = tile.getCol();
-        int moveNumber = ((Pawn)tile.getPiece()).getMoveNumber();
+        //int moveNumber = ((Pawn)tile.getPiece()).getMoveNumber();
 
         int moveDirection = 1; 
         if (this.color == 'b') moveDirection = -1;
@@ -182,7 +182,7 @@ public class Movement {
 
         whileRow = row - 1;
         whileCol = col + 1;
-        while (whileRow >= 0 && whileCol > 8) {
+        while (whileRow >= 0 && whileCol < 8) {
             if (boardTiles[whileRow][whileCol].isOccupied()) {
                 allMoves.add(new int[]{whileRow, whileCol});
                 break;
@@ -226,7 +226,7 @@ public class Movement {
         }
 
         int whileCol = col + 1;
-        while (row < 8) {
+        while (whileCol < 8) {
             if (boardTiles[row][whileCol].isOccupied()) {
                 allMoves.add(new int[]{row, whileCol});
                 break;
@@ -394,6 +394,18 @@ public class Movement {
     }
 
     public static void main(String[] args) {
+        Chessboard testBoard = new Chessboard();
+        Tile[][] testTiles = testBoard.getBoardTiles();
+        Movement white = new Movement('w');
+        white.setBoardTiles(testTiles);
+        Rook rook = new Rook("wRi", 'w');
+        Bishop bishop = new Bishop("wBi", 'w');
+
+        white.getBoardTiles()[3][3].setPiece(bishop);
+        white.getBoardTiles()[3][3].setOccupied(true);
+        testBoard.printBoard();
+    
+        white.moveHandler(white.getBoardTiles()[3][3]);
         
     }
 }
