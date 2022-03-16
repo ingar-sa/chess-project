@@ -172,5 +172,6 @@ public class Chessboard {
         gameBoard.makeBoard();
         gameBoard.placePieces();
         gameBoard.printBoard();
+        System.out.println("foo");
     }
 }
