@@ -141,7 +141,6 @@ public class Movement {
 
     private ArrayList<int[]> bishopMoves(Tile tile) {
         
-        ArrayList<int[]> legalMoves = new ArrayList<int[]>();
         ArrayList<int[]> allMoves = new ArrayList<int[]>();
 
         int row = tile.getRow();
@@ -188,7 +187,7 @@ public class Movement {
 
         whileRow = row - 1;
         whileCol = col + 1;
-        while (whileRow >= 0 && whileCol > 8) {
+        while (whileRow >= 0 && whileCol < 8) {
             if (boardTiles[whileRow][whileCol].isOccupied()) {
                 allMoves.add(new int[]{whileRow, whileCol});
                 break;
@@ -199,25 +198,11 @@ public class Movement {
             ++whileCol;
         }
 
-        for (int[] move : allMoves) {
-            Tile checkIfLegalTile = boardTiles[move[0]][move[1]]; 
-            
-            if (!checkIfLegalTile.isOccupied())
-                legalMoves.add(move);
-
-            if (checkIfLegalTile.isOccupied() 
-                && checkIfLegalTile.getPiece().getColor() != this.color)
-                {
-                    legalMoves.add(move);
-                }
-        }
-
-        return legalMoves;
+        return removeFriendlyTiles(allMoves);
     }
 
     private ArrayList<int[]> rookMoves(Tile tile) {
         
-        ArrayList<int[]> legalMoves = new ArrayList<int[]>();
         ArrayList<int[]> allMoves = new ArrayList<int[]>();
 
         int row = tile.getRow();
@@ -246,7 +231,7 @@ public class Movement {
         }
 
         int whileCol = col + 1;
-        while (row < 8) {
+        while (whileCol < 8) {
             if (boardTiles[row][whileCol].isOccupied()) {
                 allMoves.add(new int[]{row, whileCol});
                 break;
@@ -267,21 +252,23 @@ public class Movement {
             --whileCol;
         }
 
-        for (int[] move : allMoves) {
-            Tile checkIfLegalTile = boardTiles[move[0]][move[1]]; 
-            
-            if (!checkIfLegalTile.isOccupied())
-                legalMoves.add(move);
+        return removeFriendlyTiles(allMoves);
+    }
 
-            if (checkIfLegalTile.isOccupied() 
-                && checkIfLegalTile.getPiece().getColor() != this.color)
-                {
-                    legalMoves.add(move);
-                }
+    private ArrayList<int[]> removeFriendlyTiles(ArrayList<int[]> allMoves) {
+         ArrayList<int[]> legalMoves = new ArrayList<int[]>();
+
+         for (int[] move : allMoves) {
+            Tile checkIfLegalTile = boardTiles[move[0]][move[1]]; 
+
+            if (checkIfLegalTile.isOccupied() && checkIfLegalTile.getPiece().getColor() == this.color)
+                continue;
+
+            legalMoves.add(move);
         }
 
         return legalMoves;
-    }
+    } 
 
     private ArrayList<int[]> queenMoves(Tile tile) {
 
@@ -412,11 +399,20 @@ public class Movement {
     }
 
     public static void main(String[] args) {
-        Chessboard chessboard = new Chessboard();
-        
-        Tile[][] tiles = chessboard.getBoardTiles();
-
+        Chessboard testBoard = new Chessboard();
+        Tile[][] testTiles = testBoard.getBoardTiles();
+        Movement white = new Movement('w');
+        white.setBoardTiles(testTiles);
+        Rook rook = new Rook("wRi", 'w');
         Bishop bishop = new Bishop("wBi", 'w');
+
+        white.getBoardTiles()[3][3].setPiece(bishop);
+        white.getBoardTiles()[3][3].setOccupied(true);
+        testBoard.printBoard();
+    
+        white.moveHandler(white.getBoardTiles()[3][3]);
+        
+                
         /*
         Rook rook = new Rook("wR1",'w');
         
@@ -453,13 +449,6 @@ public class Movement {
         tiles[4][4].setPiece(enpawn2);
         */
         
-        chessboard.getBoardTiles()[2][3].setPiece(bishop);
-
-        chessboard.printBoard();
-
-
-        Movement white = new Movement('w');
-        white.setBoardTiles(tiles);
-        white.moveHandler(tiles[2][3]);
+        
     }
 }

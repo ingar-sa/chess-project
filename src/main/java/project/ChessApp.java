@@ -1,6 +1,5 @@
 package project;
 
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -16,7 +15,7 @@ public class ChessApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        primaryStage.setTitle("Chess");
+        primaryStage.setTitle("Example App");
         primaryStage.setScene(new Scene(FXMLLoader.load(getClass().getResource("Chessboard.fxml"))));
         primaryStage.show();
     }

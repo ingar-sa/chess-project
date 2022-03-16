@@ -20,8 +20,8 @@ public class Chessboard {
     }
 
     private void makeBoard() {
-        for (int row = 0; row < 8; row++) {
-            for (int column = 0; column < 8; column++) {
+        for (int row = 0; row < 8; ++row) {
+            for (int col = 0; col < 8; ++col) {
                 
                 char firstColor;
                 char secondColor; 
@@ -36,10 +36,10 @@ public class Chessboard {
                     secondColor = 'w';
                 }
 
-                tileColor = (column % 2 == 1) ? firstColor : secondColor;
+                tileColor = (col % 2 == 1) ? firstColor : secondColor;
 
-                Tile tile = new Tile(row, column, tileColor);
-                boardTiles[row][column] = tile;
+                Tile tile = new Tile(row, col, tileColor);
+                boardTiles[row][col] = tile;
             }
         }
     }
@@ -136,9 +136,9 @@ public class Chessboard {
     public void printBoard() {
     
         //Collections.reverse(boardTiles);
-        for (int row = 7; row >= 0; row--) {
+        for (int row = 7; row >= 0; --row) {
             String ofRow = (row) + " ";
-            for (int col = 0; col < 8; col++) {
+            for (int col = 0; col < 8; ++col) {
                 
                 Tile tile = boardTiles[row][col];
                 try {
