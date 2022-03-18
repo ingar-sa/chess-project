@@ -6,6 +6,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
+/*
+
+it's possible to show exceptions in javafx, e.g. alert class
+Examples of javafx code in self-checkout example in school code x   
+
+*/
+
 public class ChessController {
     
     @FXML
