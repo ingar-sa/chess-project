@@ -4,8 +4,6 @@ import project.Pieces.*;
 
 public class Tile {
 
-    
-
     private Piece piece;
     private int row;
     private int col;
