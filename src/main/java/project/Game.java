@@ -99,10 +99,10 @@ public class Game {
                 for (int[] aLegalMove : legalMovesForPieceToMove) {
                     if (aLegalMove[0] == xCoordinateForMove && aLegalMove[1] == yCoordinateForMove) {
                         if (pieceToMove instanceof Pawn) {
-                            if (pieceToMove.hasMoved()) {
+                            if (pieceToMove.getHasMoved()) {
                                 ((Pawn)pieceToMove).setMovedTwoLastTurn(false);
                             }
-                            else if (!pieceToMove.hasMoved() && Math.abs(xCoordinateForMove - xCoordinateForPiece) == 2) {
+                            else if (!pieceToMove.getHasMoved() && Math.abs(xCoordinateForMove - xCoordinateForPiece) == 2) {
                                 ((Pawn)pieceToMove).setMovedTwoLastTurn(true);
                             }
 
@@ -121,7 +121,7 @@ public class Game {
 
                         } //Håndtering av rokade 
                         else if (pieceToMove instanceof King) {
-                            if (!pieceToMove.hasMoved())  {
+                            if (!pieceToMove.getHasMoved())  {
                                 if (pieceToMove.getColor() == 'w') {
                                     if (yCoordinateForMove == 6) {
                                         Rook castlingRook = ((Rook)this.currentGamePositionTiles[0][7].getPiece());
@@ -149,7 +149,7 @@ public class Game {
                             }
                         }
                         
-                        pieceToMove.hasMoved();
+                        pieceToMove.setHasMoved(true);
                         this.currentGamePositionTiles[xCoordinateForMove][yCoordinateForMove].setPiece(pieceToMove);
                         this.currentGamePositionTiles[xCoordinateForPiece][yCoordinateForPiece].removePiece();
                         legalMove = true;

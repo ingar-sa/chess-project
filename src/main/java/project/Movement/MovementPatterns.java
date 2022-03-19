@@ -58,11 +58,8 @@ public class MovementPatterns {
 
         Tile twoInFront = null;
 
-        if (!((row + (2 * moveDirection)) > 7) && this.color == 'w') {
-            twoInFront  = boardTiles[row+ (2 * moveDirection)][col];
-        }
-        else if (!((row +(2 * moveDirection)) < 0) && this.color == 'b') {
-            twoInFront  = boardTiles[row+ ( 2 * moveDirection)][col];
+        if (!pawn.getHasMoved()) {
+             twoInFront  = boardTiles[row + (2 * moveDirection)][col];
         }
 
         Tile attackLeft = null;
@@ -100,11 +97,11 @@ public class MovementPatterns {
             legalPawnMoves.add(new int[]{inFront.getRow(), inFront.getCol()});
         }    
         
-        if (!pawn.hasMoved() && twoInFront != null) {
+        if (!pawn.getHasMoved() && twoInFront != null) {
             if (!twoInFront.isOccupied() 
                 && legalPawnMoves.size() != 0) {
                     
-                  legalPawnMoves.add(new int[]{twoInFront.getRow(), twoInFront.getCol()});
+                legalPawnMoves.add(new int[]{twoInFront.getRow(), twoInFront.getCol()});
             }
         }
 
@@ -123,29 +120,20 @@ public class MovementPatterns {
         }
 
         if (passantLeft != null 
-            && passantLeft.isOccupied() 
+            //&& passantLeft.isOccupied() 
             && passantLeft.getPiece() instanceof Pawn
             && passantLeft.getPiece().getColor() != this.color
-            //&& ((moveNumber - 1) == (((Pawn)passantLeft.getPiece()).getMoveNumber())) 
-            && ((Pawn)passantLeft.getPiece()).getMovedTwoLastTurn()
-            //&& passantLeft.getPiece().getColor() != this.color
-            //Overflødig? under 
-            // && ((Pawn)passantLeft.getPiece()).hasMovedTwo()
-            ){
-
+            && ((Pawn)passantLeft.getPiece()).getMovedTwoLastTurn())
+        {
             legalPawnMoves.add(new int[]{passantLeft.getRow() + 1 * moveDirection, passantLeft.getCol()});
         }
 
         if (passantRight != null 
-            && passantRight.isOccupied() 
-            && passantRight.getPiece().getColor() != this.color 
+            //&& passantRight.isOccupied() 
             && passantRight.getPiece() instanceof Pawn
-            //&& ((moveNumber - 1) == (((Pawn)passantRight.getPiece()).getMoveNumber())) 
-            && ((Pawn)passantRight.getPiece()).getMovedTwoLastTurn()
-            //&& passantRight.getPiece().getColor() != this.color 
-            //&& ((Pawn)passantRight.getPiece()).hasMovedTwo()) 
-            ){
-                
+            && passantRight.getPiece().getColor() != this.color 
+            && ((Pawn)passantRight.getPiece()).getMovedTwoLastTurn())
+        {
             legalPawnMoves.add(new int[]{passantRight.getRow() + 1 * moveDirection, passantRight.getCol()});
         } 
 
@@ -303,7 +291,7 @@ public class MovementPatterns {
         int row = tile.getRow();
         int col = tile.getCol();
 
-        if(!king.hasMoved()) {
+        if(!king.getHasMoved()) {
             int castleRow = 0;
             if (this.color == 'b') castleRow = 7;
             
@@ -312,7 +300,7 @@ public class MovementPatterns {
 
             if (leftCorner.isOccupied() 
                 && leftCorner.getPiece() instanceof Rook 
-                && !leftCorner.getPiece().hasMoved()
+                && !leftCorner.getPiece().getHasMoved()
                 && !boardTiles[castleRow][1].isOccupied()
                 && !boardTiles[castleRow][2].isOccupied()
                 && !boardTiles[castleRow][3].isOccupied()) {
@@ -323,7 +311,7 @@ public class MovementPatterns {
         
             if (rightCorner.isOccupied() 
                 && rightCorner.getPiece() instanceof Rook 
-                && !rightCorner.getPiece().hasMoved()
+                && !rightCorner.getPiece().getHasMoved()
                 && !boardTiles[castleRow][5].isOccupied()
                 && !boardTiles[castleRow][6].isOccupied()) {
                     

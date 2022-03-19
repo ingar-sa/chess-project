@@ -172,7 +172,7 @@ public class CheckLegalMoves {
 
                         //håndtering av lovlig rokade
 
-                        else if (pieceToMove instanceof King && !pieceToMove.hasMoved()) {
+                        else if (pieceToMove instanceof King && !pieceToMove.getHasMoved()) {
                             if (colorToMove.getColor() == 'w') {
                                 if (xValue == 0 && yValue == 6) {
                                     if (oppositeCorr[0] == originalKingLocation[0] && oppositeCorr[1] == originalKingLocation[1]) {
@@ -214,7 +214,7 @@ public class CheckLegalMoves {
 
 
 
-                        // else if (pieceToMove instanceof King && !pieceToMove.hasMoved() && colorToMove.getColor() == 'w' && yValue == 6) {
+                        // else if (pieceToMove instanceof King && !pieceToMove.getHasMoved() && colorToMove.getColor() == 'w' && yValue == 6) {
                         //     //fjerner rokade trekk
                         //     if (xValue == 0) {
                         //         if (oppositeCorr[0] == originalKingLocation[0] && oppositeCorr[1] == originalKingLocation[1]) {
@@ -227,7 +227,7 @@ public class CheckLegalMoves {
                         //     }
                         // }
 
-                        // else if (pieceToMove instanceof King && !pieceToMove.hasMoved() && colorToMove.getColor() == 'w' && yValue == 2) { //sjakk på 3
+                        // else if (pieceToMove instanceof King && !pieceToMove.getHasMoved() && colorToMove.getColor() == 'w' && yValue == 2) { //sjakk på 3
                         //     //fjerner rokade trekk
                         //     if (xValue == 0) {
                         //         if (oppositeCorr[0] == originalKingLocation[0] && oppositeCorr[1] == originalKingLocation[1]) {
@@ -240,7 +240,7 @@ public class CheckLegalMoves {
                             
                         // }
 
-                        // else if (pieceToMove instanceof King && !pieceToMove.hasMoved() && colorToMove.getColor() == 'b' && yValue == 6) {
+                        // else if (pieceToMove instanceof King && !pieceToMove.getHasMoved() && colorToMove.getColor() == 'b' && yValue == 6) {
                         //     //fjerner rokade trekk
                         //     if (xValue == 7) {
                         //         if (oppositeCorr[0] == originalKingLocation[0] && oppositeCorr[1] == originalKingLocation[1]) {
@@ -253,7 +253,7 @@ public class CheckLegalMoves {
                         //     }
                         // }
 
-                        // else if (pieceToMove instanceof King && !pieceToMove.hasMoved() && colorToMove.getColor() == 'b' && yValue == 2) { //sjakk på 3
+                        // else if (pieceToMove instanceof King && !pieceToMove.getHasMoved() && colorToMove.getColor() == 'b' && yValue == 2) { //sjakk på 3
                         //     //fjerner rokade trekk
                         //     if (xValue == 7) {
                         //         if (oppositeCorr[0] == originalKingLocation[0] && oppositeCorr[1] == originalKingLocation[1]) {

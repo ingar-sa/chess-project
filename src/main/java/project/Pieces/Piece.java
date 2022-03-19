@@ -20,11 +20,11 @@ public class Piece {
         this.captured = true;
     }
 
-    public void setHasMoved() {
-        this.hasMoved = true;
+    public void setHasMoved(boolean hasMoved) {
+        this.hasMoved = hasMoved;
     }
     
-    public boolean hasMoved() {
+    public boolean getHasMoved() {
         return this.hasMoved;
     }
 
