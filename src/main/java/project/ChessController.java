@@ -1,5 +1,9 @@
 package project;
 
+import java.time.Period;
+
+import javax.crypto.spec.IvParameterSpec;
+
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -21,6 +25,8 @@ Translate to their coordinate system -> guiY = 7 - ourY
 
 public class ChessController {
 
+
+
     
     
     @FXML
@@ -40,14 +46,38 @@ public class ChessController {
     @FXML
     private Pane tile00, tile01, tile02, tile03, tile04, tile05, tile06, tile07, tile10, tile11, tile12, tile13, tile14, tile15, tile16, tile17, tile20, tile21, tile22, tile23, tile24, tile25, tile26, tile27, tile30, tile31, tile32, tile33, tile34, tile35, tile36, tile37, tile40, tile41, tile42, tile43, tile44, tile45, tile46, tile47, tile50, tile51, tile52, tile53, tile54, tile55, tile56, tile57, tile60, tile61, tile62, tile63, tile64, tile65, tile66, tile67, tile70, tile71, tile72, tile73, tile74, tile75, tile76, tile77;
     
+    private Image image;
+    private ImageView prevImageView;
+    private boolean turnOver = false;
+
+    private String getImageViewId(MouseEvent event) {
+        Pane pane = (Pane)event.getSource();
+        return pane.getId();    
+    }
+
     @FXML
     private void testClick(MouseEvent event) {
-        //System.out.println("The tile has been clicked!");
-        //chess board is 800x800 pixels
-        //System.out.println("X: " + x + " Y: " + y);
-        Pane pane = (Pane)event.getSource();
-        System.out.println(pane.getId());
+        
+        if (image != null) {
+            placeImage(event);
+            image = null;
+            //prevImageView = null;
+        }
+    
+        System.out.println("Pane id: " + getImageViewId(event));
+        ImageView iView = (ImageView) sprites.lookup("#" + getImageViewId(event));
+        prevImageView = iView;
+        image = iView.getImage();
+        System.out.println(iView.getId());
+        }
 
+    @FXML
+    private void placeImage(MouseEvent event) {
+        //String placementImageViewId = getImageViewId(event);
+        ImageView iView = (ImageView) sprites.lookup("#" + getImageViewId(event));
+        iView.setImage(image);
+        if (!turnOver)
+            prevImageView.setImage(null);
     }
 
 

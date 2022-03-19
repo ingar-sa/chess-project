@@ -102,95 +102,6 @@
             <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="6" GridPane.rowIndex="1" />
          </children>
       </GridPane>
-      <GridPane prefHeight="920.0" prefWidth="920.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="60.0">
-        <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Pane id="00" fx:id="tile00" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="0" GridPane.rowIndex="7" />
-            <Pane id="01" fx:id="tile01" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <Pane id="02" fx:id="tile02" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-            <Pane id="03" fx:id="tile03" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="7" />
-            <Pane id="04" fx:id="tile04" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="7" />
-            <Pane id="05" fx:id="tile05" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.rowIndex="7" />
-            <Pane id="06" fx:id="tile06" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="6" GridPane.rowIndex="7" />
-            <Pane id="07" fx:id="tile07" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="7" GridPane.rowIndex="7" />
-            <Pane id="10" fx:id="tile10" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="0" GridPane.rowIndex="6" />
-            <Pane id="11" fx:id="tile11" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <Pane id="12" fx:id="tile12" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-            <Pane id="13" fx:id="tile13" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="6" />
-            <Pane id="14" fx:id="tile14" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="6" />
-            <Pane id="15" fx:id="tile15" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.rowIndex="6" />
-            <Pane id="16" fx:id="tile16" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="6" GridPane.rowIndex="6" />
-            <Pane id="17" fx:id="tile17" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="7" GridPane.rowIndex="6" />
-            <Pane id="20" fx:id="tile20" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="0" GridPane.rowIndex="5" />
-            <Pane id="21" fx:id="tile21" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <Pane id="22" fx:id="tile22" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-            <Pane id="23" fx:id="tile23" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-            <Pane id="24" fx:id="tile24" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="5" />
-            <Pane id="25" fx:id="tile25" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.rowIndex="5" />
-            <Pane id="26" fx:id="tile26" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="6" GridPane.rowIndex="5" />
-            <Pane id="27" fx:id="tile27" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="7" GridPane.rowIndex="5" />
-            <Pane id="30" fx:id="tile30" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-            <Pane id="31" fx:id="tile31" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Pane id="32" fx:id="tile32" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-            <Pane id="33" fx:id="tile33" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-            <Pane id="34" fx:id="tile34" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="4" />
-            <Pane id="35" fx:id="tile35" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.rowIndex="4" />
-            <Pane id="36" fx:id="tile36" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="6" GridPane.rowIndex="4" />
-            <Pane id="37" fx:id="tile37" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="7" GridPane.rowIndex="4" />
-            <Pane id="40" fx:id="tile40" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-            <Pane id="41" fx:id="tile41" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Pane id="42" fx:id="tile42" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <Pane id="43" fx:id="tile43" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-            <Pane id="44" fx:id="tile44" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="3" />
-            <Pane id="45" fx:id="tile45" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.rowIndex="3" />
-            <Pane id="46" fx:id="tile46" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="6" GridPane.rowIndex="3" />
-            <Pane id="47" fx:id="tile47" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="7" GridPane.rowIndex="3" />
-            <Pane id="50" fx:id="tile50" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-            <Pane id="51" fx:id="tile51" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Pane id="52" fx:id="tile52" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <Pane id="53" fx:id="tile53" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-            <Pane id="54" fx:id="tile54" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="2" />
-            <Pane id="55" fx:id="tile55" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.rowIndex="2" />
-            <Pane id="56" fx:id="tile56" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="6" GridPane.rowIndex="2" />
-            <Pane id="57" fx:id="tile57" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="7" GridPane.rowIndex="2" />
-            <Pane id="60" fx:id="tile60" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-            <Pane id="61" fx:id="tile61" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Pane id="62" fx:id="tile62" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <Pane id="63" fx:id="tile63" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <Pane id="64" fx:id="tile64" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-            <Pane id="65" fx:id="tile65" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.rowIndex="1" />
-            <Pane id="66" fx:id="tile66" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="6" GridPane.rowIndex="1" />
-            <Pane id="67" fx:id="tile67" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="7" GridPane.rowIndex="1" />
-            <Pane id="70" fx:id="tile70" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-            <Pane id="71" fx:id="tile71" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-            <Pane id="72" fx:id="tile72" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-            <Pane id="73" fx:id="tile73" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="0" />
-            <Pane id="74" fx:id="tile74" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="0" />
-            <Pane id="75" fx:id="tile75" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.rowIndex="0" />
-            <Pane id="76" fx:id="tile76" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="6" GridPane.rowIndex="0" />
-            <Pane id="77" fx:id="tile77" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="7" GridPane.rowIndex="0" />
-
-         </children>
-      </GridPane>
       <GridPane fx:id="sprites" gridLinesVisible="true" layoutX="10.0" layoutY="10.0" prefHeight="800.0" prefWidth="800.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="60.0">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -629,6 +540,95 @@
                   <Image url="@sprites/bRook.png" />
                </image>
             </ImageView>
+
+         </children>
+      </GridPane>
+      <GridPane prefHeight="920.0" prefWidth="920.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="60.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Pane id="00" fx:id="tile00" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+            <Pane id="01" fx:id="tile01" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <Pane id="02" fx:id="tile02" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+            <Pane id="03" fx:id="tile03" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="7" />
+            <Pane id="04" fx:id="tile04" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="7" />
+            <Pane id="05" fx:id="tile05" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.rowIndex="7" />
+            <Pane id="06" fx:id="tile06" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="6" GridPane.rowIndex="7" />
+            <Pane id="07" fx:id="tile07" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="7" GridPane.rowIndex="7" />
+            <Pane id="10" fx:id="tile10" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+            <Pane id="11" fx:id="tile11" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <Pane id="12" fx:id="tile12" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+            <Pane id="13" fx:id="tile13" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="6" />
+            <Pane id="14" fx:id="tile14" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+            <Pane id="15" fx:id="tile15" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.rowIndex="6" />
+            <Pane id="16" fx:id="tile16" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="6" GridPane.rowIndex="6" />
+            <Pane id="17" fx:id="tile17" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="7" GridPane.rowIndex="6" />
+            <Pane id="20" fx:id="tile20" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+            <Pane id="21" fx:id="tile21" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Pane id="22" fx:id="tile22" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+            <Pane id="23" fx:id="tile23" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+            <Pane id="24" fx:id="tile24" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+            <Pane id="25" fx:id="tile25" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.rowIndex="5" />
+            <Pane id="26" fx:id="tile26" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="6" GridPane.rowIndex="5" />
+            <Pane id="27" fx:id="tile27" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="7" GridPane.rowIndex="5" />
+            <Pane id="30" fx:id="tile30" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+            <Pane id="31" fx:id="tile31" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Pane id="32" fx:id="tile32" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <Pane id="33" fx:id="tile33" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+            <Pane id="34" fx:id="tile34" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+            <Pane id="35" fx:id="tile35" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.rowIndex="4" />
+            <Pane id="36" fx:id="tile36" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="6" GridPane.rowIndex="4" />
+            <Pane id="37" fx:id="tile37" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="7" GridPane.rowIndex="4" />
+            <Pane id="40" fx:id="tile40" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+            <Pane id="41" fx:id="tile41" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Pane id="42" fx:id="tile42" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Pane id="43" fx:id="tile43" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+            <Pane id="44" fx:id="tile44" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+            <Pane id="45" fx:id="tile45" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.rowIndex="3" />
+            <Pane id="46" fx:id="tile46" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="6" GridPane.rowIndex="3" />
+            <Pane id="47" fx:id="tile47" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="7" GridPane.rowIndex="3" />
+            <Pane id="50" fx:id="tile50" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+            <Pane id="51" fx:id="tile51" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Pane id="52" fx:id="tile52" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Pane id="53" fx:id="tile53" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <Pane id="54" fx:id="tile54" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+            <Pane id="55" fx:id="tile55" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.rowIndex="2" />
+            <Pane id="56" fx:id="tile56" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="6" GridPane.rowIndex="2" />
+            <Pane id="57" fx:id="tile57" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="7" GridPane.rowIndex="2" />
+            <Pane id="60" fx:id="tile60" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <Pane id="61" fx:id="tile61" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Pane id="62" fx:id="tile62" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Pane id="63" fx:id="tile63" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <Pane id="64" fx:id="tile64" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+            <Pane id="65" fx:id="tile65" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+            <Pane id="66" fx:id="tile66" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="6" GridPane.rowIndex="1" />
+            <Pane id="67" fx:id="tile67" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="7" GridPane.rowIndex="1" />
+            <Pane id="70" fx:id="tile70" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <Pane id="71" fx:id="tile71" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+            <Pane id="72" fx:id="tile72" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+            <Pane id="73" fx:id="tile73" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+            <Pane id="74" fx:id="tile74" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+            <Pane id="75" fx:id="tile75" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.rowIndex="0" />
+            <Pane id="76" fx:id="tile76" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="6" GridPane.rowIndex="0" />
+            <Pane id="77" fx:id="tile77" onMouseClicked="#testClick" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="7" GridPane.rowIndex="0" />
 
          </children>
       </GridPane>
