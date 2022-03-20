@@ -104,6 +104,7 @@ public class Game {
                             }
                             else if (!pieceToMove.getHasMoved() && Math.abs(xCoordinateForMove - xCoordinateForPiece) == 2) {
                                 ((Pawn)pieceToMove).setMovedTwoLastTurn(true);
+                                ((Pawn)pieceToMove).setMoveNumberEnPassant(checkLegalMoves.getMoveNUmber() + 1);
                             }
 
                             //Legge til fjerning av brikken an passent!!!
