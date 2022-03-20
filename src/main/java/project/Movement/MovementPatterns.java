@@ -21,13 +21,14 @@ public class MovementPatterns {
 
     private char color;
     private Tile[][] boardTiles;
+    private CheckLegalMoves checkLegalMoves;
     
 
-    MovementPatterns (char color) {
+    MovementPatterns (char color, CheckLegalMoves checkLegalMoves) {
         this.color = color;
+        this.checkLegalMoves = checkLegalMoves;
     }
 
-   
     public ArrayList<int[]> moveHandler(Tile tile) {
         ArrayList<int[]> allMoves = new ArrayList<int[]>();
         Piece piece = tile.getPiece();
@@ -119,20 +120,21 @@ public class MovementPatterns {
             legalPawnMoves.add(new int[]{attackRight.getRow(), attackRight.getCol()});
         }
 
-        if (passantLeft != null 
-            //&& passantLeft.isOccupied() 
+        if (passantLeft != null  
             && passantLeft.getPiece() instanceof Pawn
             && passantLeft.getPiece().getColor() != this.color
-            && ((Pawn)passantLeft.getPiece()).getMovedTwoLastTurn())
+            && ((Pawn)passantLeft.getPiece()).getMovedTwoLastTurn()
+            && ((((Pawn)passantLeft.getPiece()).getmoveNumberEnPassant() - checkLegalMoves.getMoveNUmber()) == 0))
         {
             legalPawnMoves.add(new int[]{passantLeft.getRow() + 1 * moveDirection, passantLeft.getCol()});
         }
 
         if (passantRight != null 
-            //&& passantRight.isOccupied() 
             && passantRight.getPiece() instanceof Pawn
             && passantRight.getPiece().getColor() != this.color 
-            && ((Pawn)passantRight.getPiece()).getMovedTwoLastTurn())
+            && ((Pawn)passantRight.getPiece()).getMovedTwoLastTurn()
+            && ((((Pawn)passantRight.getPiece()).getmoveNumberEnPassant() - checkLegalMoves.getMoveNUmber()) == 0))
+
         {
             legalPawnMoves.add(new int[]{passantRight.getRow() + 1 * moveDirection, passantRight.getCol()});
         } 

@@ -32,15 +32,15 @@ public class CheckLegalMoves {
     
     //se hvordan dette skal gjøres
     //Tur
-    int moveNumber = 1; 
+    int moveNumber = 0; 
 
 
     //Sjekk om vi trenger chessboard
     public CheckLegalMoves(Tile[][] boardTiles) {
         this.currentGamePositionTiles = boardTiles;
         
-        this.whiteMovement = new MovementPatterns('w');
-        this.blackMovement = new MovementPatterns('b');
+        this.whiteMovement = new MovementPatterns('w', this);
+        this.blackMovement = new MovementPatterns('b', this);
           
     }
     //endret så den returnerer 
@@ -384,6 +384,10 @@ public class CheckLegalMoves {
         this.moveNumber ++;
     }
 
+    public int getMoveNUmber() {
+        return this.moveNumber;
+    }
+
     public int getGameStatus() {
         return this.gameStatus;
     }
@@ -401,11 +405,6 @@ public class CheckLegalMoves {
             }
         }
     }
-
-    public int getMoveNUmber() {
-        return this.moveNumber;
-    }
-
 
     public static void main(String[] args) {
         long startTime = System.nanoTime();

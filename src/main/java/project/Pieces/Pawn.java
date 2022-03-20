@@ -9,7 +9,7 @@ public class Pawn extends Piece {
     //overflødig? - movedtwo 
     //private boolean movedTwo = false;
     private boolean movedTwoLastTurn = false;
-    //private int moveNumber;
+    private int moveNumberEnPassant;
     
     public boolean getMovedTwoLastTurn() {
         return movedTwoLastTurn;
@@ -24,13 +24,13 @@ public class Pawn extends Piece {
     }
 
 
-    // public void setMoveNumber(int moveNumber) {
-    //     this.moveNumber = moveNumber;
-    // }
+    public void setMoveNumberEnPassant(int moveNumberEnPassant) {
+         this.moveNumberEnPassant = moveNumberEnPassant;
+    }
 
-    // public int getMoveNumber() {
-    //     return this.moveNumber;
-    // }
+    public int getmoveNumberEnPassant() {
+         return this.moveNumberEnPassant;
+    }
 
 
 
