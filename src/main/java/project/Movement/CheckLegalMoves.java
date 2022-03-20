@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-import project.Game;
+import project.TerminalChess;
 import project.Board.Chessboard;
 import project.Board.Tile;
 import project.Pieces.Bishop;

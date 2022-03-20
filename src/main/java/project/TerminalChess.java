@@ -18,15 +18,13 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Set;
 
-public class Game {
+public class TerminalChess {
     
     Chessboard chessboard;
     CheckLegalMoves checkLegalMoves;
     Tile[][] currentGamePositionTiles;
 
-    
-
-    public Game() {
+    public TerminalChess() {
         Chessboard chessboard = new Chessboard();
 
         this.chessboard = chessboard;
@@ -243,7 +241,7 @@ public class Game {
     
 
     public static void main(String[] args) {
-       Game game = new Game();
+       TerminalChess game = new TerminalChess();
        game.movePieces();
    }
 }

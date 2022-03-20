@@ -48,6 +48,7 @@ public class ChessController {
     private Pane tile00, tile01, tile02, tile03, tile04, tile05, tile06, tile07, tile10, tile11, tile12, tile13, tile14, tile15, tile16, tile17, tile20, tile21, tile22, tile23, tile24, tile25, tile26, tile27, tile30, tile31, tile32, tile33, tile34, tile35, tile36, tile37, tile40, tile41, tile42, tile43, tile44, tile45, tile46, tile47, tile50, tile51, tile52, tile53, tile54, tile55, tile56, tile57, tile60, tile61, tile62, tile63, tile64, tile65, tile66, tile67, tile70, tile71, tile72, tile73, tile74, tile75, tile76, tile77;
     
     
+    private String pieceSprite;
     private ImageView prevImageView;
     private boolean turnOver = false;
 
@@ -56,14 +57,18 @@ public class ChessController {
     void testClick(MouseEvent event) {
         
         ImageView iView = (ImageView)event.getSource();
-        Image piece = iView.getImage();
-        System.out.println(piece.getUrl());
+        Image piece;
+        try {
+            piece = iView.getImage();
 
+        } catch (NullPointerException e) {
+            return;
+        }
 
-        //Image image = new Image("file:/C:/School/oop/TDT4100_prosjekt_ingara/target/classes/project/sprites/wQueen.png");
-        Image image = new Image("file:wQueen.png", 65, 65, false, false);
-        
-        iView.setImage(image);
+        //file:/C:/School/oop/TDT4100_prosjekt_ingara/target/classes/project/sprites/wPawn.png
+        pieceSprite =  piece.getUrl();
+
+        // Send which tile was clicked to Game and get the legal moves in return.
 
         }
 
