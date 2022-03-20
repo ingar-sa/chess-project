@@ -1,5 +1,7 @@
 package project;
 
+
+
 import java.time.Period;
 
 import javax.crypto.spec.IvParameterSpec;
@@ -35,7 +37,6 @@ public class ChessController {
     @FXML
     private GridPane tileGrid;
 
-
     @FXML
     private GridPane sprites;
     
@@ -46,39 +47,25 @@ public class ChessController {
     @FXML
     private Pane tile00, tile01, tile02, tile03, tile04, tile05, tile06, tile07, tile10, tile11, tile12, tile13, tile14, tile15, tile16, tile17, tile20, tile21, tile22, tile23, tile24, tile25, tile26, tile27, tile30, tile31, tile32, tile33, tile34, tile35, tile36, tile37, tile40, tile41, tile42, tile43, tile44, tile45, tile46, tile47, tile50, tile51, tile52, tile53, tile54, tile55, tile56, tile57, tile60, tile61, tile62, tile63, tile64, tile65, tile66, tile67, tile70, tile71, tile72, tile73, tile74, tile75, tile76, tile77;
     
-    private Image image;
+    
     private ImageView prevImageView;
     private boolean turnOver = false;
 
-    private String getImageViewId(MouseEvent event) {
-        Pane pane = (Pane)event.getSource();
-        return pane.getId();    
-    }
 
     @FXML
-    private void testClick(MouseEvent event) {
+    void testClick(MouseEvent event) {
         
-        if (image != null) {
-            placeImage(event);
-            image = null;
-            //prevImageView = null;
-        }
-    
-        System.out.println("Pane id: " + getImageViewId(event));
-        ImageView iView = (ImageView) sprites.lookup("#" + getImageViewId(event));
-        prevImageView = iView;
-        image = iView.getImage();
-        System.out.println(iView.getId());
-        }
+        ImageView iView = (ImageView)event.getSource();
+        Image piece = iView.getImage();
+        System.out.println(piece.getUrl());
 
-    @FXML
-    private void placeImage(MouseEvent event) {
-        //String placementImageViewId = getImageViewId(event);
-        ImageView iView = (ImageView) sprites.lookup("#" + getImageViewId(event));
+
+        //Image image = new Image("file:/C:/School/oop/TDT4100_prosjekt_ingara/target/classes/project/sprites/wQueen.png");
+        Image image = new Image("file:wQueen.png", 65, 65, false, false);
+        
         iView.setImage(image);
-        if (!turnOver)
-            prevImageView.setImage(null);
-    }
+
+        }
 
 
 

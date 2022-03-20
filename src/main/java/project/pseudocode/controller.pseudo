@@ -1,0 +1,13 @@
+
+
+class Controller () {
+
+    ImageView.onclick() {
+
+        if iview == null:
+            do nothing
+
+            
+    }
+
+}
