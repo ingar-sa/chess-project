@@ -72,7 +72,7 @@ public class TerminalChess {
                     keyForPieceToMove = Pieces; 
                     legalPiece = true;
                 }
-
+            
             }
 
             if (!legalPiece) {
