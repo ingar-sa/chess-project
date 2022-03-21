@@ -2,7 +2,8 @@ package project;
 
 import project.Board.Chessboard;
 import project.Board.Tile;
-import project.Movement.CheckLegalMoves;
+//import project.Movement.CheckLegalMoves;
+import project.Movement.TileCheckLegalMoves;
 import project.Pieces.Bishop;
 import project.Pieces.King;
 import project.Pieces.Knight;
@@ -18,13 +19,13 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Set;
 
-public class TerminalChess {
+public class TileTerminalChess {
     
     Chessboard chessboard;
-    CheckLegalMoves checkLegalMoves;
+    TileCheckLegalMoves checkLegalMoves;
     Tile[][] currentGamePositionTiles;
 
-    public TerminalChess() {
+    public TileTerminalChess() {
         Chessboard chessboard = new Chessboard();
 
         this.chessboard = chessboard;
@@ -32,7 +33,7 @@ public class TerminalChess {
         this.currentGamePositionTiles = currentGamePositionTiles;
 
 
-        CheckLegalMoves checkLegalMoves = new CheckLegalMoves(currentGamePositionTiles);  
+        TileCheckLegalMoves checkLegalMoves = new TileCheckLegalMoves(currentGamePositionTiles);  
         this.checkLegalMoves = checkLegalMoves;
     }
 
@@ -46,7 +47,7 @@ public class TerminalChess {
         
             chessboard.printBoard();
             
-            HashMap<int[], ArrayList<int[]>> allLegalMovesAfterControl = checkLegalMoves.CheckforCheckMateAndPat();
+            HashMap<Tile, ArrayList<int[]>> allLegalMovesAfterControl = checkLegalMoves.CheckforCheckMateAndPat();
 
             if (checkLegalMoves.getGameStatus() != 0) {
                 break;
@@ -57,22 +58,18 @@ public class TerminalChess {
             System.out.println("col: "); // Read user input
             int yCoordinateForPiece = userInputForMove.nextInt();
             
-            int[] coordinatesForPieceToMove = new int[] {xCoordinateForPiece, yCoordinateForPiece}; 
+            Tile tilePieceToMoveIsOn = currentGamePositionTiles[xCoordinateForPiece][yCoordinateForPiece]; 
 
             Piece pieceToMove  = this.currentGamePositionTiles[xCoordinateForPiece][yCoordinateForPiece].getPiece();
 
-            Set<int[]> allPiecesThatCanMove = allLegalMovesAfterControl.keySet();
+            Set<Tile> allPiecesThatCanMove = allLegalMovesAfterControl.keySet();
 
             boolean legalPiece = false;
 
-            int [] keyForPieceToMove = null; 
-
-            for (int[] Pieces : allPiecesThatCanMove) {
-                if (Arrays.equals(Pieces, coordinatesForPieceToMove)) {
-                    keyForPieceToMove = Pieces; 
-                    legalPiece = true;
+            for (Tile piece : allPiecesThatCanMove) {
+                if (piece == tilePieceToMoveIsOn) {
+                       legalPiece = true;
                 }
-            
             }
 
             if (!legalPiece) {
@@ -80,7 +77,7 @@ public class TerminalChess {
                 continue;
             }
 
-            ArrayList<int[]> legalMovesForPieceToMove = allLegalMovesAfterControl.get(keyForPieceToMove);
+            ArrayList<int[]> legalMovesForPieceToMove = allLegalMovesAfterControl.get(tilePieceToMoveIsOn);
 
             System.out.println("row: ");
             int xCoordinateForMove = userInputForMove.nextInt();
@@ -220,7 +217,7 @@ public class TerminalChess {
             
             //chessboard.printBoard();
             checkLegalMoves.increaseMoveNumber();
-        }
+            }
 
         userInputForMove.close();
 
