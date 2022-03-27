@@ -52,6 +52,7 @@ public class Game {
 
     public void updateBoard(int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
         Piece pieceToMove = currentGamePositionTiles[chosenPieceRow][chosenPieceCol].getPiece();
+        pieceToMove.setHasMoved(true);
         this.currentGamePositionTiles[chosenPieceRow][chosenPieceCol].removePiece();
         this.currentGamePositionTiles[moveToPieceRow][moveToPieceCol].setPiece(pieceToMove);
         checkLegalMoves.increaseMoveNumber();
