@@ -124,7 +124,7 @@ public class TileMovementPatterns {
             && passantLeft.getPiece() instanceof Pawn
             && passantLeft.getPiece().getColor() != this.color
             && ((Pawn)passantLeft.getPiece()).getMovedTwoLastTurn()
-            && ((((Pawn)passantLeft.getPiece()).getmoveNumberEnPassant() - checkLegalMoves.getMoveNUmber()) == 0))
+            && ((((Pawn)passantLeft.getPiece()).getMoveNumberEnPassant() - checkLegalMoves.getMoveNumber()) == 0))
         {
             legalPawnMoves.add(new int[]{passantLeft.getRow() + 1 * moveDirection, passantLeft.getCol()});
         }
@@ -133,7 +133,7 @@ public class TileMovementPatterns {
             && passantRight.getPiece() instanceof Pawn
             && passantRight.getPiece().getColor() != this.color 
             && ((Pawn)passantRight.getPiece()).getMovedTwoLastTurn()
-            && ((((Pawn)passantRight.getPiece()).getmoveNumberEnPassant() - checkLegalMoves.getMoveNUmber()) == 0))
+            && ((((Pawn)passantRight.getPiece()).getMoveNumberEnPassant() - checkLegalMoves.getMoveNumber()) == 0))
 
         {
             legalPawnMoves.add(new int[]{passantRight.getRow() + 1 * moveDirection, passantRight.getCol()});

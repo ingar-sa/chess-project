@@ -387,7 +387,7 @@ public class TileCheckLegalMoves {
         this.moveNumber ++;
     }
 
-    public int getMoveNUmber() {
+    public int getMoveNumber() {
         return this.moveNumber;
     }
 

@@ -1,3 +1,17 @@
-Innkapsling av alle arraylists return new ArrayList<>(oldArrayList);
 
-INGEN spillogikk i kontrolleren
+Defensive copy når en har flere dybder
+Chessboard -> tile[][] -> tile -> piece 
+
+HashMap<Tile, ArrayList<int[]>> allLegalMovesAfterControl
+HashMap<int[], ArrayList<int[]>>
+ArrayList<String>
+
+Innkapsling i mappe 
+
+Bruke python script til å generere fxml?
+
+Grense på logikk i kontrolleren.
+
+Blir objecter alltid referanser når man bruker en vanlig "getter"
+
+Få imageview til å fylle hele tilen.

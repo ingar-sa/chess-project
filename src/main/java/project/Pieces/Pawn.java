@@ -28,7 +28,7 @@ public class Pawn extends Piece {
          this.moveNumberEnPassant = moveNumberEnPassant;
     }
 
-    public int getmoveNumberEnPassant() {
+    public int getMoveNumberEnPassant() {
          return this.moveNumberEnPassant;
     }
 

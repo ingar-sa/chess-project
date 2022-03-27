@@ -99,7 +99,7 @@ public class TileTerminalChess {
                             }
                             else if (!pieceToMove.getHasMoved() && Math.abs(xCoordinateForMove - xCoordinateForPiece) == 2) {
                                 ((Pawn)pieceToMove).setMovedTwoLastTurn(true);
-                                ((Pawn)pieceToMove).setMoveNumberEnPassant(checkLegalMoves.getMoveNUmber() + 1);
+                                ((Pawn)pieceToMove).setMoveNumberEnPassant(checkLegalMoves.getMoveNumber() + 1);
                             }
 
                             //Legge til fjerning av brikken an passent!!!
@@ -222,7 +222,7 @@ public class TileTerminalChess {
         userInputForMove.close();
 
         if (checkLegalMoves.getGameStatus() == 2) {
-            if (checkLegalMoves.getMoveNUmber() % 2 == 1) {
+            if (checkLegalMoves.getMoveNumber() % 2 == 1) {
                 System.out.println("White won by checkmate!");
             }
             else {

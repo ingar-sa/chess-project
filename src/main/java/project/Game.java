@@ -6,6 +6,7 @@ import java.util.Set;
 
 import project.Board.Chessboard;
 import project.Board.Tile;
+import project.Movement.CheckLegalMoves;
 import project.Movement.TileCheckLegalMoves;
 import project.Pieces.Piece;
 
@@ -14,25 +15,29 @@ public class Game {
     Chessboard chessboard;
     TileCheckLegalMoves checkLegalMoves;
     Tile[][] currentGamePositionTiles;
+    HashMap<Tile, ArrayList<int[]>> allLegalMovesAfterControl;
 
     public Game() {
-        this.chessboard               = new Chessboard();        //Only necessary for printing board 
-        this.currentGamePositionTiles = chessboard.getBoardTiles();
-        this.checkLegalMoves          = new TileCheckLegalMoves(currentGamePositionTiles);  
+        this.chessboard                = new Chessboard();        //Only necessary for printing board 
+        this.currentGamePositionTiles  = chessboard.getBoardTiles();
+        this.checkLegalMoves           = new TileCheckLegalMoves(currentGamePositionTiles);
+        this.allLegalMovesAfterControl = checkLegalMoves.CheckforCheckMateAndPat();
+    }
+
+    public int isGameOver() {
+        return checkLegalMoves.getGameStatus();
     }
 
     public ArrayList<String> getLegalMoves(int row, int col) {
 
-        HashMap<Tile, ArrayList<int[]>> allLegalMovesAfterControl = checkLegalMoves.CheckforCheckMateAndPat();
-        Tile tilePieceToMoveIsOn = currentGamePositionTiles[row][col]; 
-        Piece pieceToMove = this.currentGamePositionTiles[row][col].getPiece();
-        ArrayList<int[]> legalMovesForPieceToMove = allLegalMovesAfterControl.get(tilePieceToMoveIsOn);
-        Set<Tile> allPiecesThatCanMove = allLegalMovesAfterControl.keySet();
-        
-        boolean legalPiece = false;
+        //Piece pieceToMove                                       = this.currentGamePositionTiles[row][col].getPiece();
+        Tile             tilePieceToMoveIsOn       = currentGamePositionTiles[row][col]; 
+        ArrayList<int[]> legalMovesForPieceToMove  = this.allLegalMovesAfterControl.get(tilePieceToMoveIsOn);
+        Set<Tile>        allPiecesThatCanMove      = this.allLegalMovesAfterControl.keySet();
+        boolean          legalPiece                = false;
 
         for (Tile piece : allPiecesThatCanMove) {
-            if (piece == tilePieceToMoveIsOn && allLegalMovesAfterControl.get(tilePieceToMoveIsOn).size() != 0) {
+            if (piece == tilePieceToMoveIsOn && this.allLegalMovesAfterControl.get(tilePieceToMoveIsOn).size() != 0) {
                     legalPiece = true;
             }
         }
@@ -50,13 +55,29 @@ public class Game {
         return new ArrayList<String>(coordinateString);
     }
 
-    public void updateBoard(int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
+    public int updateGameState(int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
         Piece pieceToMove = currentGamePositionTiles[chosenPieceRow][chosenPieceCol].getPiece();
+        
         pieceToMove.setHasMoved(true);
+        
         this.currentGamePositionTiles[chosenPieceRow][chosenPieceCol].removePiece();
         this.currentGamePositionTiles[moveToPieceRow][moveToPieceCol].setPiece(pieceToMove);
+        
         checkLegalMoves.increaseMoveNumber();
+
+        this.allLegalMovesAfterControl = checkLegalMoves.CheckforCheckMateAndPat();
+
+        int gameStatus = checkLegalMoves.getGameStatus(); //gameStatus returns 1 if it is pat, 2 if it is check mate, and else 0
+        if (gameStatus == 1) {
+            return 0;
+        }
+        else if (gameStatus == 2) {
+            return (checkLegalMoves.getMoveNumber() % 2 == 0) ? 1 : 2;  //If movenumber is even, black has check mate. Otherwise white has check mate. 
+        }
+        
+        return -1;
     }
+        
 
     public static void main(String[] args) {
                 
