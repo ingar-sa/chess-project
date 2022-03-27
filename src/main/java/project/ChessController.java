@@ -91,60 +91,69 @@ public class ChessController {
     @FXML
     private Pane tile00, tile01, tile02, tile03, tile04, tile05, tile06, tile07, tile10, tile11, tile12, tile13, tile14, tile15, tile16, tile17, tile20, tile21, tile22, tile23, tile24, tile25, tile26, tile27, tile30, tile31, tile32, tile33, tile34, tile35, tile36, tile37, tile40, tile41, tile42, tile43, tile44, tile45, tile46, tile47, tile50, tile51, tile52, tile53, tile54, tile55, tile56, tile57, tile60, tile61, tile62, tile63, tile64, tile65, tile66, tile67, tile70, tile71, tile72, tile73, tile74, tile75, tile76, tile77;
     
-    
-    private char currentPlayerTurn = 'w';
-    private boolean hasPieceBeenChosen = false;
-    private Piece chosenPiece;
-    private String pieceSprite;
-    private ImageView prevImageView;
+    //private Piece chosenPiece;
+    //private char currentPlayerTurn = 'w';
     // private boolean turnOver = false;
+
+    private boolean pieceHasBeenChosen = false;
+    private String chosenPieceSpriteUrl;
+    private ImageView chosenPieceImageView;
     private Game game = new Game();
     private ArrayList<String> legalMovesStrings;
 
 
     @FXML
     private void testClick (MouseEvent event) {
-        if (!hasPieceBeenChosen){
-            ImageView iView = (ImageView)event.getSource();
-            Image piece;
+        if (!pieceHasBeenChosen){
+            ImageView pieceImageView = (ImageView)event.getSource();
+            Image sprite;
             
-            piece = iView.getImage();
+            sprite = pieceImageView.getImage();
             
-            if (piece == null)
-                return;
-
-            //Possibly remove this section, as it might be on the edge of what is considered game logic
-            pieceSprite = piece.getUrl();
-            char blackOrWhite =  pieceSprite.charAt(pieceSprite.length() - 6); 
-            if (blackOrWhite != this.currentPlayerTurn) {
-                return;
-            }
-
-            int row = GridPane.getRowIndex(iView);
-            int col = GridPane.getColumnIndex(iView);
+            //Fix for opposite row coordinates
+            int col = GridPane.getColumnIndex(pieceImageView);
+            int row = GridPane.getRowIndex(pieceImageView); 
+            row = 7 - row;
             
             System.out.println(row + " " + col);
 
             legalMovesStrings = game.getLegalMoves(row, col);
-            hasPieceBeenChosen = true;
+            if (legalMovesStrings.size() == 0)
+                return;
+            
+            System.out.println("Legal Move!");
+            pieceHasBeenChosen = true;
+            chosenPieceImageView = pieceImageView;
+            chosenPieceSpriteUrl = sprite.getUrl();
 
         }
+        else {
 
-        ImageView iView = (ImageView)event.getSource();
-        String legalMoveId = null;
-        
-        //Use .contains instead
-        for (String coordinate : legalMovesStrings) {
-            if (coordinate.equals(iView.getId())) {
-                legalMoveId = coordinate;
-                break;
-            }
+            pieceHasBeenChosen = false;
+            
+            System.out.println("Check if the new piece is legal.");
+
+            ImageView moveToImageView = (ImageView)event.getSource();
+            String legalMoveId = moveToImageView.getId();
+            
+
+            if (!legalMovesStrings.contains(legalMoveId)) 
+                return;
+            
+            chosenPieceImageView.setImage(null);
+            moveToImageView.setImage(new Image(chosenPieceSpriteUrl));
+
+            int chosenPieceRow = GridPane.getRowIndex(chosenPieceImageView); 
+            int chosenPieceCol = GridPane.getColumnIndex(chosenPieceImageView);
+            
+            int moveToPieceRow = GridPane.getRowIndex(moveToImageView); 
+            int moveToPieceCol = GridPane.getColumnIndex(moveToImageView);
+            
+            chosenPieceRow = 7 - chosenPieceRow;
+            moveToPieceRow = 7 - moveToPieceRow;
+
+            game.updateBoard(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol);
         }
-
-        if (legalMoveId == null)
-            return;
-        
-        
     }
 
 
@@ -167,7 +176,7 @@ public class ChessController {
         
     }
 
-
+    @FXML
     private void initialize()
     {
     }

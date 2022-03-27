@@ -163,7 +163,7 @@ public class TileMovementPatterns {
         }
             
         whileRow = row - 1;
-        whileCol = row - 1;
+        whileCol = col - 1;
         while (whileRow >= 0 && whileCol >= 0) {
             if (boardTiles[whileRow][whileCol].isOccupied()) {
                 allMoves.add(new int[]{whileRow, whileCol});

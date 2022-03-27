@@ -27,23 +27,35 @@ public class Game {
         Tile tilePieceToMoveIsOn = currentGamePositionTiles[row][col]; 
         Piece pieceToMove = this.currentGamePositionTiles[row][col].getPiece();
         ArrayList<int[]> legalMovesForPieceToMove = allLegalMovesAfterControl.get(tilePieceToMoveIsOn);
-
-        //TODO: check if there are no legal moves and return nothing if so
-
-        return new ArrayList<String>(coordinateArrayToString(legalMovesForPieceToMove));
-    }
-
-    private ArrayList<String> coordinateArrayToString(ArrayList<int[]> coordinateArray) {
+        Set<Tile> allPiecesThatCanMove = allLegalMovesAfterControl.keySet();
         
-        ArrayList<String> coordinateString = new ArrayList<String>();
+        boolean legalPiece = false;
 
-        for (int[] legalMove : coordinateArray) {
+        for (Tile piece : allPiecesThatCanMove) {
+            if (piece == tilePieceToMoveIsOn && allLegalMovesAfterControl.get(tilePieceToMoveIsOn).size() != 0) {
+                    legalPiece = true;
+            }
+        }
+
+        ArrayList<String> coordinateString = new ArrayList<String>();
+        
+        if (!legalPiece) {
+            return coordinateString;
+        }
+
+        for (int[] legalMove : legalMovesForPieceToMove) {
             coordinateString.add(legalMove[0] + "" + legalMove[1]);
         }
         
-        return coordinateString;
+        return new ArrayList<String>(coordinateString);
     }
 
+    public void updateBoard(int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
+        Piece pieceToMove = currentGamePositionTiles[chosenPieceRow][chosenPieceCol].getPiece();
+        this.currentGamePositionTiles[chosenPieceRow][chosenPieceCol].removePiece();
+        this.currentGamePositionTiles[moveToPieceRow][moveToPieceCol].setPiece(pieceToMove);
+        checkLegalMoves.increaseMoveNumber();
+    }
 
     public static void main(String[] args) {
                 

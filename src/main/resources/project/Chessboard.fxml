@@ -129,7 +129,7 @@
             <Insets />
             </GridPane.margin>
                <image>
-                  <Image url="@sprites/wRook.png" />
+                  <Image url="@wR.png" />
                </image>
             </ImageView>
             <ImageView id="01" fx:id="sprite01" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="7">
@@ -137,7 +137,7 @@
             <Insets />
             </GridPane.margin>
                <image>
-                  <Image url="@sprites/wKnight.png" />
+                  <Image url="@wK.png" />
                </image>
             </ImageView>
             <ImageView id="02" fx:id="sprite02" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="7">
@@ -145,7 +145,7 @@
             <Insets />
             </GridPane.margin>
                <image>
-                  <Image url="@sprites/wBishop.png" />
+                  <Image url="@wB.png" />
                </image>
             </ImageView>
             <ImageView id="03" fx:id="sprite03" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="7">
@@ -153,7 +153,7 @@
             <Insets />
             </GridPane.margin>
                <image>
-                  <Image url="@sprites/wQueen.png" />
+                  <Image url="@wQ.png" />
                </image>
             </ImageView>
             <ImageView id="05" fx:id="sprite05" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="7">
@@ -161,7 +161,7 @@
             <Insets />
             </GridPane.margin>
                <image>
-                  <Image url="@sprites/wBishop.png" />
+                  <Image url="@wB.png" />
                </image>
             </ImageView>
             <ImageView id="04" fx:id="sprite04" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="7">
@@ -169,7 +169,7 @@
             <Insets />
             </GridPane.margin>
                <image>
-                  <Image url="@sprites/wKing.png" />
+                  <Image url="@wX.png" />
                </image>
             </ImageView>
             <ImageView id="06" fx:id="sprite06" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="7">
@@ -177,7 +177,7 @@
             <Insets />
             </GridPane.margin>
                <image>
-                  <Image url="@sprites/wKnight.png" />
+                  <Image url="@wK.png" />
                </image>
             </ImageView>
             <ImageView id="07" fx:id="sprite07" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="7">
@@ -185,7 +185,7 @@
             <Insets />
             </GridPane.margin>
                <image>
-                  <Image url="@sprites/wRook.png" />
+                  <Image url="@wR.png" />
                </image>
             </ImageView>
             <ImageView id="10" fx:id="sprite10" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.rowIndex="6">
@@ -481,7 +481,7 @@
             <Insets />
             </GridPane.margin>
                <image>
-                  <Image url="@sprites/bRook.png" />
+                  <Image url="@bR.png" />
                </image>
             </ImageView>
             <ImageView id="71" fx:id="sprite71" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="0">
@@ -489,7 +489,7 @@
             <Insets />
             </GridPane.margin>
                <image>
-                  <Image url="@sprites/bKnight.png" />
+                  <Image url="@bK.png" />
                </image>
             </ImageView>
             <ImageView id="72" fx:id="sprite72" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="0">
@@ -497,7 +497,7 @@
             <Insets />
             </GridPane.margin>
                <image>
-                  <Image url="@sprites/bBishop.png" />
+                  <Image url="@bB.png" />
                </image>
             </ImageView>
             <ImageView id="73" fx:id="sprite73" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="0">
@@ -505,7 +505,7 @@
             <Insets />
             </GridPane.margin>
                <image>
-                  <Image url="@sprites/bQueen.png" />
+                  <Image url="@bQ.png" />
                </image>
             </ImageView>
             <ImageView id="74" fx:id="sprite74" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="0">
@@ -513,7 +513,7 @@
             <Insets />
             </GridPane.margin>
                <image>
-                  <Image url="@sprites/bKing.png" />
+                  <Image url="@bX.png" />
                </image>
             </ImageView>
             <ImageView id="75" fx:id="sprite75" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="0">
@@ -521,7 +521,7 @@
             <Insets />
             </GridPane.margin>
                <image>
-                  <Image url="@sprites/bBishop.png" />
+                  <Image url="@bB.png" />
                </image>
             </ImageView>
             <ImageView id="76" fx:id="sprite76" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="0">
@@ -529,7 +529,7 @@
             <Insets />
             </GridPane.margin>
                <image>
-                  <Image url="@sprites/bKnight.png" />
+                  <Image url="@bK.png" />
                </image>
             </ImageView>
             <ImageView id="77" fx:id="sprite77" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="0">
@@ -537,7 +537,7 @@
             <Insets />
             </GridPane.margin>
                <image>
-                  <Image url="@sprites/bRook.png" />
+                  <Image url="@bR.png" />
                </image>
             </ImageView>
 
