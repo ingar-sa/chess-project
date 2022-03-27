@@ -113,8 +113,9 @@ public class ChessController {
             if (piece == null)
                 return;
 
+            //Possibly remove this section, as it might be on the edge of what is considered game logic
             pieceSprite = piece.getUrl();
-            char blackOrWhite =  pieceSprite.charAt(pieceSprite.length() - 6);
+            char blackOrWhite =  pieceSprite.charAt(pieceSprite.length() - 6); 
             if (blackOrWhite != this.currentPlayerTurn) {
                 return;
             }
@@ -132,6 +133,7 @@ public class ChessController {
         ImageView iView = (ImageView)event.getSource();
         String legalMoveId = null;
         
+        //Use .contains instead
         for (String coordinate : legalMovesStrings) {
             if (coordinate.equals(iView.getId())) {
                 legalMoveId = coordinate;
@@ -145,6 +147,8 @@ public class ChessController {
         
     }
 
+
+    //This is without a doubt a cool feature to have, but... focusing on oop principles takes precedence
     private void drawCirclesForLegalMoves(ArrayList<String> legalMovesStrings) {
         for (String legalMove : legalMovesStrings) {
             ImageView legalMoveImageView = (ImageView)sprites.lookup("#" + legalMove);

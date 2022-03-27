@@ -1,2 +1,3 @@
 Innkapsling av alle arraylists return new ArrayList<>(oldArrayList);
 
+INGEN spillogikk i kontrolleren
