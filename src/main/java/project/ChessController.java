@@ -84,16 +84,11 @@ public class ChessController {
     @FXML
     private GridPane sprites;
     
-    //Generating the imageviews in javafx code was more cumbersome than writing a python
-    //script to generate the fxml and working on it in scenebuilder.
+    //Generating the imageviews in javafx like we do with colorTiles() was more cumbersome 
+    //than writing a python script to generate the fxml. The script can be found in src/python.
     @FXML
     private ImageView sprite00, sprite01, sprite02, sprite03, sprite04, sprite05, sprite06, sprite07, sprite10, sprite11, sprite12, sprite13, sprite14, sprite15, sprite16, sprite17, sprite20, sprite21, sprite22, sprite23, sprite24, sprite25, sprite26, sprite27, sprite30, sprite31, sprite32, sprite33, sprite34, sprite35, sprite36, sprite37, sprite40, sprite41, sprite42, sprite43, sprite44, sprite45, sprite46, sprite47, sprite50, sprite51, sprite52, sprite53, sprite54, sprite55, sprite56, sprite57, sprite60, sprite61, sprite62, sprite63, sprite64, sprite65, sprite66, sprite67, sprite70, sprite71, sprite72, sprite73, sprite74, sprite75, sprite76, sprite77;
     
-    
-    //private Piece chosenPiece;
-    //private char currentPlayerTurn = 'w';
-    // private boolean turnOver = false;
-
     private boolean pieceHasBeenChosen = false;
     private String chosenPieceSpriteUrl;
     private ImageView chosenPieceImageView;
@@ -109,9 +104,10 @@ public class ChessController {
 
         for (int row = 0; row < tileColors.getRowCount(); ++row ) {
             for (int col = 0; col < tileColors.getColumnCount(); ++col) {
-                
-                tileColor = (row % 2 == 1) ?
-                            (col % 2 == 1) ? light : dark
+
+                //Starting color for each row alternates
+                tileColor = (row % 2 == 1) ?               
+                            (col % 2 == 1) ? light : dark  
                            :(col % 2 == 1) ? dark : light;
 
                 tileColors.add(new Rectangle(100, 100, tileColor), col, row); 
@@ -170,15 +166,15 @@ public class ChessController {
             chosenPieceRow = 7 - chosenPieceRow;
             moveToPieceRow = 7 - moveToPieceRow;
 
+            //Retrieves the game state. 0 represents pat, 1 check mate for black and 2 is check mate for white 
             int gameOver = game.updateGameState(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol);
 
-            if (gameOver == 0)
+            if (gameOver == Consts.PAT)
                 System.out.println("Pat");
-            else if (gameOver == 1) 
+            else if (gameOver == Consts.CHECK_MATE_FOR_BLACK) 
                 System.out.println("Check Mate for Black.");
-            else if (gameOver == 2) 
+            else if (gameOver == Consts.CHECK_MATE_FOR_WHITE) 
                 System.out.println("Check Mate for White.");
-            
         }
     }
 

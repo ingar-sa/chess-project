@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import project.Consts;
 import project.TerminalChess;
 import project.Board.Chessboard;
 import project.Board.Tile;
@@ -24,7 +25,7 @@ public class TileCheckLegalMoves {
     private TileMovementPatterns whiteMovement;
     private TileMovementPatterns blackMovement;
 
-    private int gameStatus = 0;
+    private int gameStatus = Consts.GAME_NOT_OVER;
 
     //må vell egentlig hentes fra hovedbrettet
     private int[] whiteKing;
@@ -374,10 +375,10 @@ public class TileCheckLegalMoves {
         }
 
         if (kingCanBetaken && !notGameOver) {
-            this.gameStatus = 2;
+            this.gameStatus = Consts.CHECK_MATE;
         } 
         else if (!kingCanBetaken && !notGameOver) {
-            this.gameStatus = 1;
+            this.gameStatus = Consts.PAT;
         }
 
         return legalMoves;
