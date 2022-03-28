@@ -11,7 +11,6 @@ import project.Pieces.Piece;
 import project.Pieces.Queen;
 import project.Pieces.Rook;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -157,13 +156,13 @@ public class TerminalChess {
             }
 
             if (!legalMove) {
-                System.out.println("Ulovelig trekk!");
+                System.out.println("Ulovlig trekk!");
                 continue;
             }
 
             if (pieceToMove instanceof Pawn && xCoordinateForMove == 7) {
 
-                System.out.println("What to promoto to (0 = B, 1 = K, 2 = Q, 3 = Rook): ");
+                System.out.println("What to promote to (0 = B, 1 = K, 2 = Q, 3 = Rook): ");
                 int queenPromotionPiece = userInputForMove.nextInt();
                 
 
@@ -192,7 +191,7 @@ public class TerminalChess {
             if (pieceToMove instanceof Pawn && xCoordinateForMove == 0) {
 
                 
-                System.out.println("What to promoto to (0 = B, 1 = K, 2 = Q, 3 = Rook): ");
+                System.out.println("What to promote to (0 = B, 1 = K, 2 = Q, 3 = Rook): ");
                 int queenPromotionPiece = userInputForMove.nextInt();
                 
 
@@ -224,7 +223,7 @@ public class TerminalChess {
 
         userInputForMove.close();
 
-        if (checkLegalMoves.getGameStatus() == 2) {
+        if (checkLegalMoves.getGameStatus() == Consts.CHECKMATE) {
             if (checkLegalMoves.getMoveNumber() % 2 == 1) {
                 System.out.println("White won by checkmate!");
             }

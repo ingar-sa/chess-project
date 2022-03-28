@@ -1,22 +1,16 @@
 package project;
 
-import java.time.Period;
 import java.util.ArrayList;
-
-import javax.crypto.spec.IvParameterSpec;
 
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import project.Pieces.Piece;
 
 /*
 
@@ -98,8 +92,8 @@ public class ChessController {
     @FXML
     private void colorTiles() {
 
-        Color dark =  new Color(81.0/255, 42.0/255, 42.0/255, 1);
         Color light = new Color(122.0/255, 74.0/255, 61.0/255, 1);
+        Color dark =  new Color(81.0/255, 42.0/255, 42.0/255, 1);
         Paint tileColor;
 
         for (int row = 0; row < tileColors.getRowCount(); ++row ) {
@@ -171,9 +165,9 @@ public class ChessController {
 
             if (gameOver == Consts.PAT)
                 System.out.println("Pat");
-            else if (gameOver == Consts.CHECK_MATE_FOR_BLACK) 
+            else if (gameOver == Consts.CHECKMATE_FOR_BLACK) 
                 System.out.println("Check Mate for Black.");
-            else if (gameOver == Consts.CHECK_MATE_FOR_WHITE) 
+            else if (gameOver == Consts.CHECKMATE_FOR_WHITE) 
                 System.out.println("Check Mate for White.");
         }
     }

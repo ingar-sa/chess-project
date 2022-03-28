@@ -2,7 +2,6 @@ package project;
 
 import project.Board.Chessboard;
 import project.Board.Tile;
-//import project.Movement.CheckLegalMoves;
 import project.Movement.TileCheckLegalMoves;
 import project.Pieces.Bishop;
 import project.Pieces.King;
@@ -12,9 +11,7 @@ import project.Pieces.Piece;
 import project.Pieces.Queen;
 import project.Pieces.Rook;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Set;
@@ -37,8 +34,6 @@ public class TileTerminalChess {
         this.checkLegalMoves = checkLegalMoves;
     }
 
-
-    
     public void movePieces() {
     
         Scanner userInputForMove = new Scanner(System.in);
@@ -221,7 +216,7 @@ public class TileTerminalChess {
 
         userInputForMove.close();
 
-        if (checkLegalMoves.getGameStatus() == 2) {
+        if (checkLegalMoves.getGameStatus() == Consts.CHECKMATE) {
             if (checkLegalMoves.getMoveNumber() % 2 == 1) {
                 System.out.println("White won by checkmate!");
             }

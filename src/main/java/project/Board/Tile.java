@@ -4,16 +4,16 @@ import project.Pieces.*;
 
 public class Tile {
 
-    private Piece piece;
-    private int row;
-    private int col;
-    private char color;
+    private Piece   piece;
+    private int     row;
+    private int     col;
+    private char    color;
     private boolean occupied;
     
     
     public Tile(int row, int col, char color) {
-        this.row = row;
-        this.col = col;
+        this.row   = row;
+        this.col   = col;
         this.color = color;
     }
 
@@ -68,7 +68,6 @@ public class Tile {
         this.occupied = occupied;
     }
     
-    //ny
     public void removePiece() {
         this.piece = null;
         this.occupied = false;

@@ -6,7 +6,6 @@ import java.util.Set;
 
 import project.Board.Chessboard;
 import project.Board.Tile;
-import project.Movement.CheckLegalMoves;
 import project.Movement.TileCheckLegalMoves;
 import project.Pieces.Piece;
 
@@ -76,8 +75,8 @@ public class Game {
         if (gameStatus == Consts.PAT) {
             return Consts.PAT;
         }
-        else if (gameStatus == Consts.CHECK_MATE) {
-            return (checkLegalMoves.getMoveNumber() % 2 == 0) ? Consts.CHECK_MATE_FOR_BLACK : Consts.CHECK_MATE_FOR_WHITE;  //When movenumber is even, black has check mate, when it's odd, white has check mate. 
+        else if (gameStatus == Consts.CHECKMATE) {
+            return (checkLegalMoves.getMoveNumber() % 2 == 0) ? Consts.CHECKMATE_FOR_BLACK : Consts.CHECKMATE_FOR_WHITE;  //When movenumber is even, black has check mate, when it's odd, white has check mate. 
         }
         else {
             return Consts.GAME_NOT_OVER;

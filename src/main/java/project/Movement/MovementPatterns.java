@@ -16,41 +16,41 @@ import project.Pieces.Rook;
 
 // Husk en passant må skje rett etter motstander har flyttet + queen promotion
 
-
 public class MovementPatterns {
 
-    private char color;
-    private Tile[][] boardTiles;
+    private char            color;
+    private Tile[][]        boardTiles;
     private CheckLegalMoves checkLegalMoves;
     
 
     MovementPatterns (char color, CheckLegalMoves checkLegalMoves) {
-        this.color = color;
+        this.color           = color;
         this.checkLegalMoves = checkLegalMoves;
     }
 
     public ArrayList<int[]> moveHandler(Tile tile) {
+
+        Piece piece               = tile.getPiece();
         ArrayList<int[]> allMoves = new ArrayList<int[]>();
-        Piece piece = tile.getPiece();
         
-        if (piece instanceof Pawn) allMoves = pawnMoves(tile);
+        if      (piece instanceof Pawn)   allMoves = pawnMoves(tile);
         else if (piece instanceof Bishop) allMoves = bishopMoves(tile);
-        else if (piece instanceof Rook) allMoves = rookMoves(tile);
+        else if (piece instanceof Rook)   allMoves = rookMoves(tile);
         else if (piece instanceof Knight) allMoves = knightMoves(tile);
-        else if (piece instanceof King) allMoves = kingMoves(tile);
-        else if (piece instanceof Queen) allMoves = queenMoves(tile);
+        else if (piece instanceof King)   allMoves = kingMoves(tile);
+        else if (piece instanceof Queen)  allMoves = queenMoves(tile);
 
         return allMoves;
     }
 
 
     private ArrayList<int[]> pawnMoves(Tile tile) {     
+        
+        Pawn pawn                       = (Pawn)tile.getPiece(); 
+        int row                         = tile.getRow();
+        int col                         = tile.getCol();
         ArrayList<int[]> legalPawnMoves = new ArrayList<int[]>();
-        Pawn pawn = (Pawn)tile.getPiece(); 
-        int row = tile.getRow();
-        int col = tile.getCol();
-        //int moveNumber = ((Pawn)tile.getPiece()).getMoveNumber();
-
+        
         int moveDirection = 1; 
         if (this.color == 'b') moveDirection = -1;
         
@@ -59,44 +59,41 @@ public class MovementPatterns {
 
         Tile twoInFront = null;
 
-        if (!pawn.getHasMoved()) {
+        if (!pawn.getHasMoved()) 
              twoInFront  = boardTiles[row + (2 * moveDirection)][col];
-        }
+        
 
         Tile attackLeft = null;
         Tile attackRight = null;
          
-        if (!(col == 0)) { 
+        if (!(col == 0)) 
             attackLeft = boardTiles[row+(1*moveDirection)][col-1];
-        }
+        
 
-        if (!(col == 7)) {
+        if (!(col == 7)) 
             attackRight = boardTiles[row+(1*moveDirection)][col+1];
-        }
+        
 
         Tile passantLeft = null; 
         Tile passantRight = null;
         
-        if (this.color == 'w' && row == 4 && col != 0) {
+        if (this.color == 'w' && row == 4 && col != 0) 
             passantLeft = boardTiles[row][col-1];
-        }
-
-        if (this.color == 'b' && row == 3 && col != 0) {
-            passantLeft = boardTiles[row][col-1];
-        }
-
-        if (this.color == 'w' && row == 4 && col != 7) {
-            passantRight = boardTiles[row][col+1];
-        }
-
-        if (this.color == 'b' && row == 3 && col != 7) {
-            passantRight = boardTiles[row][col+1];
-        }
         
 
-        if (!inFront.isOccupied()) {
+        if (this.color == 'b' && row == 3 && col != 0) 
+            passantLeft = boardTiles[row][col-1];
+        
+
+        if (this.color == 'w' && row == 4 && col != 7) 
+            passantRight = boardTiles[row][col+1];
+    
+        if (this.color == 'b' && row == 3 && col != 7) 
+            passantRight = boardTiles[row][col+1];
+        
+        if (!inFront.isOccupied()) 
             legalPawnMoves.add(new int[]{inFront.getRow(), inFront.getCol()});
-        }    
+        
         
         if (!pawn.getHasMoved() && twoInFront != null) {
             if (!twoInFront.isOccupied() 
@@ -124,8 +121,8 @@ public class MovementPatterns {
             && passantLeft.getPiece() instanceof Pawn
             && passantLeft.getPiece().getColor() != this.color
             && ((Pawn)passantLeft.getPiece()).getMovedTwoLastTurn()
-            && ((((Pawn)passantLeft.getPiece()).getMoveNumberEnPassant() - checkLegalMoves.getMoveNumber()) == 0))
-        {
+            && ((((Pawn)passantLeft.getPiece()).getMoveNumberEnPassant() - checkLegalMoves.getMoveNumber()) == 0)) {
+        
             legalPawnMoves.add(new int[]{passantLeft.getRow() + 1 * moveDirection, passantLeft.getCol()});
         }
 
@@ -133,9 +130,8 @@ public class MovementPatterns {
             && passantRight.getPiece() instanceof Pawn
             && passantRight.getPiece().getColor() != this.color 
             && ((Pawn)passantRight.getPiece()).getMovedTwoLastTurn()
-            && ((((Pawn)passantRight.getPiece()).getMoveNumberEnPassant() - checkLegalMoves.getMoveNumber()) == 0))
+            && ((((Pawn)passantRight.getPiece()).getMoveNumberEnPassant() - checkLegalMoves.getMoveNumber()) == 0) ){
 
-        {
             legalPawnMoves.add(new int[]{passantRight.getRow() + 1 * moveDirection, passantRight.getCol()});
         } 
 
@@ -148,7 +144,8 @@ public class MovementPatterns {
 
         int row = tile.getRow();
         int col = tile.getCol();
-        
+
+        //Up-right diagonal
         int whileRow = row + 1;
         int whileCol = col + 1;
         while (whileRow < 8 && whileCol < 8) {
@@ -161,20 +158,8 @@ public class MovementPatterns {
             ++whileRow;
             ++whileCol;
         }
-            
-        whileRow = row - 1;
-        whileCol = col - 1;
-        while (whileRow >= 0 && whileCol >= 0) {
-            if (boardTiles[whileRow][whileCol].isOccupied()) {
-                allMoves.add(new int[]{whileRow, whileCol});
-                break;
-            }
-            allMoves.add(new int[]{whileRow, whileCol});
-                 
-            --whileRow;
-            --whileCol;
-        } 
 
+        //Up-left diagonal
         whileRow = row + 1;
         whileCol = col - 1;
         while (whileRow < 8 && whileCol >= 0) {
@@ -188,6 +173,7 @@ public class MovementPatterns {
             --whileCol;
         }
 
+        //Down-right diagonal
         whileRow = row - 1;
         whileCol = col + 1;
         while (whileRow >= 0 && whileCol < 8) {
@@ -201,6 +187,20 @@ public class MovementPatterns {
             ++whileCol;
         }
 
+         //Down-left diagonal
+         whileRow = row - 1;
+         whileCol = col - 1;
+         while (whileRow >= 0 && whileCol >= 0) {
+             if (boardTiles[whileRow][whileCol].isOccupied()) {
+                 allMoves.add(new int[]{whileRow, whileCol});
+                 break;
+             }
+             allMoves.add(new int[]{whileRow, whileCol});
+                  
+             --whileRow;
+             --whileCol;
+         } 
+
         return removeFriendlyTiles(allMoves);
     }
 
@@ -211,6 +211,8 @@ public class MovementPatterns {
         int row = tile.getRow();
         int col = tile.getCol();
         
+
+        //Up
         int whileRow = row + 1;
         while (whileRow < 8) {
             if (boardTiles[whileRow][col].isOccupied()) {
@@ -221,7 +223,8 @@ public class MovementPatterns {
             
             ++whileRow;
         }
-            
+        
+        //Down
         whileRow = row - 1;
         while (whileRow >= 0) {
             if (boardTiles[whileRow][col].isOccupied()) {
@@ -233,18 +236,8 @@ public class MovementPatterns {
             --whileRow;
         }
 
-        int whileCol = col + 1;
-        while (whileCol < 8) {
-            if (boardTiles[row][whileCol].isOccupied()) {
-                allMoves.add(new int[]{row, whileCol});
-                break;
-            }
-            allMoves.add(new int[]{row, whileCol});
-            
-            ++whileCol;
-        }
-
-        whileCol = col - 1;
+        //Left
+        int whileCol = col - 1;
         while (whileCol >= 0) {
             if (boardTiles[row][whileCol].isOccupied()) {
                 allMoves.add(new int[]{row, whileCol});
@@ -255,16 +248,29 @@ public class MovementPatterns {
             --whileCol;
         }
 
+        //Right
+        whileCol = col + 1;
+        while (whileCol < 8) {
+            if (boardTiles[row][whileCol].isOccupied()) {
+                allMoves.add(new int[]{row, whileCol});
+                break;
+            }
+            allMoves.add(new int[]{row, whileCol});
+            
+            ++whileCol;
+        }
+
         return removeFriendlyTiles(allMoves);
     }
 
     private ArrayList<int[]> removeFriendlyTiles(ArrayList<int[]> allMoves) {
+
          ArrayList<int[]> legalMoves = new ArrayList<int[]>();
 
          for (int[] move : allMoves) {
-            Tile checkIfLegalTile = boardTiles[move[0]][move[1]]; 
+            Tile checkIfFriendlyTile = boardTiles[move[0]][move[1]]; 
 
-            if (checkIfLegalTile.isOccupied() && checkIfLegalTile.getPiece().getColor() == this.color)
+            if (checkIfFriendlyTile.isOccupied() && checkIfFriendlyTile.getPiece().getColor() == this.color)
                 continue;
 
             legalMoves.add(move);
@@ -297,7 +303,7 @@ public class MovementPatterns {
             int castleRow = 0;
             if (this.color == 'b') castleRow = 7;
             
-            Tile leftCorner = boardTiles[castleRow][0];
+            Tile leftCorner  = boardTiles[castleRow][0];
             Tile rightCorner = boardTiles[castleRow][7];
 
             if (leftCorner.isOccupied() 
@@ -321,7 +327,8 @@ public class MovementPatterns {
             }
 
         }
-        
+
+        //TODO: Add explanatory comments
         for (int boundedRow = row + 1; boundedRow >= row - 1; boundedRow--) {
 
             if (boundedRow < 8 && boundedRow >= 0) {
@@ -347,18 +354,8 @@ public class MovementPatterns {
         }
 
         return legalMoves;
-    }   
-
-    public Tile[][] getBoardTiles() {
-        return boardTiles;
-    }
-
-
-    public void setBoardTiles(Tile[][] boardTiles) {
-        this.boardTiles = boardTiles;
-    }
-
-
+    } 
+    
     private ArrayList<int[]> knightMoves(Tile tile) {
 
         ArrayList<int[]> legalMoves = new ArrayList<int[]>();
@@ -390,13 +387,23 @@ public class MovementPatterns {
     }
     
     void makeMove(Tile ourTile, ArrayList<int[]> legalMoves, int[] debugChoice) {
-        //Some code to choose which move the player picks from the interface
-        Tile newTile = boardTiles[debugChoice[0]][debugChoice[1]];
         
+        Tile newTile = boardTiles[debugChoice[0]][debugChoice[1]];
+
         newTile.setPiece(ourTile.getPiece());
         ourTile.setPiece(null);
     }
 
+
+    public Tile[][] getBoardTiles() {
+        return boardTiles;
+    }
+
+
+    public void setBoardTiles(Tile[][] boardTiles) {
+        this.boardTiles = boardTiles;
+    }
+    
     public char getColor() {
         return this.color;
     }

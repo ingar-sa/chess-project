@@ -1,14 +1,12 @@
 package project.Movement;
 
-import java.security.Key;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 import project.Consts;
-import project.TerminalChess;
 import project.Board.Chessboard;
 import project.Board.Tile;
 import project.Pieces.Bishop;
@@ -21,7 +19,7 @@ import project.Pieces.Pawn;
 
 public class TileCheckLegalMoves {
     
-    private Tile[][] currentGamePositionTiles;
+    private Tile[][]             currentGamePositionTiles;
     private TileMovementPatterns whiteMovement;
     private TileMovementPatterns blackMovement;
 
@@ -375,7 +373,7 @@ public class TileCheckLegalMoves {
         }
 
         if (kingCanBetaken && !notGameOver) {
-            this.gameStatus = Consts.CHECK_MATE;
+            this.gameStatus = Consts.CHECKMATE;
         } 
         else if (!kingCanBetaken && !notGameOver) {
             this.gameStatus = Consts.PAT;

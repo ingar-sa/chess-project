@@ -1,14 +1,11 @@
 package project.Movement;
 
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 import project.Consts;
-import project.TerminalChess;
 import project.Board.Chessboard;
 import project.Board.Tile;
 import project.Pieces.Bishop;
@@ -375,7 +372,7 @@ public class CheckLegalMoves {
             this.gameStatus = Consts.PAT;
         } 
         else if (!kingCanBetaken && !notGameOver) {
-            this.gameStatus = Consts.CHECK_MATE;
+            this.gameStatus = Consts.CHECKMATE;
         }
 
         return legalMoves;

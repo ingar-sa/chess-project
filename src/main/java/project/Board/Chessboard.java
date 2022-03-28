@@ -11,7 +11,7 @@ import project.Pieces.Rook;
 public class Chessboard {
 
     // Make hashmap
-    private Tile[][] boardTiles = new Tile[8][8];
+    private Tile[][]    boardTiles = new Tile[8][8];
     private final int[] columnLetters = {0, 1, 2, 3, 4, 5, 6, 7};
 
     public Chessboard () {
@@ -135,7 +135,6 @@ public class Chessboard {
     
     public void printBoard() {
     
-        //Collections.reverse(boardTiles);
         for (int row = 7; row >= 0; --row) {
             String ofRow = (row) + " ";
             for (int col = 0; col < 8; ++col) {
@@ -151,7 +150,6 @@ public class Chessboard {
             }
 
             System.out.println(ofRow);
-            //System.out.println();
         }
 
         String colLetters = "  ";
