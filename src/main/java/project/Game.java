@@ -85,19 +85,20 @@ public class Game implements Serializable {
         }
     }
 
-    public HashMap loadedGamePiecesPosition() {
+    public HashMap<String, String> loadedGamePiecesPosition() {
 
         HashMap<String, String> piecePositions = new HashMap<>();
 
-        int rowNumber = 0;
         for (Tile[] row : currentGamePositionTiles) {
-            int colNumber = 0;
             for (Tile tile : row) {
-                piecePositions.put(rowNumber + "" + colNumber, tile.getPiece().getSpriteId());
-                ++colNumber;
-            }
 
-            ++rowNumber;
+                String positionId = tile.getRow() + "" + tile.getCol();
+
+                if (tile.isOccupied())
+                    piecePositions.put(positionId, tile.getPiece().getSpriteId());
+                else
+                    piecePositions.put(positionId, null);
+            }
         }
 
         return piecePositions;

@@ -2,8 +2,10 @@ package project;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -211,12 +213,23 @@ public class ChessController implements Serializable {
 
         SaveGame loadGame = new SaveGame();
         game = (Game)loadGame.ReadObjectFromFile("src/main/java/project/Files/savegames/save1.binary");
+        recreateBoardFromLoadedGame();
         game.chessboard.printBoard();
     }
 
     @FXML
-    private void recreateBoardFromLoadedGame(Game game) {
-        //for (Tile tile : game.)
+    private void recreateBoardFromLoadedGame() {
+
+        HashMap<String, String> piecePositions = game.loadedGamePiecesPosition();
+
+        for (String positionId : piecePositions.keySet()) {
+            String spriteId = piecePositions.get(positionId);
+            ImageView placeSpriteOnImageView = (ImageView)sprites.lookup("#" + positionId);
+            if (spriteId != null)
+                placeSpriteOnImageView.setImage(new Image("file:src/main/resources/project/" + spriteId));      
+            else
+                placeSpriteOnImageView.setImage(null);
+        }
     }
         
 

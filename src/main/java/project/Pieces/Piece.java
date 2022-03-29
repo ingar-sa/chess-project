@@ -15,7 +15,7 @@ public class Piece implements Serializable {
     protected Piece (String name,  char color, char spriteType) {
         this.name = name;
         this.color = color; //Add verification for correct type
-        this.spriteId = color + "" + spriteType;
+        this.spriteId = color + "" + spriteType + ".png";
     }
 
     public String getSpriteId() {
