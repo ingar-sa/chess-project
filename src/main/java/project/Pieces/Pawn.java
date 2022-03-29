@@ -13,6 +13,10 @@ public class Pawn extends Piece {
     private boolean movedTwoLastTurn = false;
     private int moveNumberEnPassant;
     
+    public Pawn (String name, char color) {
+        super(name, color, 'P');
+    }
+
     public boolean getMovedTwoLastTurn() {
         return movedTwoLastTurn;
     }
@@ -21,11 +25,6 @@ public class Pawn extends Piece {
         this.movedTwoLastTurn = movedTwoLastTurn;
     }
 
-    public Pawn (String name, char color) {
-        super(name, color);
-    }
-
-
     public void setMoveNumberEnPassant(int moveNumberEnPassant) {
          this.moveNumberEnPassant = moveNumberEnPassant;
     }
@@ -33,8 +32,6 @@ public class Pawn extends Piece {
     public int getMoveNumberEnPassant() {
          return this.moveNumberEnPassant;
     }
-
-
 
     public static void main(String[] args) {
         Pawn testPawn = new Pawn("pawn", 'w');

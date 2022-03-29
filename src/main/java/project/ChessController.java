@@ -202,7 +202,8 @@ public class ChessController implements Serializable {
     public void saveGame() {
 
         SaveGame saveGame = new SaveGame();
-        //saveGame.WriteObjectToFile(game); 
+        
+        saveGame.WriteObjectToFile(game, "src/main/java/project/Files/savegames/save1.binary");
     }
 
     @FXML

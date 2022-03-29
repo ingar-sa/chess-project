@@ -85,6 +85,24 @@ public class Game implements Serializable {
         }
     }
 
+    public HashMap loadedGamePiecesPosition() {
+
+        HashMap<String, String> piecePositions = new HashMap<>();
+
+        int rowNumber = 0;
+        for (Tile[] row : currentGamePositionTiles) {
+            int colNumber = 0;
+            for (Tile tile : row) {
+                piecePositions.put(rowNumber + "" + colNumber, tile.getPiece().getSpriteId());
+                ++colNumber;
+            }
+
+            ++rowNumber;
+        }
+
+        return piecePositions;
+    }
+
     public static void main(String[] args) {
         
     }

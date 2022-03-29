@@ -42,7 +42,7 @@ public class SaveGame implements Serializable {
 			ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
 			objectOut.writeObject(serObj);
 			objectOut.close();
-			System.out.println("Game saved!");
+			System.out.println(serObj.toString() + " saved!");
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
