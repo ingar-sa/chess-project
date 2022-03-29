@@ -1,15 +1,17 @@
 package project;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
 import project.Board.Chessboard;
 import project.Board.Tile;
+import project.Files.SaveGame;
 import project.Movement.TileCheckLegalMoves;
 import project.Pieces.Piece;
 
-public class Game {
+public class Game implements Serializable {
     
     Chessboard                      chessboard;
     TileCheckLegalMoves             checkLegalMoves;
@@ -82,29 +84,8 @@ public class Game {
             return Consts.GAME_NOT_OVER;
         }
     }
-        
 
     public static void main(String[] args) {
-                
-        String legalMovesString = "";
-        ArrayList<int[]> test = new ArrayList<int[]>() {
-            {
-                add(new int[] {1, 2});
-                add(new int[] {4, 3});
-            }
-        };
-
-
-
-
-        int[] yo= new int[] {1, 2};
-        test.add(yo);
-        for (int[] legalMove : test) {
-            legalMovesString += legalMove[0];
-            legalMovesString += legalMove[1];
-        }
-
-        System.out.println(legalMovesString);
         
     }
 

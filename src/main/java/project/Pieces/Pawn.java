@@ -1,5 +1,7 @@
 package project.Pieces;
 
+import java.io.Serializable;
+
 /*
 
 */

@@ -1,8 +1,12 @@
 package project;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -11,6 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import project.Files.SaveGame;
 
 /*
 
@@ -69,8 +74,13 @@ Translate to their coordinate system -> guiY = 7 - ourY
 
 */
 
-public class ChessController {
+public class ChessController implements Serializable {
 
+    @FXML
+    private MenuItem saveGame;
+
+    @FXML
+    private MenuItem loadGame;
 
     @FXML
     private GridPane tileColors;
@@ -187,6 +197,27 @@ public class ChessController {
             tileColors.add(circle, col, row);
         }
     }
+
+    @FXML
+    public void saveGame() {
+
+        SaveGame saveGame = new SaveGame();
+        //saveGame.WriteObjectToFile(game); 
+    }
+
+    @FXML
+    public void loadGame() {
+
+        SaveGame loadGame = new SaveGame();
+        game = (Game)loadGame.ReadObjectFromFile("src/main/java/project/Files/savegames/save1.binary");
+        game.chessboard.printBoard();
+    }
+
+    @FXML
+    private void recreateBoardFromLoadedGame(Game game) {
+        //for (Tile tile : game.)
+    }
+        
 
     @FXML
     private void initialize()
