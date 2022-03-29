@@ -1,6 +1,7 @@
 package project.Movement;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ import project.Pieces.Queen;
 import project.Pieces.Rook;
 import project.Pieces.Pawn;
 
-public class TileCheckLegalMoves {
+public class TileCheckLegalMoves implements Serializable {
     
     private Tile[][]             currentGamePositionTiles;
     private TileMovementPatterns whiteMovement;

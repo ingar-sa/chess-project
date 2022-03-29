@@ -1,8 +1,10 @@
 package project.Board;
+import java.io.Serializable;
+
 import project.Pieces.*;
 
 
-public class Tile {
+public class Tile implements Serializable {
 
     private Piece   piece;
     private int     row;

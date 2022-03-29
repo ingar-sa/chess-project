@@ -1,5 +1,6 @@
 package project.Movement;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -17,7 +18,7 @@ import project.Pieces.Rook;
 // Husk en passant må skje rett etter motstander har flyttet + queen promotion
 
 
-public class TileMovementPatterns {
+public class TileMovementPatterns implements Serializable {
 
     private char color;
     private Tile[][] boardTiles;

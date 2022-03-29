@@ -1,5 +1,7 @@
 package project.Board;
 
+import java.io.Serializable;
+
 import project.Pieces.Bishop;
 import project.Pieces.King;
 import project.Pieces.Knight;
@@ -8,7 +10,7 @@ import project.Pieces.Queen;
 import project.Pieces.Rook;
 
 
-public class Chessboard {
+public class Chessboard implements Serializable {
 
     // Make hashmap
     private Tile[][]    boardTiles = new Tile[8][8];

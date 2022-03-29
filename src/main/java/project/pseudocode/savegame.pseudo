@@ -1,0 +1,15 @@
+
+
+Need to handle if we need to create a new file or read from an existing one
+
+equivalent to "with open" in python. You don't need to close the file
+try (InputStream inputStream - new FileInputStream(file)) {
+    doStuffWithFile(inputStream)
+
+} catch (IOexception e) { -> doStuffWithFile must throw IOexception
+    handle exception
+}
+
+writer.println(line)
+-> (automatic newline) writer.println(line2)
+

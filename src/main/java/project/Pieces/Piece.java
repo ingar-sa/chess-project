@@ -1,19 +1,25 @@
 package project.Pieces;
 
-public class Piece {
+import java.io.Serializable;
+
+public class Piece implements Serializable {
     
-    private String name;
-    private char pieceType;
-    private char color;
+    private String  name;
+    private String  spriteId;
+    private char    pieceType;
+    private char    color;
+    protected int   moveNumber;
     private boolean captured = false;
     private boolean hasMoved = false;
-    protected int moveNumber;
 
-
-    protected Piece (String name,  char color) {
+    protected Piece (String name,  char color, char spriteType) {
         this.name = name;
-        //this.pieceType = pieceType;
-        this.color = color;
+        this.color = color; //Add verification for correct type
+        this.spriteId = color + "" + spriteType + ".png";
+    }
+
+    public String getSpriteId() {
+        return this.spriteId;
     }
 
     public void capture() {
@@ -58,7 +64,7 @@ public class Piece {
 
     public void setCaptured(boolean captured) {
         this.captured = captured;
-    }    
+    }
 }
 
 
