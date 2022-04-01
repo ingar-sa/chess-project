@@ -74,6 +74,11 @@ public class Tile implements Serializable {
         this.piece = null;
         this.occupied = false;
     }
+
+    public int[] getCoordinates() {
+        //
+        return new int[] {this.row, this.col};
+    }
     
     @Override
     public String toString() {

@@ -20,7 +20,7 @@ import project.Pieces.Rook;
 public class MovementPatterns implements Serializable {
 
     private char            color;
-    private Tile[][]        boardTiles;
+    //private Tile[][]        boardTiles;
     private CheckLegalMoves checkLegalMoves;
     
 
@@ -29,23 +29,23 @@ public class MovementPatterns implements Serializable {
         this.checkLegalMoves = checkLegalMoves;
     }
 
-    public ArrayList<int[]> moveHandler(Tile tile) {
+    public ArrayList<int[]> moveHandler(Tile tile, Tile[][] boardTiles) {
 
         Piece piece               = tile.getPiece();
         ArrayList<int[]> allMoves = new ArrayList<int[]>();
         
-        if      (piece instanceof Pawn)   allMoves = pawnMoves(tile);
-        else if (piece instanceof Bishop) allMoves = bishopMoves(tile);
-        else if (piece instanceof Rook)   allMoves = rookMoves(tile);
-        else if (piece instanceof Knight) allMoves = knightMoves(tile);
-        else if (piece instanceof King)   allMoves = kingMoves(tile);
-        else if (piece instanceof Queen)  allMoves = queenMoves(tile);
+        if      (piece instanceof Pawn)   allMoves = pawnMoves(tile, boardTiles);
+        else if (piece instanceof Bishop) allMoves = bishopMoves(tile, boardTiles);
+        else if (piece instanceof Rook)   allMoves = rookMoves(tile, boardTiles);
+        else if (piece instanceof Knight) allMoves = knightMoves(tile, boardTiles);
+        else if (piece instanceof King)   allMoves = kingMoves(tile, boardTiles);
+        else if (piece instanceof Queen)  allMoves = queenMoves(tile, boardTiles);
 
         return allMoves;
     }
 
 
-    private ArrayList<int[]> pawnMoves(Tile tile) {     
+    private ArrayList<int[]> pawnMoves(Tile tile, Tile[][] boardTiles) {     
         
         Pawn pawn                       = (Pawn)tile.getPiece(); 
         int row                         = tile.getRow();
@@ -139,7 +139,7 @@ public class MovementPatterns implements Serializable {
         return legalPawnMoves;
     }
     
-    private ArrayList<int[]> bishopMoves(Tile tile) {
+    private ArrayList<int[]> bishopMoves(Tile tile, Tile[][] boardTiles) {
         
         ArrayList<int[]> allMoves = new ArrayList<int[]>();
 
@@ -202,10 +202,10 @@ public class MovementPatterns implements Serializable {
              --whileCol;
          } 
 
-        return removeFriendlyTiles(allMoves);
+        return removeFriendlyTiles(allMoves, boardTiles);
     }
 
-    private ArrayList<int[]> rookMoves(Tile tile) {
+    private ArrayList<int[]> rookMoves(Tile tile, Tile[][] boardTiles) {
         
         ArrayList<int[]> allMoves = new ArrayList<int[]>();
 
@@ -261,10 +261,10 @@ public class MovementPatterns implements Serializable {
             ++whileCol;
         }
 
-        return removeFriendlyTiles(allMoves);
+        return removeFriendlyTiles(allMoves, boardTiles);
     }
 
-    private ArrayList<int[]> removeFriendlyTiles(ArrayList<int[]> allMoves) {
+    private ArrayList<int[]> removeFriendlyTiles(ArrayList<int[]> allMoves, Tile[][] boardTiles) {
 
          ArrayList<int[]> legalMoves = new ArrayList<int[]>();
 
@@ -280,18 +280,18 @@ public class MovementPatterns implements Serializable {
         return legalMoves;
     } 
 
-    private ArrayList<int[]> queenMoves(Tile tile) {
+    private ArrayList<int[]> queenMoves(Tile tile, Tile[][] boardTiles) {
 
         ArrayList<int[]> legalMoves = new ArrayList<int[]>();
 
-        legalMoves.addAll(this.bishopMoves(tile));
-        legalMoves.addAll(this.rookMoves(tile));
+        legalMoves.addAll(this.bishopMoves(tile, boardTiles));
+        legalMoves.addAll(this.rookMoves(tile, boardTiles));
 
         return legalMoves;
             
     }
 
-    private ArrayList<int[]> kingMoves(Tile tile) {
+    private ArrayList<int[]> kingMoves(Tile tile, Tile[][] boardTiles) {
 
         ArrayList<int[]> legalMoves = new ArrayList<int[]>();
 
@@ -357,7 +357,7 @@ public class MovementPatterns implements Serializable {
         return legalMoves;
     } 
     
-    private ArrayList<int[]> knightMoves(Tile tile) {
+    private ArrayList<int[]> knightMoves(Tile tile, Tile[][] boardTiles) {
 
         ArrayList<int[]> legalMoves = new ArrayList<int[]>();
         ArrayList<int[]> moveCoordinates = new ArrayList<int[]>();        
@@ -387,7 +387,7 @@ public class MovementPatterns implements Serializable {
         return legalMoves;
     }
     
-    void makeMove(Tile ourTile, ArrayList<int[]> legalMoves, int[] debugChoice) {
+    void makeMove(Tile ourTile, ArrayList<int[]> legalMoves, int[] debugChoice, Tile[][] boardTiles) {
         
         Tile newTile = boardTiles[debugChoice[0]][debugChoice[1]];
 
@@ -395,20 +395,11 @@ public class MovementPatterns implements Serializable {
         ourTile.setPiece(null);
     }
 
-
-    public Tile[][] getBoardTiles() {
-        return boardTiles;
-    }
-
-
-    public void setBoardTiles(Tile[][] boardTiles) {
-        this.boardTiles = boardTiles;
-    }
-    
     public char getColor() {
         return this.color;
     }
 
+    /*
     public static void main(String[] args) {
         Chessboard chessboard = new Chessboard();
         
@@ -557,4 +548,5 @@ public class MovementPatterns implements Serializable {
 
         
     }
+    */
 }

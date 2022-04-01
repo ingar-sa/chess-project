@@ -15,3 +15,8 @@ Grense på logikk i kontrolleren.
 Blir objecter alltid referanser når man bruker en vanlig "getter"
 
 Få imageview til å fylle hele tilen.
+
+
+
+
+Static liste med informasjon som blir brukt av flere klasser 
