@@ -19,7 +19,7 @@ import project.Pieces.Pawn;
 
 public class CheckLegalMoves implements Serializable {
     
-    private Tile[][] currentGamePositionTiles;
+    //private Tile[][] currentGamePositionTiles;
     private MovementPatterns whiteMovement;
     private MovementPatterns blackMovement;
 
@@ -35,8 +35,8 @@ public class CheckLegalMoves implements Serializable {
 
 
     //Sjekk om vi trenger chessboard
-    public CheckLegalMoves(Tile[][] boardTiles) {
-        this.currentGamePositionTiles = boardTiles;
+    public CheckLegalMoves() {
+        //currentGamePositionTiles = boardTiles;
         
         this.whiteMovement = new MovementPatterns('w', this);
         this.blackMovement = new MovementPatterns('b', this);
@@ -44,7 +44,6 @@ public class CheckLegalMoves implements Serializable {
     }
     //endret så den returnerer 
     private HashMap<int[], ArrayList<int[]>> populateAllMoves(MovementPatterns movementPattern, Tile[][] boardTiles) {
-        movementPattern.setBoardTiles(boardTiles);
 
         HashMap<int[], ArrayList<int[]>> legalMoves = new HashMap<int[], ArrayList<int[]>>();
         
@@ -54,7 +53,7 @@ public class CheckLegalMoves implements Serializable {
                     && tile.getPiece().getColor() == movementPattern.getColor()) {
 
                     int[] key = new int[] {tile.getRow(), tile.getCol()};
-                    ArrayList<int[]> allMoves = movementPattern.moveHandler(tile);
+                    ArrayList<int[]> allMoves = movementPattern.moveHandler(tile, boardTiles);
 
                     legalMoves.put(key, allMoves);
                     
@@ -64,11 +63,11 @@ public class CheckLegalMoves implements Serializable {
         return legalMoves;
     }
 
-    private HashMap<int[], ArrayList<int[]>> eliminateChecks() {
+    private HashMap<int[], ArrayList<int[]>> eliminateChecks(Tile[][] currentGamePositionTiles) {
         MovementPatterns colorToMove;
         MovementPatterns colorNotMoving;
 
-        setKingPosition();
+        setKingPosition(currentGamePositionTiles);
 
         if (moveNumber % 2 == 0) {
             colorToMove = whiteMovement;
@@ -102,7 +101,7 @@ public class CheckLegalMoves implements Serializable {
             for (int[] coordinates : allMovesForAPiece) {
                 //Chessboard shadowChessboardObject = new Chessboard();
 
-                //Tile[][] shadowBoardTiles = this.currentGamePositionTiles;
+                //Tile[][] shadowBoardTiles = currentGamePositionTiles;
  
                 // Name e.g. piecePositonNow
                 int xKey = key[0];
@@ -112,7 +111,7 @@ public class CheckLegalMoves implements Serializable {
                 int xValue = coordinates[0];
                 int yValue = coordinates[1];
                 
-                Piece pieceToMove = this.currentGamePositionTiles[xKey][yKey].getPiece();
+                Piece pieceToMove = currentGamePositionTiles[xKey][yKey].getPiece();
 
                 //sjekk for kongen, skal oppdatere område hvis han flytter 
 
@@ -130,14 +129,14 @@ public class CheckLegalMoves implements Serializable {
                 }
 
                 // pieceAtThespotWeAreMovingTo
-                Piece placeBackPiece = this.currentGamePositionTiles[xValue][yValue].getPiece();
+                Piece placeBackPiece = currentGamePositionTiles[xValue][yValue].getPiece();
 
                 //Se på dette iforhold til okupering osv - i piece klassn
-                this.currentGamePositionTiles[xKey][yKey].removePiece();
-                this.currentGamePositionTiles[xKey][yKey].setOccupied(false);
+                currentGamePositionTiles[xKey][yKey].removePiece();
+                currentGamePositionTiles[xKey][yKey].setOccupied(false);
 
-                this.currentGamePositionTiles[xValue][yValue].setPiece(pieceToMove);
-                this.currentGamePositionTiles[xValue][yValue].isOccupied();
+                currentGamePositionTiles[xValue][yValue].setPiece(pieceToMove);
+                currentGamePositionTiles[xValue][yValue].isOccupied();
 
                 int[] kingLocation;
 
@@ -150,7 +149,7 @@ public class CheckLegalMoves implements Serializable {
                     kingLocation = this.blackKing;
                 }
 
-                HashMap<int[], ArrayList<int[]>> legalMovesOpposite = populateAllMoves(colorNotMoving, this.currentGamePositionTiles);
+                HashMap<int[], ArrayList<int[]>> legalMovesOpposite = populateAllMoves(colorNotMoving, currentGamePositionTiles);
 
                 Collection<ArrayList<int[]>> allOppositeMoves = legalMovesOpposite.values();
 
@@ -210,60 +209,6 @@ public class CheckLegalMoves implements Serializable {
                             }
                             
                         }
-
-
-
-                        // else if (pieceToMove instanceof King && !pieceToMove.getHasMoved() && colorToMove.getColor() == 'w' && yValue == 6) {
-                        //     //fjerner rokade trekk
-                        //     if (xValue == 0) {
-                        //         if (oppositeCorr[0] == originalKingLocation[0] && oppositeCorr[1] == originalKingLocation[1]) {
-                        //             movesToBeRemoved.add(allMovesForAPiece.get(count));
-                        //         }
-                        //         else if (oppositeCorr[0] == 0 && oppositeCorr[1] == 5) { //Hvis feltet som paseres er sjakk 
-                        //             movesToBeRemoved.add(allMovesForAPiece.get(count));
-                        //         }
-                            
-                        //     }
-                        // }
-
-                        // else if (pieceToMove instanceof King && !pieceToMove.getHasMoved() && colorToMove.getColor() == 'w' && yValue == 2) { //sjakk på 3
-                        //     //fjerner rokade trekk
-                        //     if (xValue == 0) {
-                        //         if (oppositeCorr[0] == originalKingLocation[0] && oppositeCorr[1] == originalKingLocation[1]) {
-                        //             movesToBeRemoved.add(allMovesForAPiece.get(count));
-                        //         }
-                        //         else if (oppositeCorr[0] == 0 && oppositeCorr[1] == 3) {
-                        //             movesToBeRemoved.add(allMovesForAPiece.get(count));
-                        //         }
-                        //     }
-                            
-                        // }
-
-                        // else if (pieceToMove instanceof King && !pieceToMove.getHasMoved() && colorToMove.getColor() == 'b' && yValue == 6) {
-                        //     //fjerner rokade trekk
-                        //     if (xValue == 7) {
-                        //         if (oppositeCorr[0] == originalKingLocation[0] && oppositeCorr[1] == originalKingLocation[1]) {
-                        //             movesToBeRemoved.add(allMovesForAPiece.get(count));
-                        //         }
-                        //         else if (oppositeCorr[0] == 7 && oppositeCorr[1] == 5) { //Hvis feltet som paseres er sjakk 
-                        //             movesToBeRemoved.add(allMovesForAPiece.get(count));
-                        //         }
-                            
-                        //     }
-                        // }
-
-                        // else if (pieceToMove instanceof King && !pieceToMove.getHasMoved() && colorToMove.getColor() == 'b' && yValue == 2) { //sjakk på 3
-                        //     //fjerner rokade trekk
-                        //     if (xValue == 7) {
-                        //         if (oppositeCorr[0] == originalKingLocation[0] && oppositeCorr[1] == originalKingLocation[1]) {
-                        //             movesToBeRemoved.add(allMovesForAPiece.get(count));
-                        //         }
-                        //         else if (oppositeCorr[0] == 7 && oppositeCorr[1] == 3) {
-                        //             movesToBeRemoved.add(allMovesForAPiece.get(count));
-                        //         }
-                        //     }
-                            
-                        // }
                                   
                     }
                     
@@ -271,7 +216,7 @@ public class CheckLegalMoves implements Serializable {
                 
 
                 //flytt brikken tilbake, den som ble flyttet på - går vell å lage metode
-                Piece pieceToMoveBack = this.currentGamePositionTiles[xValue][yValue].getPiece();
+                Piece pieceToMoveBack = currentGamePositionTiles[xValue][yValue].getPiece();
 
 
                 //Tror ikke dette trengs til noe egentlig
@@ -279,17 +224,17 @@ public class CheckLegalMoves implements Serializable {
                 //     ((Pawn)pieceToMoveBack).setMovedTwoLastTurn(false);
                 // }
 
-                this.currentGamePositionTiles[xValue][yValue].removePiece();
-                this.currentGamePositionTiles[xValue][yValue].setPiece(placeBackPiece);
-                if (this.currentGamePositionTiles[xValue][yValue].getPiece() == null) {
-                    this.currentGamePositionTiles[xValue][yValue].setOccupied(false);
+                currentGamePositionTiles[xValue][yValue].removePiece();
+                currentGamePositionTiles[xValue][yValue].setPiece(placeBackPiece);
+                if (currentGamePositionTiles[xValue][yValue].getPiece() == null) {
+                    currentGamePositionTiles[xValue][yValue].setOccupied(false);
                     //overkill etter fix? - se på - setOccupied
                 }
                 
                 
-                this.currentGamePositionTiles[xKey][yKey].setPiece(pieceToMoveBack);
+                currentGamePositionTiles[xKey][yKey].setPiece(pieceToMoveBack);
                 //overkill? - se på piece 
-                this.currentGamePositionTiles[xKey][yKey].isOccupied();
+                currentGamePositionTiles[xKey][yKey].isOccupied();
 
                 //setter kongen tilbake
                 if (kingMovedWhite) {
@@ -308,12 +253,12 @@ public class CheckLegalMoves implements Serializable {
         return legalMoves;
     }
 
-    public HashMap<int[], ArrayList<int[]>> CheckforCheckMateAndPat () {
+    public HashMap<int[], ArrayList<int[]>> CheckforCheckMateAndPat (Tile[][] currentGamePositionTiles) {
 
         MovementPatterns colorToMove;
         MovementPatterns colorNotMoving;
 
-        HashMap<int[], ArrayList<int[]>> legalMoves = eliminateChecks();
+        HashMap<int[], ArrayList<int[]>> legalMoves = eliminateChecks(currentGamePositionTiles);
         
         boolean kingCanBetaken = false;
         boolean notGameOver = false;
@@ -391,9 +336,9 @@ public class CheckLegalMoves implements Serializable {
         return this.gameStatus;
     }
 
-    private void setKingPosition() {
+    private void setKingPosition(Tile[][] currentGamePositionTiles) {
 
-        for (Tile[] tileRow : this.currentGamePositionTiles) {
+        for (Tile[] tileRow : currentGamePositionTiles) {
             for (Tile tile: tileRow) {
                 if (tile.getPiece() instanceof King && ((King)tile.getPiece()).getColor() == 'w') {
                     this.whiteKing = new int[]{tile.getRow(), tile.getCol()};
@@ -521,10 +466,10 @@ public class CheckLegalMoves implements Serializable {
        
         chessboard.printBoard();
 
-        CheckLegalMoves checklegalmoves = new CheckLegalMoves(tiles);
+        //CheckLegalMoves checklegalmoves = new CheckLegalMoves(tiles);
 
 
-        checklegalmoves.CheckforCheckMateAndPat();
+        //checklegalmoves.CheckforCheckMateAndPat();
         
         long endTime   = System.nanoTime();
         long totalTime = endTime - startTime;

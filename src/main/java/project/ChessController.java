@@ -19,62 +19,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import project.Files.SaveGame;
 
-/*
-
-it's possible to show exceptions in javafx, e.g. alert class
-Examples of javafx code in self-checkout example in school code x   
-
-THE ROWS IN THE JAVAFX CHESSBOARD STARTS WITH 0 AT THE TOP,  NOT THE BOTTOM LIKE OURS!!!!
-Translate to our coordinate system -> ourY = 7 - guiY
-Translate to their coordinate system -> guiY = 7 - ourY
-
-   Necessary data
-
-    which player has the current turn (currentPlayerTurn) = white
-    has a piece already been chosen (hasPieceBeenChosen) = false
-    which piece has been chosen (pieceChosen) = null;
-    string of legal moves used to draw circles on tiles
-
-    ImageView.onclick() {
-
-        if !hasPieceBeenChosen:
-
-            if !(piece || ourColor):
-                do nothing
-
-            get coordinates
-            get url // what image the piece is
-
-            send coordinate to Game // Game creates a variable 
-
-            get a string in the form of "123446" representing legal moves
-            draw circles on legal moves
-        
-            hasPieceBeenChosen = true;
-
-            return;
-
-        else:
-            //a piece is already chosen
-            get coordinates
-            (maybe) send coordinates to Game
-            
-            if coordinate in legal moves:
-                en passant and castling needs to move two pieces
-                send coordinates of new tile to Game
-                move piece from old tile
-
-            Check with game if pawn has promoted 
-                fix queen promotion
-
-            hasPieceBeenChosen = false
-            currentPlayerTurn = opposite color
-            remove all circles drawn
-            return;
-    }
-
-
-*/
 
 public class ChessController implements Serializable {
 
@@ -148,29 +92,41 @@ public class ChessController implements Serializable {
 
         }
         else {
-
-            pieceHasBeenChosen = false;
-            
+        
             System.out.println("Check if the new piece is legal.");
 
             ImageView moveToImageView = (ImageView)event.getSource();
             String legalMoveId = moveToImageView.getId();
-            
+
+            int moveToPieceRow = GridPane.getRowIndex(moveToImageView); 
+            int moveToPieceCol = GridPane.getColumnIndex(moveToImageView);
+            moveToPieceRow = 7 - moveToPieceRow;
+
+            if (game.allLegalPieces(moveToPieceRow, moveToPieceCol)) {
+                legalMovesStrings = game.getLegalMoves(moveToPieceRow, moveToPieceCol);
+                if (legalMovesStrings.size() == 0) {
+                    pieceHasBeenChosen = false;
+                    return;
+                }
+                else {
+                    this.chosenPieceImageView = (ImageView)event.getSource();
+                    Image sprite = this.chosenPieceImageView.getImage();
+                    this.chosenPieceSpriteUrl = sprite.getUrl();
+                }
+                return;
+            }
+
+            pieceHasBeenChosen = false;
+
+            int chosenPieceRow = GridPane.getRowIndex(chosenPieceImageView); 
+            int chosenPieceCol = GridPane.getColumnIndex(chosenPieceImageView);
+            chosenPieceRow = 7 - chosenPieceRow;
 
             if (!legalMovesStrings.contains(legalMoveId)) 
                 return;
             
             chosenPieceImageView.setImage(null);
             moveToImageView.setImage(new Image(chosenPieceSpriteUrl));
-
-            int chosenPieceRow = GridPane.getRowIndex(chosenPieceImageView); 
-            int chosenPieceCol = GridPane.getColumnIndex(chosenPieceImageView);
-            
-            int moveToPieceRow = GridPane.getRowIndex(moveToImageView); 
-            int moveToPieceCol = GridPane.getColumnIndex(moveToImageView);
-            
-            chosenPieceRow = 7 - chosenPieceRow;
-            moveToPieceRow = 7 - moveToPieceRow;
 
             //Retrieves the game state. 0 represents pat, 1 check mate for black and 2 is check mate for white 
             int gameOver = game.updateGameState(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol);
@@ -214,7 +170,7 @@ public class ChessController implements Serializable {
         SaveGame loadGame = new SaveGame();
         game = (Game)loadGame.ReadObjectFromFile("src/main/java/project/Files/savegames/save1.binary");
         recreateBoardFromLoadedGame();
-        game.chessboard.printBoard();
+        //game.chessboard.printBoard();
     }
 
     @FXML
