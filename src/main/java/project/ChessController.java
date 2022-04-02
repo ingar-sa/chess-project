@@ -124,12 +124,64 @@ public class ChessController implements Serializable {
 
             if (!legalMovesStrings.contains(legalMoveId)) 
                 return;
-            
-            chosenPieceImageView.setImage(null);
-            moveToImageView.setImage(new Image(chosenPieceSpriteUrl));
 
+            String enPassentMove = game.isMoveEnPassent(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol);
+            
+            //Check if the move was en passent
+            if (enPassentMove.length() != 0) {
+                ImageView pieceTakenByEnPassent = (ImageView)sprites.lookup("#" + enPassentMove);
+                pieceTakenByEnPassent.setImage(null);
+            }
+
+            String castelingMove = game.isMoveCasteling(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol);
+            
+            if (castelingMove.length() != 0) {
+                //White Castling rigth
+                if (castelingMove.equals("05")) {
+                    ImageView rigthCastlingRookOriginalPos = (ImageView)sprites.lookup("#" + "07");
+                    Image sprite = rigthCastlingRookOriginalPos.getImage();
+                    //Hardkode dette også - vi vet jo urlen?
+                    String urlRook = sprite.getUrl();
+                    rigthCastlingRookOriginalPos.setImage(null);
+                    ImageView rigthCastlingRookNewPos = (ImageView)sprites.lookup("#" + "05");
+                    rigthCastlingRookNewPos.setImage(new Image(urlRook));
+                }
+                //White castling left 
+                else if (castelingMove.equals("03")) { 
+                    ImageView rigthCastlingRookOriginalPos = (ImageView)sprites.lookup("#" + "00");
+                    Image sprite = rigthCastlingRookOriginalPos.getImage();
+                    //Hardkode dette også?
+                    String urlRook = sprite.getUrl();
+                    rigthCastlingRookOriginalPos.setImage(null);
+                    ImageView rigthCastlingRookNewPos = (ImageView)sprites.lookup("#" + "03");
+                    rigthCastlingRookNewPos.setImage(new Image(urlRook));
+                }
+                //Black castling rigth 
+                else if (castelingMove.equals("75")) {
+                    ImageView rigthCastlingRookOriginalPos = (ImageView)sprites.lookup("#" + "77");
+                    Image sprite = rigthCastlingRookOriginalPos.getImage();
+                    //Hardkode dette også?
+                    String urlRook = sprite.getUrl();
+                    rigthCastlingRookOriginalPos.setImage(null);
+                    ImageView rigthCastlingRookNewPos = (ImageView)sprites.lookup("#" + "75");
+                    rigthCastlingRookNewPos.setImage(new Image(urlRook));
+                }
+                //Black castling left 
+                else if (castelingMove.equals("73")) {
+                    ImageView rigthCastlingRookOriginalPos = (ImageView)sprites.lookup("#" + "70");
+                    Image sprite = rigthCastlingRookOriginalPos.getImage();
+                    //Hardkode dette også?
+                    String urlRook = sprite.getUrl();
+                    rigthCastlingRookOriginalPos.setImage(null);
+                    ImageView rigthCastlingRookNewPos = (ImageView)sprites.lookup("#" + "73");
+                    rigthCastlingRookNewPos.setImage(new Image(urlRook));
+                }
+            }
             //Retrieves the game state. 0 represents pat, 1 check mate for black and 2 is check mate for white 
             int gameOver = game.updateGameState(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol);
+
+            chosenPieceImageView.setImage(null);
+            moveToImageView.setImage(new Image(chosenPieceSpriteUrl));
 
             if (gameOver == Consts.PAT)
                 System.out.println("Pat");

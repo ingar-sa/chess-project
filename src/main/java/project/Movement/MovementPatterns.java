@@ -122,7 +122,7 @@ public class MovementPatterns implements Serializable {
             && passantLeft.getPiece() instanceof Pawn
             && passantLeft.getPiece().getColor() != this.color
             && ((Pawn)passantLeft.getPiece()).getMovedTwoLastTurn()
-            && ((((Pawn)passantLeft.getPiece()).getMoveNumberEnPassant() - checkLegalMoves.getMoveNumber()) == 0)) {
+            && ((((Pawn)passantLeft.getPiece()).getMoveNumberEnPassant() - checkLegalMoves.getMoveNumber()) == - 1)) {
         
             legalPawnMoves.add(new int[]{passantLeft.getRow() + 1 * moveDirection, passantLeft.getCol()});
         }
@@ -131,7 +131,7 @@ public class MovementPatterns implements Serializable {
             && passantRight.getPiece() instanceof Pawn
             && passantRight.getPiece().getColor() != this.color 
             && ((Pawn)passantRight.getPiece()).getMovedTwoLastTurn()
-            && ((((Pawn)passantRight.getPiece()).getMoveNumberEnPassant() - checkLegalMoves.getMoveNumber()) == 0) ){
+            && ((((Pawn)passantRight.getPiece()).getMoveNumberEnPassant() - checkLegalMoves.getMoveNumber()) == - 1) ){
 
             legalPawnMoves.add(new int[]{passantRight.getRow() + 1 * moveDirection, passantRight.getCol()});
         } 

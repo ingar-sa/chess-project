@@ -10,6 +10,7 @@ public class Pawn extends Piece {
 
     //overflødig? - movedtwo 
     //private boolean movedTwo = false;
+    //Endre navnet til kun has movedTwo
     private boolean movedTwoLastTurn = false;
     private int moveNumberEnPassant;
     

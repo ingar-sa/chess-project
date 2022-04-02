@@ -243,13 +243,82 @@ public class Game implements Serializable {
         return new ArrayList<String>(coordinateString);
     }
 
-    public int updateGameState(int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int pieceToMoveCol) {
+    public String isMoveEnPassent(int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
+
+        Piece pieceToMove = boardTiles[chosenPieceRow][chosenPieceCol].getPiece();
+
+        if (pieceToMove instanceof Pawn) {
+            int moveNumber = checkLegalMoves.getMoveNumber();
+            ((Pawn)pieceToMove).setMoveNumberEnPassant(moveNumber);
+            if (pieceToMove.getHasMoved()) {
+                ((Pawn)pieceToMove).setMovedTwoLastTurn(false);
+            }
+            else if (Math.abs(chosenPieceRow - moveToPieceRow) == 2) {
+                ((Pawn)pieceToMove).setMovedTwoLastTurn(true);
+            }
+
+            if (!boardTiles[moveToPieceRow][moveToPieceCol].isOccupied() && Math.abs(chosenPieceCol-moveToPieceCol) == 1) {
+                if (pieceToMove.getColor() == 'w') {
+                    this.boardTiles[moveToPieceRow - 1][moveToPieceCol].removePiece();
+                    return (moveToPieceRow - 1) + "" + moveToPieceCol;
+                }
+                else if (pieceToMove.getColor() == 'b') {
+                    this.boardTiles[moveToPieceRow + 1][moveToPieceCol].removePiece();
+                    return (moveToPieceRow + 1) + "" + moveToPieceCol;
+                }
+            }
+        }
+        return "";
+    }
+
+    public String isMoveCasteling (int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
         
         Piece pieceToMove = boardTiles[chosenPieceRow][chosenPieceCol].getPiece();
-        pieceToMove.setHasMoved(true);
+
+        if (pieceToMove instanceof King) {
+            if (!pieceToMove.getHasMoved())  {
+                if (pieceToMove.getColor() == 'w') {
+                    if (moveToPieceCol == 6) {
+                        Rook castlingRook = ((Rook)this.boardTiles[0][7].getPiece());
+                        this.boardTiles[0][7].removePiece();
+                        this.boardTiles[0][5].setPiece(castlingRook);
+                        return "05";
+                    }
+                    else if (moveToPieceCol == 2) {
+                        Rook castlingRook = ((Rook)this.boardTiles[0][0].getPiece());
+                        this.boardTiles[0][0].removePiece();
+                        this.boardTiles[0][3].setPiece(castlingRook);
+                        return "03";
+                    }
+                }
+                else if (pieceToMove.getColor() == 'b') {
+                    if (moveToPieceCol == 6) {
+                        Rook castlingRook = ((Rook)this.boardTiles[7][7].getPiece());
+                        this.boardTiles[7][7].removePiece();
+                        this.boardTiles[7][5].setPiece(castlingRook);
+                        return "75";
+                    }
+                    else if (moveToPieceCol == 2) {
+                        Rook castlingRook = ((Rook)this.boardTiles[7][0].getPiece());
+                        this.boardTiles[7][0].removePiece();
+                        this.boardTiles[7][3].setPiece(castlingRook);
+                        return "73";
+                    }
+                }
+            }
+        }
+
+        return "";
+    }
+
+    public int updateGameState(int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
         
+        Piece pieceToMove = boardTiles[chosenPieceRow][chosenPieceCol].getPiece();
+
+        pieceToMove.setHasMoved(true);
+       
         this.boardTiles[chosenPieceRow][chosenPieceCol].removePiece();
-        this.boardTiles[moveToPieceRow][pieceToMoveCol].setPiece(pieceToMove);
+        this.boardTiles[moveToPieceRow][moveToPieceCol].setPiece(pieceToMove);
         
         checkLegalMoves.increaseMoveNumber();
 
