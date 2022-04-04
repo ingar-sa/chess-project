@@ -1,33 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="920.0" prefWidth="920.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.ChessController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="680.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.ChessController">
    <children>
-      <MenuBar prefHeight="25.0" prefWidth="920.0">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-                  <MenuItem fx:id="saveGame" mnemonicParsing="false" onAction="#saveGame" text="Save game" />
-              <MenuItem fx:id="loadGame" mnemonicParsing="false" onAction="#loadGame" text="Load game" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-      <GridPane fx:id="tileColors" gridLinesVisible="true" prefHeight="800.0" prefWidth="800.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="60.0">
+      <GridPane fx:id="tileColors" gridLinesVisible="true" prefHeight="560.0" prefWidth="560.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="60.0">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -48,74 +34,8 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
-         <children>
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="2" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="4" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="6" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="5" GridPane.rowIndex="1" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="7" GridPane.rowIndex="1" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.rowIndex="2" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="4" GridPane.rowIndex="2" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="6" GridPane.rowIndex="2" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="5" GridPane.rowIndex="3" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="7" GridPane.rowIndex="3" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.rowIndex="4" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="4" GridPane.rowIndex="4" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="6" GridPane.rowIndex="4" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="5" GridPane.rowIndex="5" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="7" GridPane.rowIndex="5" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.rowIndex="6" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="4" GridPane.rowIndex="6" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="6" GridPane.rowIndex="6" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="3" GridPane.rowIndex="7" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="5" GridPane.rowIndex="7" />
-            <Rectangle fill="#7a4a3d" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="7" GridPane.rowIndex="7" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="1" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="3" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="5" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="7" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.rowIndex="1" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="5" GridPane.rowIndex="2" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="7" GridPane.rowIndex="2" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.rowIndex="3" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="4" GridPane.rowIndex="3" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="6" GridPane.rowIndex="3" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="5" GridPane.rowIndex="4" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="7" GridPane.rowIndex="4" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.rowIndex="5" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="4" GridPane.rowIndex="5" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="6" GridPane.rowIndex="5" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="3" GridPane.rowIndex="6" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="5" GridPane.rowIndex="6" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="7" GridPane.rowIndex="6" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.rowIndex="7" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="4" GridPane.rowIndex="7" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="6" GridPane.rowIndex="7" />
-            <Rectangle fill="#512a2a" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" GridPane.columnIndex="6" GridPane.rowIndex="1" />
-         </children>
       </GridPane>
-      <GridPane fx:id="sprites" gridLinesVisible="true" layoutX="10.0" layoutY="10.0" prefHeight="800.0" prefWidth="800.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="60.0">
+      <GridPane fx:id="sprites" gridLinesVisible="true" layoutX="10.0" layoutY="10.0" prefHeight="560.0" prefWidth="560.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="60.0">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -137,7 +57,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <ImageView id="00" fx:id="sprite00" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER">
+            <ImageView id="00" fx:id="sprite00" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -145,7 +65,7 @@
                      <Image url="@wR.png" />
                   </image>
                </ImageView>
-               <ImageView id="01" fx:id="sprite01" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER">
+               <ImageView id="01" fx:id="sprite01" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -153,7 +73,7 @@
                      <Image url="@wK.png" />
                   </image>
                </ImageView>
-               <ImageView id="02" fx:id="sprite02" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER">
+               <ImageView id="02" fx:id="sprite02" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -161,7 +81,7 @@
                      <Image url="@wB.png" />
                   </image>
                </ImageView>
-               <ImageView id="03" fx:id="sprite03" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER">
+               <ImageView id="03" fx:id="sprite03" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -169,7 +89,7 @@
                      <Image url="@wQ.png" />
                   </image>
                </ImageView>
-               <ImageView id="05" fx:id="sprite05" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER">
+               <ImageView id="05" fx:id="sprite05" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -177,7 +97,7 @@
                      <Image url="@wB.png" />
                   </image>
                </ImageView>
-               <ImageView id="04" fx:id="sprite04" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER">
+               <ImageView id="04" fx:id="sprite04" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -185,7 +105,7 @@
                      <Image url="@wX.png" />
                   </image>
                </ImageView>
-               <ImageView id="06" fx:id="sprite06" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER">
+               <ImageView id="06" fx:id="sprite06" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -193,7 +113,7 @@
                      <Image url="@wK.png" />
                   </image>
                </ImageView>
-               <ImageView id="07" fx:id="sprite07" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER">
+               <ImageView id="07" fx:id="sprite07" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -201,7 +121,7 @@
                      <Image url="@wR.png" />
                   </image>
                </ImageView>
-               <ImageView id="10" fx:id="sprite10" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
+               <ImageView id="10" fx:id="sprite10" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -209,7 +129,7 @@
                      <Image url="@wP.png" />
                   </image>
                </ImageView>
-               <ImageView id="11" fx:id="sprite11" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
+               <ImageView id="11" fx:id="sprite11" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -217,7 +137,7 @@
                      <Image url="@wP.png" />
                   </image>
                </ImageView>
-               <ImageView id="12" fx:id="sprite12" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
+               <ImageView id="12" fx:id="sprite12" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -225,7 +145,7 @@
                      <Image url="@wP.png" />
                   </image>
                </ImageView>
-               <ImageView id="13" fx:id="sprite13" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
+               <ImageView id="13" fx:id="sprite13" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -233,7 +153,7 @@
                      <Image url="@wP.png" />
                   </image>
                </ImageView>
-               <ImageView id="14" fx:id="sprite14" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
+               <ImageView id="14" fx:id="sprite14" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -241,7 +161,7 @@
                      <Image url="@wP.png" />
                   </image>
                </ImageView>
-               <ImageView id="15" fx:id="sprite15" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
+               <ImageView id="15" fx:id="sprite15" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -249,7 +169,7 @@
                      <Image url="@wP.png" />
                   </image>
                </ImageView>
-               <ImageView id="16" fx:id="sprite16" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
+               <ImageView id="16" fx:id="sprite16" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -257,7 +177,7 @@
                      <Image url="@wP.png" />
                   </image>
                </ImageView>
-               <ImageView id="17" fx:id="sprite17" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
+               <ImageView id="17" fx:id="sprite17" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -265,175 +185,167 @@
                      <Image url="@wP.png" />
                   </image>
                </ImageView>
-               <ImageView id="20" fx:id="sprite20" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
+               <ImageView id="20" fx:id="sprite20" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="21" fx:id="sprite21" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
+               <ImageView id="21" fx:id="sprite21" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="22" fx:id="sprite22" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
+               <ImageView id="22" fx:id="sprite22" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="23" fx:id="sprite23" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
+               <ImageView id="23" fx:id="sprite23" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="24" fx:id="sprite24" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
+               <ImageView id="24" fx:id="sprite24" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="25" fx:id="sprite25" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
+               <ImageView id="25" fx:id="sprite25" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="26" fx:id="sprite26" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
+               <ImageView id="26" fx:id="sprite26" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="27" fx:id="sprite27" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
+               <ImageView id="27" fx:id="sprite27" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="30" fx:id="sprite30" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+               <ImageView id="30" fx:id="sprite30" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="31" fx:id="sprite31" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+               <ImageView id="31" fx:id="sprite31" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="32" fx:id="sprite32" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+               <ImageView id="32" fx:id="sprite32" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="33" fx:id="sprite33" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+               <ImageView id="33" fx:id="sprite33" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="34" fx:id="sprite34" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+               <ImageView id="34" fx:id="sprite34" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="35" fx:id="sprite35" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+               <ImageView id="35" fx:id="sprite35" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="36" fx:id="sprite36" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+               <ImageView id="36" fx:id="sprite36" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="37" fx:id="sprite37" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+               <ImageView id="37" fx:id="sprite37" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="40" fx:id="sprite40" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+               <ImageView id="40" fx:id="sprite40" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="41" fx:id="sprite41" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+               <ImageView id="41" fx:id="sprite41" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="42" fx:id="sprite42" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+               <ImageView id="42" fx:id="sprite42" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="43" fx:id="sprite43" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+               <ImageView id="43" fx:id="sprite43" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="44" fx:id="sprite44" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+               <ImageView id="44" fx:id="sprite44" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="45" fx:id="sprite45" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+               <ImageView id="45" fx:id="sprite45" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="46" fx:id="sprite46" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+               <ImageView id="46" fx:id="sprite46" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="47" fx:id="sprite47" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+               <ImageView id="47" fx:id="sprite47" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="50" fx:id="sprite50" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+               <ImageView id="50" fx:id="sprite50" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="51" fx:id="sprite51" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+               <ImageView id="51" fx:id="sprite51" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="52" fx:id="sprite52" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+               <ImageView id="52" fx:id="sprite52" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="53" fx:id="sprite53" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+               <ImageView id="53" fx:id="sprite53" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="54" fx:id="sprite54" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+               <ImageView id="54" fx:id="sprite54" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="55" fx:id="sprite55" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+               <ImageView id="55" fx:id="sprite55" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="56" fx:id="sprite56" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+               <ImageView id="56" fx:id="sprite56" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="57" fx:id="sprite57" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+               <ImageView id="57" fx:id="sprite57" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
                </ImageView>
-               <ImageView id="60" fx:id="sprite60" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-               <GridPane.margin>
-               <Insets />
-               </GridPane.margin>
-                  <image>
-                     <Image url="@bP.png" />
-                  </image>
-               </ImageView>
-               <ImageView id="61" fx:id="sprite61" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+               <ImageView id="60" fx:id="sprite60" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -441,7 +353,7 @@
                      <Image url="@bP.png" />
                   </image>
                </ImageView>
-               <ImageView id="62" fx:id="sprite62" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+               <ImageView id="61" fx:id="sprite61" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -449,7 +361,7 @@
                      <Image url="@bP.png" />
                   </image>
                </ImageView>
-               <ImageView id="63" fx:id="sprite63" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+               <ImageView id="62" fx:id="sprite62" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -457,7 +369,7 @@
                      <Image url="@bP.png" />
                   </image>
                </ImageView>
-               <ImageView id="64" fx:id="sprite64" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+               <ImageView id="63" fx:id="sprite63" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -465,7 +377,7 @@
                      <Image url="@bP.png" />
                   </image>
                </ImageView>
-               <ImageView id="65" fx:id="sprite65" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+               <ImageView id="64" fx:id="sprite64" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -473,7 +385,7 @@
                      <Image url="@bP.png" />
                   </image>
                </ImageView>
-               <ImageView id="66" fx:id="sprite66" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+               <ImageView id="65" fx:id="sprite65" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -481,7 +393,7 @@
                      <Image url="@bP.png" />
                   </image>
                </ImageView>
-               <ImageView id="67" fx:id="sprite67" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+               <ImageView id="66" fx:id="sprite66" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -489,7 +401,15 @@
                      <Image url="@bP.png" />
                   </image>
                </ImageView>
-               <ImageView id="70" fx:id="sprite70" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
+               <ImageView id="67" fx:id="sprite67" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+               <GridPane.margin>
+               <Insets />
+               </GridPane.margin>
+                  <image>
+                     <Image url="@bP.png" />
+                  </image>
+               </ImageView>
+               <ImageView id="70" fx:id="sprite70" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -497,7 +417,7 @@
                      <Image url="@bR.png" />
                   </image>
                </ImageView>
-               <ImageView id="71" fx:id="sprite71" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
+               <ImageView id="71" fx:id="sprite71" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -505,7 +425,7 @@
                      <Image url="@bK.png" />
                   </image>
                </ImageView>
-               <ImageView id="72" fx:id="sprite72" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
+               <ImageView id="72" fx:id="sprite72" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -513,7 +433,7 @@
                      <Image url="@bB.png" />
                   </image>
                </ImageView>
-               <ImageView id="73" fx:id="sprite73" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
+               <ImageView id="73" fx:id="sprite73" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -521,7 +441,7 @@
                      <Image url="@bQ.png" />
                   </image>
                </ImageView>
-               <ImageView id="74" fx:id="sprite74" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
+               <ImageView id="74" fx:id="sprite74" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -529,7 +449,7 @@
                      <Image url="@bX.png" />
                   </image>
                </ImageView>
-               <ImageView id="75" fx:id="sprite75" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
+               <ImageView id="75" fx:id="sprite75" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -537,7 +457,7 @@
                      <Image url="@bB.png" />
                   </image>
                </ImageView>
-               <ImageView id="76" fx:id="sprite76" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
+               <ImageView id="76" fx:id="sprite76" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -545,7 +465,7 @@
                      <Image url="@bK.png" />
                   </image>
                </ImageView>
-               <ImageView id="77" fx:id="sprite77" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
+               <ImageView id="77" fx:id="sprite77" fitHeight="70.0" fitWidth="70.0" onMouseClicked="#testClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
                <GridPane.margin>
                <Insets />
                </GridPane.margin>
@@ -555,127 +475,87 @@
                </ImageView>
          </children>
       </GridPane>
-      <Pane layoutY="58.0" prefHeight="806.0" prefWidth="59.0">
-         <children>
-            <GridPane layoutX="18.0" prefHeight="806.0" prefWidth="41.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Label prefHeight="58.0" prefWidth="61.0" text="7">
-                     <font>
-                        <Font size="40.0" />
-                     </font>
-                  </Label>
-                  <Label prefHeight="58.0" prefWidth="61.0" text="6" GridPane.rowIndex="1">
-                     <font>
-                        <Font size="40.0" />
-                     </font>
-                  </Label>
-                  <Label prefHeight="58.0" prefWidth="61.0" text="5" GridPane.rowIndex="2">
-                     <font>
-                        <Font size="40.0" />
-                     </font>
-                  </Label>
-                  <Label prefHeight="58.0" prefWidth="61.0" text="4" GridPane.rowIndex="3">
-                     <font>
-                        <Font size="40.0" />
-                     </font>
-                  </Label>
-                  <Label prefHeight="58.0" prefWidth="61.0" text="3" GridPane.rowIndex="4">
-                     <font>
-                        <Font size="40.0" />
-                     </font>
-                  </Label>
-                  <Label prefHeight="58.0" prefWidth="61.0" text="2" GridPane.rowIndex="5">
-                     <font>
-                        <Font size="40.0" />
-                     </font>
-                  </Label>
-                  <Label prefHeight="58.0" prefWidth="61.0" text="1" GridPane.rowIndex="6">
-                     <font>
-                        <Font size="40.0" />
-                     </font>
-                  </Label>
-                  <Label prefHeight="58.0" prefWidth="61.0" text="0" GridPane.rowIndex="7">
-                     <font>
-                        <Font size="40.0" />
-                     </font>
-                  </Label>
-               </children>
-            </GridPane>
-         </children>
-      </Pane>
-      <Pane layoutX="60.0" layoutY="876.0" prefHeight="42.0" prefWidth="800.0">
-         <children>
-            <GridPane>
-              <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Label alignment="CENTER" prefHeight="41.0" prefWidth="100.0" text="0" textAlignment="RIGHT">
-                     <font>
-                        <Font size="40.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="41.0" prefWidth="100.0" text="1" textAlignment="RIGHT" GridPane.columnIndex="1">
-                     <font>
-                        <Font size="40.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="41.0" prefWidth="100.0" text="2" textAlignment="RIGHT" GridPane.columnIndex="2">
-                     <font>
-                        <Font size="40.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="41.0" prefWidth="100.0" text="3" textAlignment="RIGHT" GridPane.columnIndex="3">
-                     <font>
-                        <Font size="40.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="41.0" prefWidth="100.0" text="4" textAlignment="RIGHT" GridPane.columnIndex="4">
-                     <font>
-                        <Font size="40.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="41.0" prefWidth="100.0" text="5" textAlignment="RIGHT" GridPane.columnIndex="5">
-                     <font>
-                        <Font size="40.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="41.0" prefWidth="100.0" text="6" textAlignment="RIGHT" GridPane.columnIndex="6">
-                     <font>
-                        <Font size="40.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="41.0" prefWidth="100.0" text="7" textAlignment="RIGHT" GridPane.columnIndex="7">
-                     <font>
-                        <Font size="40.0" />
-                     </font>
-                  </Label>
-               </children>
-            </GridPane>
-         </children>
-      </Pane>
+      <Label layoutX="25.0" layoutY="81.0" text="8">
+         <font>
+            <Font name="Baskerville Old Face" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="25.0" layoutY="151.0" text="7">
+         <font>
+            <Font name="Baskerville Old Face" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="25.0" layoutY="225.0" text="6">
+         <font>
+            <Font name="Baskerville Old Face" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="25.0" layoutY="293.0" text="5">
+         <font>
+            <Font name="Baskerville Old Face" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="26.0" layoutY="359.0" text="4">
+         <font>
+            <Font name="Baskerville Old Face" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="25.0" layoutY="430.0" text="3">
+         <font>
+            <Font name="Baskerville Old Face" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="26.0" layoutY="503.0" text="2">
+         <font>
+            <Font name="Baskerville Old Face" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="26.0" layoutY="569.0" text="1">
+         <font>
+            <Font name="Baskerville Old Face" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="87.0" layoutY="638.0" text="a">
+         <font>
+            <Font name="Baskerville Old Face" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="158.0" layoutY="638.0" text="b">
+         <font>
+            <Font name="Baskerville Old Face" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="227.0" layoutY="638.0" text="c">
+         <font>
+            <Font name="Baskerville Old Face" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="298.0" layoutY="638.0" text="d">
+         <font>
+            <Font name="Baskerville Old Face" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="368.0" layoutY="638.0" text="e">
+         <font>
+            <Font name="Baskerville Old Face" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="441.0" layoutY="638.0" text="f">
+         <font>
+            <Font name="Baskerville Old Face" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="509.0" layoutY="638.0" text="g">
+         <font>
+            <Font name="Baskerville Old Face" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="576.0" layoutY="638.0" text="h">
+         <font>
+            <Font name="Baskerville Old Face" size="24.0" />
+         </font>
+      </Label>
+      <Button fx:id="saveGame" layoutX="11.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#saveGame" text="Save" />
+      <Button fx:id="loadGame" layoutX="60.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#loadGame" text="Load" />
    </children>
 </AnchorPane>

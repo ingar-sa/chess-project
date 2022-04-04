@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -17,19 +18,25 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import project.Files.SaveGame;
+import project.Files.SaveGames;
 
 
 public class ChessController implements Serializable {
 
     @FXML
-    private MenuItem saveGame;
+    private Button saveGame;
 
     @FXML
-    private MenuItem loadGame;
+    private Button loadGame;
 
     @FXML
     private GridPane tileColors;
+
+    // @FXML
+    // private Menu save;
+
+    // @FXML
+    // private Menu load;
 
     @FXML
     private GridPane sprites;
@@ -60,7 +67,7 @@ public class ChessController implements Serializable {
                             (col % 2 == 1) ? light : dark  
                            :(col % 2 == 1) ? dark : light;
 
-                tileColors.add(new Rectangle(100, 100, tileColor), col, row); 
+                tileColors.add(new Rectangle(70, 70, tileColor), col, row); 
             }
         }
     }
@@ -210,19 +217,12 @@ public class ChessController implements Serializable {
 
     @FXML
     public void saveGame() {
-
-        SaveGame saveGame = new SaveGame();
-        
-        saveGame.WriteObjectToFile(game, "src/main/java/project/Files/savegames/save1.binary");
+        game.saveGame();
     }
 
     @FXML
     public void loadGame() {
-
-        SaveGame loadGame = new SaveGame();
-        game = (Game)loadGame.ReadObjectFromFile("src/main/java/project/Files/savegames/save1.binary");
-        recreateBoardFromLoadedGame();
-        //game.chessboard.printBoard();
+        return;
     }
 
     @FXML
@@ -234,7 +234,7 @@ public class ChessController implements Serializable {
             String spriteId = piecePositions.get(positionId);
             ImageView placeSpriteOnImageView = (ImageView)sprites.lookup("#" + positionId);
             if (spriteId != null)
-                placeSpriteOnImageView.setImage(new Image("file:src/main/resources/project/" + spriteId));      
+                placeSpriteOnImageView.setImage(new Image("file:src/main/resources/project/" + spriteId + ".png"));      
             else
                 placeSpriteOnImageView.setImage(null);
         }
