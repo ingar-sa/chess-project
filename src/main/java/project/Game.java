@@ -12,7 +12,7 @@ import java.util.Set;
 
 import project.Board.Chessboard;
 import project.Board.Tile;
-import project.Files.SaveGame;
+import project.Files.SaveGames;
 import project.Movement.CheckLegalMoves;
 import project.Movement.TileCheckLegalMoves;
 import project.Pieces.Bishop;
@@ -371,6 +371,26 @@ public class Game implements Serializable {
 
         return piecePositions;
     }
+
+    public void saveGame() {
+        SaveGames saveGame = new SaveGames();
+        String saveGameData = new String();
+
+        for (Tile[] row : boardTiles) {
+            for (Tile tile : row) {
+                if (tile.isOccupied()) {
+                    saveGameData += tile.getPiece().getSpriteId();
+                    saveGameData += "-";
+                }
+                else{
+                    saveGameData += "0-";
+                }
+            }
+        }
+        
+        System.out.println(saveGameData);
+    }
+    
 
     public static void main(String[] args) {
         Game game = new Game();
