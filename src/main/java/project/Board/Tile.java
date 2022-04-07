@@ -80,9 +80,8 @@ public class Tile implements Serializable {
         return new int[] {this.row, this.col};
     }
     
-    @Override
-    public String toString() {
-        return(this.row + ", " + this.col);
+    public String coordinatesToString() {
+        return(this.row + "" + this.col);
     }
 }
     

@@ -33,7 +33,7 @@ public class ChessController implements Serializable {
     private Button loadGame;
 
     @FXML
-    private Button promotion;
+    private Button promotePawn;
 
     @FXML
     private TextField saveName;
@@ -63,7 +63,9 @@ public class ChessController implements Serializable {
     private ImageView sprite00, sprite01, sprite02, sprite03, sprite04, sprite05, sprite06, sprite07, sprite10, sprite11, sprite12, sprite13, sprite14, sprite15, sprite16, sprite17, sprite20, sprite21, sprite22, sprite23, sprite24, sprite25, sprite26, sprite27, sprite30, sprite31, sprite32, sprite33, sprite34, sprite35, sprite36, sprite37, sprite40, sprite41, sprite42, sprite43, sprite44, sprite45, sprite46, sprite47, sprite50, sprite51, sprite52, sprite53, sprite54, sprite55, sprite56, sprite57, sprite60, sprite61, sprite62, sprite63, sprite64, sprite65, sprite66, sprite67, sprite70, sprite71, sprite72, sprite73, sprite74, sprite75, sprite76, sprite77;
     
     private boolean pieceHasBeenChosen = false;
+    private String pawnPromotion = new String();
     private String chosenPieceSpriteUrl;
+    private String spritesFilePath = "file:src/main/resources/project/";
     private ImageView chosenPieceImageView;
     private ArrayList<String> legalMovesStrings;
     private Game game = new Game();
@@ -98,7 +100,6 @@ public class ChessController implements Serializable {
             put("73", "70");
         }};
 
-        
         if (newRookPosition.length() != 0) {
             
             String oldRookPosition = new String();
@@ -107,7 +108,6 @@ public class ChessController implements Serializable {
                     oldRookPosition = castlingMoves.get(move);                
             }
         
-            
             ImageView rigthCastlingRookOriginalPos = (ImageView)sprites.lookup("#" + oldRookPosition);
             Image sprite = rigthCastlingRookOriginalPos.getImage();
             String urlRook = sprite.getUrl();
@@ -119,7 +119,9 @@ public class ChessController implements Serializable {
 
     @FXML
     private void testClick (MouseEvent event) {
-
+        
+        if (this.pawnPromotion != "") return; 
+        
         if (!pieceHasBeenChosen){
             ImageView pieceImageView = (ImageView)event.getSource();
             Image sprite;
@@ -189,7 +191,12 @@ public class ChessController implements Serializable {
             castling(castlingMove);
             
             //Retrieves the game state. 0 represents pat, 1 check mate for black and 2 is check mate for white 
-            int gameOver = game.updateGameState(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol);
+            game.updateGameState(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol);
+            this.pawnPromotion = game.pawnPromotion();
+
+            if (this.pawnPromotion != "") return;
+
+            int gameOver = game.checkForGameOver();
 
             chosenPieceImageView.setImage(null);
             moveToImageView.setImage(new Image(chosenPieceSpriteUrl));
@@ -201,6 +208,21 @@ public class ChessController implements Serializable {
             else if (gameOver == Consts.CHECKMATE_FOR_WHITE) 
                 System.out.println("Check Mate for White.");
         }
+    }
+
+    private void isGameOver() {
+
+        int gameOver = game.checkForGameOver();
+
+        chosenPieceImageView.setImage(null);
+        moveToImageView.setImage(new Image(chosenPieceSpriteUrl));
+
+        if (gameOver == Consts.PAT)
+            System.out.println("Pat");
+        else if (gameOver == Consts.CHECKMATE_FOR_BLACK) 
+            System.out.println("Check Mate for Black.");
+        else if (gameOver == Consts.CHECKMATE_FOR_WHITE) 
+            System.out.println("Check Mate for White.");
     }
 
 
@@ -230,6 +252,46 @@ public class ChessController implements Serializable {
     }
 
     @FXML
+    public void pawnPromotion() {
+        String userInput = promotionName.getText();
+
+        //TODO: overkill. Bare flytt det til switch
+        ArrayList<String> legalInput = new ArrayList<>() {{
+            add("bishop");
+            add("knight");
+            add("rook");
+            add("queen");
+        }};
+        
+        if (!legalInput.contains(userInput.toLowerCase())) {
+            System.err.println("Not a valid piece"); //TODO: endre slik at det popper opp tekst
+            return;
+        }    
+        
+        ImageView pawnImageView = (ImageView)sprites.lookup("#" + this.pawnPromotion);
+        char color = (pawnPromotion.charAt(0) == '0') ? 'b' : 'w';
+        char pieceType = '\0';
+
+        switch (userInput) {
+            case "bishop":
+                pieceType = 'B';
+                break;
+            case "knight":
+                pieceType = 'K';
+                break;
+            case "rook":
+                pieceType = 'R';
+                break;
+            case "queen":
+                pieceType = 'Q';
+                break;
+        }
+
+        pawnImageView.setImage(new Image(spritesFilePath + color + pieceType + ".png"));
+    }
+
+
+    @FXML
     private void recreateBoardFromLoadedGame() {
 
         HashMap<String, String> piecePositions = game.loadedGamePiecesPosition();
@@ -238,7 +300,7 @@ public class ChessController implements Serializable {
             String spriteId = piecePositions.get(positionId);
             ImageView placeSpriteOnImageView = (ImageView)sprites.lookup("#" + positionId);
             if (spriteId != null)
-                placeSpriteOnImageView.setImage(new Image("file:src/main/resources/project/" + spriteId + ".png"));      
+                placeSpriteOnImageView.setImage(new Image(spritesFilePath + spriteId + ".png"));      
             else
                 placeSpriteOnImageView.setImage(null);
         }

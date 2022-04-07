@@ -558,9 +558,12 @@
       </Label>
       <Button fx:id="saveGame" layoutX="180.0" layoutY="22.0" mnemonicParsing="false" onMouseClicked="#saveGame" text="Save" />
       <Button fx:id="loadGame" layoutX="353.0" layoutY="22.0" mnemonicParsing="false" onMouseClicked="#loadGame" text="Load" />
-      <TextField fx:id="saveName" layoutX="98.0" layoutY="22.0" prefHeight="25.0" prefWidth="76.0" text="Save name" />
-      <TextField fx:id="loadName" layoutX="273.0" layoutY="22.0" prefHeight="25.0" prefWidth="76.0" text="Save name" />
-      <Button fx:id="promotion" layoutX="514.0" layoutY="22.0" mnemonicParsing="false" text="Promotion" />
-      <TextField fx:id="promotionName" layoutX="433.0" layoutY="22.0" prefHeight="25.0" prefWidth="76.0" text="Piece name" />
+      <Button fx:id="pawnPromotion" layoutX="514.0" layoutY="22.0" mnemonicParsing="false" onMouseClicked="#promotion" text="Promotion" />
+      <Label layoutX="107.0" layoutY="2.0" text="Save name" />
+      <TextField fx:id="saveName" layoutX="98.0" layoutY="22.0" prefHeight="25.0" prefWidth="76.0" />
+      <Label layoutX="282.0" layoutY="2.0" text="Save name" />
+      <TextField fx:id="loadName" layoutX="273.0" layoutY="22.0" prefHeight="25.0" prefWidth="76.0" />
+      <Label layoutX="441.0" layoutY="2.0" text="Piece name" />
+      <TextField fx:id="promotionName" layoutX="433.0" layoutY="22.0" prefHeight="25.0" prefWidth="76.0" />
    </children>
 </AnchorPane>

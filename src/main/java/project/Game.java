@@ -311,15 +311,36 @@ public class Game implements Serializable {
         return "";
     }
 
-    public int updateGameState(int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
+    public String pawnPromotion() {
+        Tile[] topRow = boardTiles[7];
+        Tile[] bottomRow = boardTiles[0];
+
+        for (Tile tile : topRow) {
+            if (tile.isOccupied() && tile.getPiece() instanceof Pawn) {
+                return tile.coordinatesToString();
+            }
+        }
+
+        for (Tile tile : bottomRow) {
+            if (tile.isOccupied() && tile.getPiece() instanceof Pawn) {
+                return tile.coordinatesToString();
+            }
+        }
+
+        return "";
+    }
+
+    public void updateGameState(int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
         
         Piece pieceToMove = boardTiles[chosenPieceRow][chosenPieceCol].getPiece();
-
         pieceToMove.setHasMoved(true);
        
         this.boardTiles[chosenPieceRow][chosenPieceCol].removePiece();
         this.boardTiles[moveToPieceRow][moveToPieceCol].setPiece(pieceToMove);
-        
+    }
+
+    public int checkForGameOver() {
+
         checkLegalMoves.increaseMoveNumber();
 
         //allLegalMovesAfterControl is updated with the opposite player's moves here, as opposed to updating it 
