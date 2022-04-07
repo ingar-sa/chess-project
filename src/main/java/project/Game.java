@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Set;
 
+import javafx.scene.chart.PieChart;
 import project.Board.Chessboard;
 import project.Board.Tile;
 import project.Files.SaveGames;
@@ -361,6 +362,37 @@ public class Game implements Serializable {
             return Consts.GAME_NOT_OVER;
         }
     }
+
+    public void changePieceOnTile(int row, int col, char pieceType, char color) {
+
+        String pieceName = color + "" + pieceType;
+        Tile tile = boardTiles[row][col];
+
+        switch (pieceType) {
+            case 'B':
+                tile.setPiece(new Bishop(pieceName, color));
+                break;
+            case 'K':
+                tile.setPiece(new Knight(pieceName, color));
+                break;
+            case 'P':
+                tile.setPiece(new Pawn(pieceName, color));
+                break;
+            case 'R':
+                tile.setPiece(new Rook(pieceName, color));
+                break;
+            case 'Q':
+                tile.setPiece(new Queen(pieceName, color));
+                break;
+            case 'X':
+                tile.setPiece(new King(pieceName, color));
+                break;
+            default:
+                //TODO: Maybe change to something else than printing 
+                System.err.println("Invalid piece type");
+                return;
+        }
+    } 
 
     public boolean allLegalPieces(int moveToPieceRow, int moveToPieceCol) {
         Set<int[]> allPiecesThatCanMove = allLegalMovesAfterControl.keySet();

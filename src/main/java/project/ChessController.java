@@ -63,7 +63,7 @@ public class ChessController implements Serializable {
     private ImageView sprite00, sprite01, sprite02, sprite03, sprite04, sprite05, sprite06, sprite07, sprite10, sprite11, sprite12, sprite13, sprite14, sprite15, sprite16, sprite17, sprite20, sprite21, sprite22, sprite23, sprite24, sprite25, sprite26, sprite27, sprite30, sprite31, sprite32, sprite33, sprite34, sprite35, sprite36, sprite37, sprite40, sprite41, sprite42, sprite43, sprite44, sprite45, sprite46, sprite47, sprite50, sprite51, sprite52, sprite53, sprite54, sprite55, sprite56, sprite57, sprite60, sprite61, sprite62, sprite63, sprite64, sprite65, sprite66, sprite67, sprite70, sprite71, sprite72, sprite73, sprite74, sprite75, sprite76, sprite77;
     
     private boolean pieceHasBeenChosen = false;
-    private String pawnPromotion = new String();
+    private String pawnPromotion = "";
     private String chosenPieceSpriteUrl;
     private String spritesFilePath = "file:src/main/resources/project/";
     private ImageView chosenPieceImageView;
@@ -192,21 +192,14 @@ public class ChessController implements Serializable {
             
             //Retrieves the game state. 0 represents pat, 1 check mate for black and 2 is check mate for white 
             game.updateGameState(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol);
+            chosenPieceImageView.setImage(null);
+            moveToImageView.setImage(new Image(chosenPieceSpriteUrl));
+
             this.pawnPromotion = game.pawnPromotion();
 
             if (this.pawnPromotion != "") return;
 
-            int gameOver = game.checkForGameOver();
-
-            chosenPieceImageView.setImage(null);
-            moveToImageView.setImage(new Image(chosenPieceSpriteUrl));
-
-            if (gameOver == Consts.PAT)
-                System.out.println("Pat");
-            else if (gameOver == Consts.CHECKMATE_FOR_BLACK) 
-                System.out.println("Check Mate for Black.");
-            else if (gameOver == Consts.CHECKMATE_FOR_WHITE) 
-                System.out.println("Check Mate for White.");
+            isGameOver();
         }
     }
 
@@ -214,9 +207,11 @@ public class ChessController implements Serializable {
 
         int gameOver = game.checkForGameOver();
 
+        /*
         chosenPieceImageView.setImage(null);
         moveToImageView.setImage(new Image(chosenPieceSpriteUrl));
-
+        */
+        
         if (gameOver == Consts.PAT)
             System.out.println("Pat");
         else if (gameOver == Consts.CHECKMATE_FOR_BLACK) 
@@ -287,9 +282,15 @@ public class ChessController implements Serializable {
                 break;
         }
 
-        pawnImageView.setImage(new Image(spritesFilePath + color + pieceType + ".png"));
-    }
+        int tileRow = 7 - GridPane.getRowIndex(chosenPieceImageView);
+        int tileCol = GridPane.getColumnIndex(chosenPieceImageView);
+        game.changePieceOnTile(tileRow, tileCol, pieceType, color);
 
+        pawnImageView.setImage(new Image(spritesFilePath + color + pieceType + ".png"));
+
+        this.pawnPromotion = "";
+        isGameOver();
+    }
 
     @FXML
     private void recreateBoardFromLoadedGame() {
