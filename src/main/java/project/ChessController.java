@@ -3,8 +3,12 @@ package project;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
@@ -20,6 +24,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import project.Files.SaveGames;
 
@@ -142,7 +147,7 @@ public class ChessController implements Serializable {
             legalMovesStrings = game.getLegalMoves(row, col);
             if (legalMovesStrings.size() == 0)
                 return;
-            
+            drawCirclesForLegalMoves(legalMovesStrings);
             System.out.println("Legal Move!");
             pieceHasBeenChosen = true;
             chosenPieceImageView = pieceImageView;
@@ -150,7 +155,6 @@ public class ChessController implements Serializable {
 
         }
         else {
-        
             System.out.println("Check if the new piece is legal.");
 
             ImageView moveToImageView = (ImageView)event.getSource();
@@ -164,6 +168,7 @@ public class ChessController implements Serializable {
                 legalMovesStrings = game.getLegalMoves(moveToPieceRow, moveToPieceCol);
                 if (legalMovesStrings.size() == 0) {
                     pieceHasBeenChosen = false;
+                    removeCirclesForLegalMoves();
                     return;
                 }
                 else {
@@ -171,6 +176,8 @@ public class ChessController implements Serializable {
                     Image sprite = this.chosenPieceImageView.getImage();
                     this.chosenPieceSpriteUrl = sprite.getUrl();
                 }
+                removeCirclesForLegalMoves();
+                drawCirclesForLegalMoves(legalMovesStrings);
                 return;
             }
 
@@ -180,8 +187,10 @@ public class ChessController implements Serializable {
             int chosenPieceCol = GridPane.getColumnIndex(chosenPieceImageView);
             chosenPieceRow = 7 - chosenPieceRow;
 
-            if (!legalMovesStrings.contains(legalMoveId)) 
+            if (!legalMovesStrings.contains(legalMoveId)) {
+                removeCirclesForLegalMoves(); 
                 return;
+            }
 
             String enPassentMove = game.isMoveEnPassent(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol);
             
@@ -198,6 +207,8 @@ public class ChessController implements Serializable {
             game.updateGameState(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol);
             chosenPieceImageView.setImage(null);
             moveToImageView.setImage(new Image(chosenPieceSpriteUrl));
+            
+            removeCirclesForLegalMoves();
 
             this.pawnPromotion = game.pawnPromotion();
 
@@ -205,6 +216,19 @@ public class ChessController implements Serializable {
 
             isGameOver();
         }
+    }
+
+    private void removeCirclesForLegalMoves() {
+
+        ObservableList<Node> childrens = tileColors.getChildren();
+        ArrayList<Node> circlesToBeRemoved = new ArrayList<Node>();
+
+        for (Node node : childrens) {
+            if (node instanceof Circle || !(node instanceof Rectangle)) {
+                circlesToBeRemoved.add(node);
+            }
+        }
+        tileColors.getChildren().removeAll(circlesToBeRemoved);
     }
 
     private void isGameOver() {
@@ -228,15 +252,27 @@ public class ChessController implements Serializable {
     //This is without a doubt a cool feature to have, but... focusing on oop principles takes precedence
     private void drawCirclesForLegalMoves(ArrayList<String> legalMovesStrings) {
         for (String legalMove : legalMovesStrings) {
+            
             ImageView legalMoveImageView = (ImageView)sprites.lookup("#" + legalMove);
-            Circle circle = new Circle(0, 0, 50);
-            
-            
-            
+            Circle circle = new Circle(10);
+            Circle outerRim = new Circle(33);
+            Circle inside = new Circle(27);
+            Shape donut = Shape.subtract(outerRim, inside);
+            donut.setFill(Color.LIGHTGRAY);
+            circle.setFill(Color.LIGHTGRAY);
             int row = GridPane.getRowIndex(legalMoveImageView);
             int col = GridPane.getColumnIndex(legalMoveImageView);
-
-            tileColors.add(circle, col, row);
+            
+            if (legalMoveImageView.getImage() != null) {
+                tileColors.add(donut, col, row);
+                GridPane.setHalignment(donut, HPos.CENTER);
+                GridPane.setValignment(donut, VPos.CENTER);
+            }
+            else {
+                tileColors.add(circle, col, row);
+                GridPane.setHalignment(circle, HPos.CENTER);
+                GridPane.setValignment(circle, VPos.CENTER);
+            }
         }
     }
 
