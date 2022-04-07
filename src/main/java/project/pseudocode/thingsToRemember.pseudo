@@ -1,4 +1,4 @@
-- se over implementasjon av serialilzable 
+- se over implementasjon av serialilzable - trengs vell kun i game 
 - se over felter
 - se over setPiece of RemovePiece - skal vi fjerne at de også håndterer occupied. 
 - se at fargene på tiles er riktig 
@@ -7,6 +7,7 @@
 - legg til kommentarer til koden 
 - Hvis vi har tid flytte gamestatus og movenumber?
 - try/catch så ikke hele programmet krasjer - f.eks. Const 
-- tegne brettet på nytt basert på i game
+- tegne brettet på nytt basert på i game?
 - se på protected
 - se på XML endre -7 på rad 
+- se på tekst som skal dukke opp 

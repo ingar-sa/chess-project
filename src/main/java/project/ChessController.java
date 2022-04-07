@@ -68,6 +68,10 @@ public class ChessController implements Serializable {
     private String spritesFilePath = "file:src/main/resources/project/";
     private ImageView chosenPieceImageView;
     private ArrayList<String> legalMovesStrings;
+
+    @FXML
+    //private Text promotionText;
+    
     private Game game = new Game();
 
     @FXML
@@ -248,7 +252,8 @@ public class ChessController implements Serializable {
 
     @FXML
     public void pawnPromotion() {
-        String userInput = promotionName.getText();
+        //La inn lower case her
+        String userInput = promotionName.getText().toLowerCase();
 
         //TODO: overkill. Bare flytt det til switch
         ArrayList<String> legalInput = new ArrayList<>() {{
@@ -258,7 +263,7 @@ public class ChessController implements Serializable {
             add("queen");
         }};
         
-        if (!legalInput.contains(userInput.toLowerCase())) {
+        if (!legalInput.contains(userInput)) {
             System.err.println("Not a valid piece"); //TODO: endre slik at det popper opp tekst
             return;
         }    
@@ -266,7 +271,7 @@ public class ChessController implements Serializable {
         ImageView pawnImageView = (ImageView)sprites.lookup("#" + this.pawnPromotion);
         char color = (pawnPromotion.charAt(0) == '0') ? 'b' : 'w';
         char pieceType = '\0';
-
+        
         switch (userInput) {
             case "bishop":
                 pieceType = 'B';
@@ -281,14 +286,15 @@ public class ChessController implements Serializable {
                 pieceType = 'Q';
                 break;
         }
-
-        int tileRow = 7 - GridPane.getRowIndex(chosenPieceImageView);
-        int tileCol = GridPane.getColumnIndex(chosenPieceImageView);
+        //La inn pawnImageView
+        int tileRow = 7 - GridPane.getRowIndex(pawnImageView);
+        int tileCol = GridPane.getColumnIndex(pawnImageView);
         game.changePieceOnTile(tileRow, tileCol, pieceType, color);
 
         pawnImageView.setImage(new Image(spritesFilePath + color + pieceType + ".png"));
 
         this.pawnPromotion = "";
+        //this.sprites.getChildren().remove(promotionText);
         isGameOver();
     }
 

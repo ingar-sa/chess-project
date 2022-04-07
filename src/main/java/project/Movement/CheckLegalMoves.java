@@ -343,12 +343,12 @@ public class CheckLegalMoves implements Serializable {
                 }
             } 
         }
-
+        //byttet om her 
         if (kingCanBetaken && !notGameOver) {
-            this.gameStatus = Consts.PAT;
+            this.gameStatus = Consts.CHECKMATE;
         } 
         else if (!kingCanBetaken && !notGameOver) {
-            this.gameStatus = Consts.CHECKMATE;
+            this.gameStatus = Consts.PAT;
         }
 
         return legalMoves;
