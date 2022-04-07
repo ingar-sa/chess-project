@@ -221,11 +221,11 @@ public class ChessController implements Serializable {
 
     private void removeCirclesForLegalMoves() {
 
-        ObservableList<Node> childrens = tileColors.getChildren();
+        ObservableList<Node> childeren = tileColors.getChildren();
         ArrayList<Node> circlesToBeRemoved = new ArrayList<Node>();
 
-        for (Node node : childrens) {
-            if (node instanceof Circle || !(node instanceof Rectangle)) {
+        for (Node node : childeren) {
+            if (!(node instanceof Rectangle)) {
                 circlesToBeRemoved.add(node);
             }
         }
@@ -290,7 +290,8 @@ public class ChessController implements Serializable {
 
     @FXML
     public void pawnPromotion() {
-        if (pawnPromotion.equals("")) {
+
+        if (pawnPromotion.equals("")) { //Legg inn beskjed?
             return;
         }
 
