@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -555,7 +556,11 @@
             <Font name="Baskerville Old Face" size="24.0" />
          </font>
       </Label>
-      <Button fx:id="saveGame" layoutX="11.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#saveGame" text="Save" />
-      <Button fx:id="loadGame" layoutX="60.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#loadGame" text="Load" />
+      <Button fx:id="saveGame" layoutX="180.0" layoutY="22.0" mnemonicParsing="false" onMouseClicked="#saveGame" text="Save" />
+      <Button fx:id="loadGame" layoutX="353.0" layoutY="22.0" mnemonicParsing="false" onMouseClicked="#loadGame" text="Load" />
+      <TextField fx:id="saveName" layoutX="98.0" layoutY="22.0" prefHeight="25.0" prefWidth="76.0" text="Save name" />
+      <TextField fx:id="loadName" layoutX="273.0" layoutY="22.0" prefHeight="25.0" prefWidth="76.0" text="Save name" />
+      <Button fx:id="promotion" layoutX="514.0" layoutY="22.0" mnemonicParsing="false" text="Promotion" />
+      <TextField fx:id="promotionName" layoutX="433.0" layoutY="22.0" prefHeight="25.0" prefWidth="76.0" text="Piece name" />
    </children>
 </AnchorPane>

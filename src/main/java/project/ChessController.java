@@ -10,6 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -18,6 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import project.Files.SaveGames;
 
 
@@ -30,8 +33,21 @@ public class ChessController implements Serializable {
     private Button loadGame;
 
     @FXML
-    private GridPane tileColors;
+    private Button promotion;
 
+    @FXML
+    private TextField saveName;
+
+    @FXML
+    private TextField loadName;
+
+    @FXML
+    private TextField promotionName;
+
+    @FXML
+    private GridPane tileColors;
+    
+    
     // @FXML
     // private Menu save;
 
