@@ -254,6 +254,7 @@ public class ChessController implements Serializable {
         for (String legalMove : legalMovesStrings) {
             
             ImageView legalMoveImageView = (ImageView)sprites.lookup("#" + legalMove);
+            
             Circle circle = new Circle(10);
             Circle outerRim = new Circle(33);
             Circle inside = new Circle(27);
