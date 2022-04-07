@@ -1,0 +1,9 @@
+- se over implementasjon av serialilzable 
+- se over felter
+- se over setPiece of RemovePiece - skal vi fjerne at de også håndterer occupied. 
+- se at fargene på tiles er riktig 
+- se etter overkill laging av brett 
+- se over felter/metoder som ikke blir brukt
+- legg til kommentarer til koden 
+- Hvis vi har tid flytte gamestatus og movenumber?
+- try/catch så ikke hele programmet krasjer - f.eks. Const 

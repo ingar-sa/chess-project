@@ -38,7 +38,7 @@ public class Game implements Serializable {
         makeBoard();
         placePieces();
         this.checkLegalMoves = new CheckLegalMoves(); 
-        this.allLegalMovesAfterControl = checkLegalMoves.CheckforCheckMateAndPat(this.deepCopyUsingSerialization()); //allLegalMovesAfterControl is initialized with whites available moves
+        this.allLegalMovesAfterControl = checkLegalMoves.CheckforCheckMateAndPat(this.boardDeepCopyUsingSerialization()); //allLegalMovesAfterControl is initialized with whites available moves
     }
 
     public int isGameOver() {
@@ -195,7 +195,7 @@ public class Game implements Serializable {
 
     //https://www.studytonight.com/java-examples/how-to-make-a-deep-copy-of-an-object-in-java
 
-    public Tile[][] deepCopyUsingSerialization()
+    public Tile[][] boardDeepCopyUsingSerialization()
 	{
 		try
 		{
@@ -324,7 +324,9 @@ public class Game implements Serializable {
 
         //allLegalMovesAfterControl is updated with the opposite player's moves here, as opposed to updating it 
         //during the next call of getLegalMoves. This allows us to use getGameStatus() to check for a mate or pat
-        this.allLegalMovesAfterControl = checkLegalMoves.CheckforCheckMateAndPat(this.deepCopyUsingSerialization()); 
+        this.allLegalMovesAfterControl = checkLegalMoves.CheckforCheckMateAndPat(this.boardDeepCopyUsingSerialization());
+        
+        this.printBoard();
         
         int gameStatus = checkLegalMoves.getGameStatus(); //gameStatus returns 1 if it is pat, 2 if it is check mate, and otherwise 0
 
@@ -374,7 +376,7 @@ public class Game implements Serializable {
 
     public static void main(String[] args) {
         Game game = new Game();
-        Tile[][] copyBoard = game.deepCopyUsingSerialization();
+        Tile[][] copyBoard = game.boardDeepCopyUsingSerialization();
         Tile[][] realBoard = game.getBoardTiles();
         
     }
