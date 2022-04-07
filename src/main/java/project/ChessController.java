@@ -129,7 +129,7 @@ public class ChessController implements Serializable {
     @FXML
     private void testClick (MouseEvent event) {
         
-        if (this.pawnPromotion != "") return; 
+        if (!(this.pawnPromotion.equals(""))) return; 
         
         if (!pieceHasBeenChosen){
             ImageView pieceImageView = (ImageView)event.getSource();
@@ -147,6 +147,7 @@ public class ChessController implements Serializable {
             legalMovesStrings = game.getLegalMoves(row, col);
             if (legalMovesStrings.size() == 0)
                 return;
+
             drawCirclesForLegalMoves(legalMovesStrings);
             System.out.println("Legal Move!");
             pieceHasBeenChosen = true;
@@ -212,7 +213,7 @@ public class ChessController implements Serializable {
 
             this.pawnPromotion = game.pawnPromotion();
 
-            if (this.pawnPromotion != "") return;
+            if (!(this.pawnPromotion.equals(""))) return;
 
             isGameOver();
         }
@@ -254,7 +255,7 @@ public class ChessController implements Serializable {
         for (String legalMove : legalMovesStrings) {
             
             ImageView legalMoveImageView = (ImageView)sprites.lookup("#" + legalMove);
-            
+
             Circle circle = new Circle(10);
             Circle outerRim = new Circle(33);
             Circle inside = new Circle(27);
@@ -289,6 +290,10 @@ public class ChessController implements Serializable {
 
     @FXML
     public void pawnPromotion() {
+        if (pawnPromotion.equals("")) {
+            return;
+        }
+
         //La inn lower case her
         String userInput = promotionName.getText().toLowerCase();
 
