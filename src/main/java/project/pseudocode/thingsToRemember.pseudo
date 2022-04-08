@@ -15,4 +15,6 @@
 - bytte ut "" med null?
 
 - Bytte ut hvordan sirkler fjernes til Observable list, som fjerner alle endringer?
-- Spørre om lagring av filer, hvorfor ingen execptions av filewriter 
+- Spørre om lagring av filer, hvorfor ingen execptions av filewriter
+
+- SLETTE ALLE IKKE-JAVA FILER FØR INNLEVERING!!!

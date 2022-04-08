@@ -28,9 +28,9 @@ public class Game implements Serializable {
 
     //Chessboard                            chessboard;
     //private Tile[][]                        boardTiles;
-    private final int[]                     columnLetters = {0, 1, 2, 3, 4, 5, 6, 7};
-    private Tile[][]                        boardTiles = new Tile[8][8];
-    private CheckLegalMoves                 checkLegalMoves;
+    private final int[]                      columnLetters = {0, 1, 2, 3, 4, 5, 6, 7};
+    private Tile[][]                         boardTiles = new Tile[8][8];
+    private CheckLegalMoves                  checkLegalMoves;
     private HashMap<int[], ArrayList<int[]>> allLegalMovesAfterControl;
 
     public Game() {
@@ -57,8 +57,6 @@ public class Game implements Serializable {
                 char firstColor;
                 char secondColor; 
                 char tileColor;
-
-                
 
                 if (row % 2 == 1) {
                     firstColor = 'w';
@@ -272,7 +270,7 @@ public class Game implements Serializable {
         return "";
     }
 
-    public String isMoveCasteling (int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
+    public String isMoveCastling (int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
         
         Piece pieceToMove = boardTiles[chosenPieceRow][chosenPieceCol].getPiece();
 

@@ -231,7 +231,7 @@ public class ChessController implements Serializable {
                 pieceTakenByEnPassent.setImage(null);
             }
 
-            String castlingMove = game.isMoveCasteling(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol);
+            String castlingMove = game.isMoveCastling(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol);
             castling(castlingMove);
             
             //Retrieves the game state. 0 represents pat, 1 check mate for black and 2 is check mate for white 
@@ -288,25 +288,11 @@ public class ChessController implements Serializable {
         messageDisplay.setText("");
 
         if (pawnPromotion.equals("")) {
-            messageDisplay.setText("You have no pawns to promote!"); //TODO: fikse meldinger slik at de forsvinner på riktig tidspunkt
+            messageDisplay.setText("You have no pawns to promote!");
             return;
         }
 
         String userInput = promotionName.getText().toLowerCase();
-
-        //TODO: overkill. Bare flytt det til switch
-        ArrayList<String> legalInput = new ArrayList<>() {{
-            add("bishop");
-            add("knight");
-            add("rook");
-            add("queen");
-        }};
-        
-        if (!legalInput.contains(userInput)) {
-            messageDisplay.setText( "Not a valid piece! Input must be: bishop, knight, rook or queen."); 
-            return;
-        }    
-        
         ImageView pawnImageView = (ImageView)sprites.lookup("#" + this.pawnPromotion);
         char color = (pawnPromotion.charAt(0) == '0') ? 'b' : 'w';
         char pieceType = '\0';
@@ -324,6 +310,9 @@ public class ChessController implements Serializable {
             case "queen":
                 pieceType = 'Q';
                 break;
+            default:
+                messageDisplay.setText( "Not a valid piece! Input must be: bishop, knight, rook or queen."); 
+                return;
         }
         //La inn pawnImageView
         int tileRow = 7 - GridPane.getRowIndex(pawnImageView);
