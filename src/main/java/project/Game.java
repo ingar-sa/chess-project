@@ -434,11 +434,30 @@ public class Game implements Serializable {
         for (Tile[] row : boardTiles) {
             for (Tile tile : row) {
                 if (tile.isOccupied()) {
-                    saveGameData += tile.getPiece().getSpriteId();
+                    
+                    Piece piece = tile.getPiece();
+                    
+                    if (piece instanceof Pawn) {
+                        Pawn pawn = (Pawn)piece;                
+
+                        saveGameData += pawn.getSpriteId() + "+";
+                        saveGameData += ((pawn.getHasMoved()) ? "1" : "0") + "+";
+                        saveGameData += ((pawn.getMovedTwoLastTurn()) ? "1" : "0") + "+";
+                        saveGameData += pawn.getMoveNumberEnPassant();
+                    }
+                    else if (piece instanceof Rook || piece instanceof King) {
+
+                        saveGameData += piece.getSpriteId() + "+";
+                        saveGameData += ((piece.getHasMoved()) ? "1" : "0");
+                    }
+                    else {
+                        saveGameData += piece.getSpriteId();
+                    }
+
                     saveGameData += "-";
                 }
-                else{
-                    saveGameData += "0-";
+                else {
+                    saveGameData += "00-";
                 }
             }
         }
@@ -448,9 +467,7 @@ public class Game implements Serializable {
     
 
     public static void main(String[] args) {
-        Game game = new Game();
-        Tile[][] copyBoard = game.boardDeepCopyUsingSerialization();
-        Tile[][] realBoard = game.getBoardTiles();
+        
         
     }
 

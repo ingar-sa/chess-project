@@ -1,0 +1,36 @@
+"filename", "language", "XML", "Java", "Generic Pseudocode", "Markdown", "comment", "blank", "total"
+"c:\School\oop_project\TDT4100_prosjekt_ingara\README.md", "Markdown", 0, 0, 0, 60, 0, 29, 89
+"c:\School\oop_project\TDT4100_prosjekt_ingara\pom.xml", "XML", 47, 0, 0, 0, 1, 10, 58
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\exampleproject\Calculator.java", "Java", 0, 10, 0, 0, 22, 4, 36
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\exampleproject\ExampleProjectApp.java", "Java", 0, 17, 0, 0, 0, 7, 24
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\exampleproject\ExampleProjectController.java", "Java", 0, 26, 0, 0, 0, 8, 34
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\module-info.java", "Java", 0, 6, 0, 0, 0, 1, 7
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Board\Chessboard.java", "Java", 0, 137, 0, 0, 3, 38, 178
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Board\Tile.java", "Java", 0, 56, 0, 0, 1, 32, 89
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\ChessApp.java", "Java", 0, 18, 0, 0, 1, 8, 27
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\ChessController.java", "Java", 0, 284, 0, 0, 11, 88, 383
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Consts.java", "Java", 0, 11, 0, 0, 1, 4, 16
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Files\SaveGames.java", "Java", 0, 27, 0, 0, 0, 11, 38
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Game.java", "Java", 0, 356, 0, 0, 11, 91, 458
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Movement\CheckLegalMoves.java", "Java", 0, 333, 0, 0, 87, 120, 540
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Movement\MovementPatterns.java", "Java", 0, 278, 0, 0, 129, 151, 558
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Movement\TileCheckLegalMoves.java", "Java", 0, 323, 0, 0, 42, 121, 486
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Movement\TileMovementPatterns.java", "Java", 0, 288, 0, 0, 155, 104, 547
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Pieces\Bishop.java", "Java", 0, 6, 0, 0, 0, 5, 11
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Pieces\King.java", "Java", 0, 7, 0, 0, 0, 4, 11
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Pieces\Knight.java", "Java", 0, 6, 0, 0, 0, 2, 8
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Pieces\Pawn.java", "Java", 0, 25, 0, 0, 6, 11, 42
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Pieces\Piece.java", "Java", 0, 52, 0, 0, 0, 19, 71
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Pieces\Queen.java", "Java", 0, 7, 0, 0, 0, 4, 11
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Pieces\Rook.java", "Java", 0, 6, 0, 0, 0, 3, 9
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\TerminalChess.java", "Java", 0, 186, 0, 0, 3, 58, 247
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\TileTerminalChess.java", "Java", 0, 183, 0, 0, 3, 54, 240
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\pseudocode\PlayerMove.pseudo", "Generic Pseudocode", 0, 0, 92, 0, 9, 57, 158
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\pseudocode\controller.pseudo", "Generic Pseudocode", 0, 0, 32, 0, 61, 21, 114
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\pseudocode\notater.pseudo", "Generic Pseudocode", 0, 0, 11, 0, 0, 11, 22
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\pseudocode\savegame.pseudo", "Generic Pseudocode", 0, 0, 9, 0, 0, 7, 16
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\pseudocode\thingsToRemember.pseudo", "Generic Pseudocode", 0, 0, 16, 0, 0, 1, 17
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\resources\exampleproject\App.fxml", "XML", 18, 0, 0, 0, 0, 3, 21
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\resources\project\Chessboard.fxml", "XML", 572, 0, 0, 0, 0, 3, 575
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\test\java\exampleproject\CalculatorTest.java", "Java", 0, 25, 0, 0, 0, 9, 34
+"Total", "-", 637, 2673, 160, 60, 546, 1099, 5175

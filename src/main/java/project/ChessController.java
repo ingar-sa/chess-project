@@ -11,6 +11,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -52,18 +53,12 @@ public class ChessController implements Serializable {
     @FXML
     private GridPane tileColors;
     
-    
-    // @FXML
-    // private Menu save;
-
-    // @FXML
-    // private Menu load;
+    @FXML
+    private Label messageDisplay;
 
     @FXML
     private GridPane sprites;
     
-    //Generating the imageviews in javafx like we do with colorTiles() was more cumbersome 
-    //than writing a python script to generate the fxml. The script can be found in src/python.
     @FXML
     private ImageView sprite00, sprite01, sprite02, sprite03, sprite04, sprite05, sprite06, sprite07, sprite10, sprite11, sprite12, sprite13, sprite14, sprite15, sprite16, sprite17, sprite20, sprite21, sprite22, sprite23, sprite24, sprite25, sprite26, sprite27, sprite30, sprite31, sprite32, sprite33, sprite34, sprite35, sprite36, sprite37, sprite40, sprite41, sprite42, sprite43, sprite44, sprite45, sprite46, sprite47, sprite50, sprite51, sprite52, sprite53, sprite54, sprite55, sprite56, sprite57, sprite60, sprite61, sprite62, sprite63, sprite64, sprite65, sprite66, sprite67, sprite70, sprite71, sprite72, sprite73, sprite74, sprite75, sprite76, sprite77;
     
@@ -73,9 +68,7 @@ public class ChessController implements Serializable {
     private String spritesFilePath = "file:src/main/resources/project/";
     private ImageView chosenPieceImageView;
     private ArrayList<String> legalMovesStrings;
-
-    @FXML
-    //private Text promotionText;
+    private boolean isPawnPromoted = false;
     
     private Game game = new Game();
 
@@ -95,6 +88,35 @@ public class ChessController implements Serializable {
                            :(col % 2 == 1) ? dark : light;
 
                 tileColors.add(new Rectangle(70, 70, tileColor), col, row); 
+            }
+        }
+    }
+
+    private void drawCirclesForLegalMoves(ArrayList<String> legalMovesStrings) {
+        for (String legalMove : legalMovesStrings) {
+            
+            ImageView legalMoveImageView = (ImageView)sprites.lookup("#" + legalMove);
+
+            Circle circle = new Circle(10);
+            Circle outerRim = new Circle(33);
+            Circle inside = new Circle(27);
+            Shape donut = Shape.subtract(outerRim, inside);
+            donut.setFill(Color.LIGHTGRAY);
+            circle.setFill(Color.LIGHTGRAY);
+            circle.setOpacity(0.5);
+            donut.setOpacity(0.5);
+            int row = GridPane.getRowIndex(legalMoveImageView);
+            int col = GridPane.getColumnIndex(legalMoveImageView);
+            
+            if (legalMoveImageView.getImage() != null) {
+                tileColors.add(donut, col, row);
+                GridPane.setHalignment(donut, HPos.CENTER);
+                GridPane.setValignment(donut, VPos.CENTER);
+            }
+            else {
+                tileColors.add(circle, col, row);
+                GridPane.setHalignment(circle, HPos.CENTER);
+                GridPane.setValignment(circle, VPos.CENTER);
             }
         }
     }
@@ -128,6 +150,13 @@ public class ChessController implements Serializable {
 
     @FXML
     private void testClick (MouseEvent event) {
+
+        if (isPawnPromoted) {
+            messageDisplay.setText("");
+            this.isPawnPromoted = false;
+        }
+
+
         
         if (!(this.pawnPromotion.equals(""))) return; 
         
@@ -213,7 +242,10 @@ public class ChessController implements Serializable {
 
             this.pawnPromotion = game.pawnPromotion();
 
-            if (!(this.pawnPromotion.equals(""))) return;
+            if (!(this.pawnPromotion.equals(""))) {
+                messageDisplay.setText("Pawn promotion. Input must be: bishop, knight, rook or queen.");
+                return;
+            }
 
             isGameOver();
         }
@@ -249,53 +281,16 @@ public class ChessController implements Serializable {
             System.out.println("Check Mate for White.");
     }
 
-
-    //This is without a doubt a cool feature to have, but... focusing on oop principles takes precedence
-    private void drawCirclesForLegalMoves(ArrayList<String> legalMovesStrings) {
-        for (String legalMove : legalMovesStrings) {
-            
-            ImageView legalMoveImageView = (ImageView)sprites.lookup("#" + legalMove);
-
-            Circle circle = new Circle(10);
-            Circle outerRim = new Circle(33);
-            Circle inside = new Circle(27);
-            Shape donut = Shape.subtract(outerRim, inside);
-            donut.setFill(Color.LIGHTGRAY);
-            circle.setFill(Color.LIGHTGRAY);
-            int row = GridPane.getRowIndex(legalMoveImageView);
-            int col = GridPane.getColumnIndex(legalMoveImageView);
-            
-            if (legalMoveImageView.getImage() != null) {
-                tileColors.add(donut, col, row);
-                GridPane.setHalignment(donut, HPos.CENTER);
-                GridPane.setValignment(donut, VPos.CENTER);
-            }
-            else {
-                tileColors.add(circle, col, row);
-                GridPane.setHalignment(circle, HPos.CENTER);
-                GridPane.setValignment(circle, VPos.CENTER);
-            }
-        }
-    }
-
-    @FXML
-    public void saveGame() {
-        game.saveGame();
-    }
-
-    @FXML
-    public void loadGame() {
-        return;
-    }
-
     @FXML
     public void pawnPromotion() {
 
-        if (pawnPromotion.equals("")) { //Legg inn beskjed?
+        messageDisplay.setText("");
+
+        if (pawnPromotion.equals("")) {
+            messageDisplay.setText("You have no pawns to promote!"); //TODO: fikse meldinger slik at de forsvinner på riktig tidspunkt
             return;
         }
 
-        //La inn lower case her
         String userInput = promotionName.getText().toLowerCase();
 
         //TODO: overkill. Bare flytt det til switch
@@ -307,7 +302,7 @@ public class ChessController implements Serializable {
         }};
         
         if (!legalInput.contains(userInput)) {
-            System.err.println("Not a valid piece"); //TODO: endre slik at det popper opp tekst
+            messageDisplay.setText( "Not a valid piece! Input must be: bishop, knight, rook or queen."); 
             return;
         }    
         
@@ -336,6 +331,8 @@ public class ChessController implements Serializable {
 
         pawnImageView.setImage(new Image(spritesFilePath + color + pieceType + ".png"));
 
+        isPawnPromoted = true;
+
         this.pawnPromotion = "";
         //this.sprites.getChildren().remove(promotionText);
         isGameOver();
@@ -355,7 +352,22 @@ public class ChessController implements Serializable {
                 placeSpriteOnImageView.setImage(null);
         }
     }
-        
+
+    @FXML
+    public void saveGame() {
+
+        messageDisplay.setText("");
+
+        game.saveGame();
+    }
+
+    @FXML
+    public void loadGame() {
+
+        messageDisplay.setText("");
+
+        return;
+    }
 
     @FXML
     private void initialize()
