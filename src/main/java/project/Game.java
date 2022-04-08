@@ -365,7 +365,7 @@ public class Game implements Serializable {
 
     public void changePieceOnTile(int row, int col, char pieceType, char color) {
 
-        String pieceName = color + "" + pieceType;
+        String pieceName = color + " " + pieceType;
         Tile tile = boardTiles[row][col];
 
         switch (pieceType) {
