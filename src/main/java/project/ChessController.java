@@ -2,6 +2,7 @@ package project;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -42,10 +43,10 @@ public class ChessController implements Serializable {
     private Button promotePawn;
 
     @FXML
-    private TextField saveName;
+    private TextField saveNameField;
 
     @FXML
-    private TextField loadName;
+    private TextField loadNameField;
 
     @FXML
     private TextField promotionName;
@@ -358,7 +359,22 @@ public class ChessController implements Serializable {
 
         messageDisplay.setText("");
 
-        game.saveGame();
+        String saveName = this.saveNameField.getText();
+        System.out.println(saveName);
+        this.saveNameField.setText("");
+
+        if (saveName.equals("") || saveName.matches("[^a-zA-Z0-9.-]")) {
+            messageDisplay.setText("Illegal character(s) in file name!");
+            return;
+        }
+
+
+        try {   
+            game.saveGame(saveName);
+
+        } catch (Exception e) {
+            System.err.println(e.getStackTrace());
+        }
     }
 
     @FXML

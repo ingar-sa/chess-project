@@ -560,9 +560,9 @@
       <Button fx:id="loadGame" layoutX="349.0" layoutY="81.0" mnemonicParsing="false" onMouseClicked="#loadGame" text="Load" />
       <Button fx:id="pawnPromotion" layoutX="521.0" layoutY="81.0" mnemonicParsing="false" onMouseClicked="#pawnPromotion" text="Promotion" />
       <Label layoutX="107.0" layoutY="62.0" text="Save name" />
-      <TextField fx:id="saveName" layoutX="98.0" layoutY="81.0" prefHeight="25.0" prefWidth="76.0" />
+      <TextField fx:id="saveNameField" layoutX="98.0" layoutY="81.0" prefHeight="25.0" prefWidth="76.0" />
       <Label layoutX="278.0" layoutY="62.0" text="Save name" />
-      <TextField fx:id="loadName" layoutX="269.0" layoutY="81.0" prefHeight="25.0" prefWidth="76.0" />
+      <TextField fx:id="loadNameField" layoutX="269.0" layoutY="81.0" prefHeight="25.0" prefWidth="76.0" />
       <Label layoutX="444.0" layoutY="62.0" text="Piece name" />
       <TextField fx:id="promotionName" layoutX="437.0" layoutY="81.0" prefHeight="25.0" prefWidth="76.0" />
       <Label fx:id="messageDisplay" alignment="CENTER" layoutX="95.0" layoutY="21.0" prefHeight="35.0" prefWidth="500.0" style="-fx-background-color: WHITE; -fx-border-color: DARKGREY; -fx-border-width: 1; -fx-border-radius: 5;">

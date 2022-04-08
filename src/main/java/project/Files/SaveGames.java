@@ -12,7 +12,7 @@ public class SaveGames implements Serializable {
 	public void saveGame(String saveName, String saveDataString) {
 
 		try {
-			FileWriter saveGameWriter = new FileWriter("savegames/" + saveName + ".txt");
+			FileWriter saveGameWriter = new FileWriter("src/main/java/project/Files/savegames/" + saveName + ".txt");
 			saveGameWriter.write(saveDataString);
 			saveGameWriter.close();
 

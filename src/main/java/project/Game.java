@@ -427,8 +427,8 @@ public class Game implements Serializable {
         return piecePositions;
     }
 
-    public void saveGame() {
-        SaveGames saveGame = new SaveGames();
+    public void saveGame(String saveName) {
+        SaveGames saveGameWriter = new SaveGames();
         String saveGameData = new String();
 
         for (Tile[] row : boardTiles) {
@@ -462,6 +462,8 @@ public class Game implements Serializable {
             }
         }
         
+        saveGameWriter.saveGame(saveName, saveGameData);
+
         System.out.println(saveGameData);
     }
     
