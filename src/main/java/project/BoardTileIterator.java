@@ -20,18 +20,14 @@ public class BoardTileIterator implements Iterator<String[]> {
 
     @Override
     public String[] next() { //TODO: Change from tile to give pieceinfo array directly from game
-     
-        String[] pieceInfo = new String[2];
-        
+
         if (col == 8) {
             col = 0;
             ++row;
         }
 
-        Tile tile = game.getTile(row, col);
-        pieceInfo = (tile.isOccupied()) ? new String[] {tile.coordinatesToString(), tile.getPiece().getSpriteId()} 
-                                        : new String[] {tile.coordinatesToString(), ""};
-
+        String[] pieceInfo = game.getPieceInfoFromTile(row, col);
+        
         ++col;
         return pieceInfo;
     }
