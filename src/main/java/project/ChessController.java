@@ -70,8 +70,7 @@ public class ChessController implements Serializable {
     private ImageView chosenPieceImageView;
     private ArrayList<String> legalMovesStrings;
     private boolean isPawnPromoted = false;
-    
-    private Game game = new Game();
+    private Game game;
 
     @FXML
     private void colorTiles() {
@@ -329,11 +328,6 @@ public class ChessController implements Serializable {
     }
 
     @FXML
-    private void recreateBoardFromLoadedGame() {
-        
-    }
-
-    @FXML
     public void saveGame() {
 
         messageDisplay.setText("");
@@ -364,15 +358,23 @@ public class ChessController implements Serializable {
         saveNameField.setText("");
         messageDisplay.setText("");
 
+        placeSprites();
+    }
+
+    @FXML
+    private void placeSprites() {
         for (String[] tileInfo : game) {
             ImageView tileView = (ImageView)sprites.lookup("#" + tileInfo[0]);
-            tileView.setImage(new Image(spritesFilePath + tileInfo[1] + ".png"));
-        }
+            Image image = (tileInfo[1].equals("")) ? null : new Image(spritesFilePath + tileInfo[1] + ".png");
+            tileView.setImage(image);
+        }        
     }
 
     @FXML
     private void initialize()
     {
+        game = new Game();
+        placeSprites();
         colorTiles();
     }
 

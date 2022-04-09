@@ -53,6 +53,13 @@ public class Game implements Serializable, Iterable<String[]> {
         return boardTiles[row][col]; 
     }
     
+    //TODO: error handling for parameters
+    public String[] getPieceInfoFromTile(int row, int col) {
+        Tile tile = boardTiles[row][col];
+        return (tile.isOccupied()) ? new String[] {tile.coordinatesToString(), tile.getPiece().getSpriteId()} 
+                                   : new String[] {tile.coordinatesToString(), ""};
+    }
+
     private void makeBoard() {
         for (int row = 0; row < 8; ++row) {
             for (int col = 0; col < 8; ++col) {

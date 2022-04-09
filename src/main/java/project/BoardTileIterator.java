@@ -15,31 +15,21 @@ public class BoardTileIterator implements Iterator<String[]> {
 
     @Override
     public boolean hasNext() {
-        return (row < 8);
+        return (!(row == 7 && col == 8));
     }
 
     @Override
     public String[] next() { //TODO: Change from tile to give pieceinfo array directly from game
-     
-        String[] pieceInfo = new String[2];
-        
-        while (row < 8) {
-            if (col == 8) {
-                col = 0;
-                ++row;
-            }
 
-            Tile tile = game.getTile(row, col);
-            if (tile.isOccupied()) {
-                pieceInfo = new String[] {tile.coordinatesToString(), tile.getPiece().getSpriteId()};
-                ++col;
-                break;
-            }
-
-            ++col;
+        if (col == 8) {
+            col = 0;
+            ++row;
         }
 
-        return pieceInfo; //TODO: error handling if empty
+        String[] pieceInfo = game.getPieceInfoFromTile(row, col);
+        
+        ++col;
+        return pieceInfo;
     }
     
     // //Just for testing manipulation of Tile[][]
