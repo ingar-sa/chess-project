@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Set;
 
 import javafx.scene.chart.PieChart;
@@ -24,7 +25,7 @@ import project.Pieces.Piece;
 import project.Pieces.Queen;
 import project.Pieces.Rook;
 
-public class Game implements Serializable {
+public class Game implements Serializable, Iterable<String[]> {
 
     //Chessboard                            chessboard;
     //private Tile[][]                        boardTiles;
@@ -34,8 +35,6 @@ public class Game implements Serializable {
     private HashMap<int[], ArrayList<int[]>> allLegalMovesAfterControl;
 
     public Game() {
-        //this.chessboard                = new Chessboard();        //Only necessary for printing board 
-        //this.boardTiles  = chessboard.getBoardTiles();
         makeBoard();
         placePieces();
         this.checkLegalMoves = new CheckLegalMoves(); 
@@ -48,6 +47,10 @@ public class Game implements Serializable {
 
     public Tile[][] getBoardTiles() {
         return boardTiles;
+    }
+
+    public Tile getTile(int row, int col) {
+        return boardTiles[row][col]; 
     }
     
     private void makeBoard() {
@@ -439,39 +442,39 @@ public class Game implements Serializable {
         int tileDataIndex = 0;
         for (Tile[] row : boardTiles) {
             for (Tile tile : row) {
-                String[] pieceWithAttributes = tileData[tileDataIndex].split("+");
+                String[] pieceWithAttributes = tileData[tileDataIndex].split("=");
 
                 switch (pieceWithAttributes.length) {
-                    case 1: //Other piece or empty
-                        String pieceOrNothing = pieceWithAttributes[0];
-                        if (!pieceOrNothing.equals("00")) {
-                            char color     = pieceOrNothing.charAt(0);
-                            char pieceType = pieceOrNothing.charAt(1);
+                case 1: //Other piece or empty
+                    String pieceOrNothing = pieceWithAttributes[0];
+                    if (!pieceOrNothing.equals("00")) {
+                        char color     = pieceOrNothing.charAt(0);
+                        char pieceType = pieceOrNothing.charAt(1);
 
-                            changePieceOnTile(tile.getRow(), tile.getCol(), pieceType, color);
-                        }
-                        break;
-                    case 2: //Rook and King
-                        String rookOrKing    = pieceWithAttributes[0];
-                        char rookOrKingColor = rookOrKing.charAt(0);
-                        char pieceType       = rookOrKing.charAt(1);
-                        int hasMoved         = Integer.parseInt(pieceWithAttributes[1]);
+                        changePieceOnTile(tile.getRow(), tile.getCol(), pieceType, color);
+                    }
+                    break;
+                case 2: //Rook and King
+                    String rookOrKing    = pieceWithAttributes[0];
+                    char rookOrKingColor = rookOrKing.charAt(0);
+                    char pieceType       = rookOrKing.charAt(1);
+                    int hasMoved         = Integer.parseInt(pieceWithAttributes[1]);
 
-                        changePieceOnTile(tile.getRow(), tile.getCol(), pieceType, rookOrKingColor, hasMoved);
-                        break;
-                    case 4: //Pawn
-                        String pawn             = pieceWithAttributes[0];
-                        char pawnColor          = pawn.charAt(0);
-                        char pawnType           = pawn.charAt(1);
-                        int pawnHasMoved        = Integer.parseInt(pieceWithAttributes[1]);
-                        int movedTwoLastTurn    = Integer.parseInt(pieceWithAttributes[2]);
-                        int enPassentMoveNumber = Integer.parseInt(pieceWithAttributes[3]);
+                    changePieceOnTile(tile.getRow(), tile.getCol(), pieceType, rookOrKingColor, hasMoved);
+                    break;
+                case 4: //Pawn
+                    String pawn             = pieceWithAttributes[0];
+                    char pawnColor          = pawn.charAt(0);
+                    char pawnType           = pawn.charAt(1);
+                    int pawnHasMoved        = Integer.parseInt(pieceWithAttributes[1]);
+                    int movedTwoLastTurn    = Integer.parseInt(pieceWithAttributes[2]);
+                    int enPassentMoveNumber = Integer.parseInt(pieceWithAttributes[3]);
 
-                        changePieceOnTile(tile.getRow(), tile.getCol(), pawnType, pawnColor, 
-                                          pawnHasMoved, movedTwoLastTurn, enPassentMoveNumber);
-                        break;
-                    default:
-                        System.err.println("Invalid piece information.");
+                    changePieceOnTile(tile.getRow(), tile.getCol(), pawnType, pawnColor, 
+                                        pawnHasMoved, movedTwoLastTurn, enPassentMoveNumber);
+                    break;
+                default:
+                    System.err.println("Invalid piece information.");
                 }
 
                 ++tileDataIndex;
@@ -501,14 +504,14 @@ public class Game implements Serializable {
                     if (piece instanceof Pawn) {
                         Pawn pawn = (Pawn)piece;                
 
-                        saveGameData += pawn.getSpriteId() + "+";
-                        saveGameData += ((pawn.getHasMoved()) ? "1" : "0") + "+";
-                        saveGameData += ((pawn.getMovedTwoLastTurn()) ? "1" : "0") + "+";
+                        saveGameData += pawn.getSpriteId() + "=";
+                        saveGameData += ((pawn.getHasMoved()) ? "1" : "0") + "=";
+                        saveGameData += ((pawn.getMovedTwoLastTurn()) ? "1" : "0") + "=";
                         saveGameData += pawn.getMoveNumberEnPassant();
                     }
                     else if (piece instanceof Rook || piece instanceof King) {
 
-                        saveGameData += piece.getSpriteId() + "+";
+                        saveGameData += piece.getSpriteId() + "=";
                         saveGameData += ((piece.getHasMoved()) ? "1" : "0");
                     }
                     else {
@@ -530,9 +533,12 @@ public class Game implements Serializable {
         System.out.println(saveGameData);
     }
 
+    @Override
+    public BoardTileIterator iterator() {
+        return new BoardTileIterator(this);
+    } 
+
     public static void main(String[] args) {
         
-        
     }
-
 }

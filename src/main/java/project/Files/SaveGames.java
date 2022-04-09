@@ -1,14 +1,15 @@
 package project.Files;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Scanner;
-
 
 public class SaveGames implements Serializable {
     
@@ -25,29 +26,19 @@ public class SaveGames implements Serializable {
 	}
     
 	public String loadGame(String saveName) {
-		// //TODO: try catch
-		// File saveFile = new File("src/main/java/project/Files/savegames/" + saveName + ".txt");
-		// Scanner loadGameScanner = new Scanner(saveFile);
-		// String saveData = new String();
-
-		// while(loadGameScanner.hasNextLine()) {
-		// 	saveData += loadGameScanner.nextLine();
-		// 	System.out.println(saveData);
-		// }
 		
-		// loadGameScanner.close();
-		// return saveData;
-		try {
-		Path fileName = Path.of(saveName + ".txt");
-	    String actual = Files.readString(fileName);
-	    System.out.println(actual);
-		return actual;
+		String saveData = new String();
+
+		try (BufferedReader reader = new BufferedReader(new FileReader("src/main/java/project/Files/savegames/" + saveName + ".txt"))) {
+			saveData = reader.readLine();
 		} catch (IOException e) {
-			System.err.println("IOexception.");
+			System.err.println("An IOEexception has occurred.");
+			e.printStackTrace();
+		} catch (Exception e) {
+			System.err.println("An unknown error has occurred.");
 			e.printStackTrace();
 		}
 
-		return "";
+		return saveData;
 	}
-
 }

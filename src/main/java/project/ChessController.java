@@ -360,9 +360,14 @@ public class ChessController implements Serializable {
     public void loadGame() {
         String fileName = loadNameField.getText();
         game.loadedGamePiecesPosition(fileName);
+        
+        saveNameField.setText("");
         messageDisplay.setText("");
 
-        return;
+        for (String[] tileInfo : game) {
+            ImageView tileView = (ImageView)sprites.lookup("#" + tileInfo[0]);
+            tileView.setImage(new Image(spritesFilePath + tileInfo[1] + ".png"));
+        }
     }
 
     @FXML
