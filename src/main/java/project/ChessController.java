@@ -330,17 +330,7 @@ public class ChessController implements Serializable {
 
     @FXML
     private void recreateBoardFromLoadedGame() {
-
-        HashMap<String, String> piecePositions = game.loadedGamePiecesPosition();
-
-        for (String positionId : piecePositions.keySet()) {
-            String spriteId = piecePositions.get(positionId);
-            ImageView placeSpriteOnImageView = (ImageView)sprites.lookup("#" + positionId);
-            if (spriteId != null)
-                placeSpriteOnImageView.setImage(new Image(spritesFilePath + spriteId + ".png"));      
-            else
-                placeSpriteOnImageView.setImage(null);
-        }
+        
     }
 
     @FXML
@@ -368,7 +358,8 @@ public class ChessController implements Serializable {
 
     @FXML
     public void loadGame() {
-
+        String fileName = loadNameField.getText();
+        game.loadedGamePiecesPosition(fileName);
         messageDisplay.setText("");
 
         return;

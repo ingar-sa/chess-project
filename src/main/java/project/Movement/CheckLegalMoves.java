@@ -366,6 +366,15 @@ public class CheckLegalMoves implements Serializable {
         return this.gameStatus;
     }
 
+    public void setMoveNumber(int moveNumber) {
+        if (moveNumber >= 0) {
+            this.moveNumber = moveNumber;
+        }
+        else {
+            System.err.println("Illegal movenumber!");
+        }
+    }
+
     private void setKingPositions(Tile[][] currentGamePositionTiles) {
 
         for (Tile[] tileRow : currentGamePositionTiles) {

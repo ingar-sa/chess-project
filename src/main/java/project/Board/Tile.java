@@ -30,7 +30,6 @@ public class Tile implements Serializable {
         this.piece = piece;
     }
 
-
     public int getRow() {
         return this.row;
     }
@@ -49,7 +48,7 @@ public class Tile implements Serializable {
     public void setCol(int col) {
         this.col = col;
     }
-
+    
 
     public char getTileColor() {
         return this.color;

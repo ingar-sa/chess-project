@@ -1,11 +1,5 @@
 package project.Pieces;
 
-import java.io.Serializable;
-
-/*
-
-*/
-
 public class Pawn extends Piece {
 
     //overflødig? - movedtwo 
@@ -27,7 +21,12 @@ public class Pawn extends Piece {
     }
 
     public void setMoveNumberEnPassant(int moveNumberEnPassant) {
-         this.moveNumberEnPassant = moveNumberEnPassant;
+        if (moveNumberEnPassant >= 0) {
+            this.moveNumberEnPassant = moveNumberEnPassant;
+        } 
+        else {
+            System.err.println("Illegal value for moveNumberEnPassant!");
+        }
     }
 
     public int getMoveNumberEnPassant() {

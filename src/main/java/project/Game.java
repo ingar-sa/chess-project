@@ -67,7 +67,7 @@ public class Game implements Serializable {
                     secondColor = 'w';
                 }
 
-                tileColor = (col % 2 == 1) ? firstColor : secondColor;
+                tileColor = (col % 2 == 0) ? firstColor : secondColor;
 
                 Tile tile = new Tile(row, col, tileColor);
                 boardTiles[row][col] = tile;
@@ -328,7 +328,8 @@ public class Game implements Serializable {
 
         return "";
     }
-
+    
+    //TODO: Error handling for parameters
     public void updateGameState(int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
         
         Piece pieceToMove = boardTiles[chosenPieceRow][chosenPieceCol].getPiece();
@@ -361,7 +362,8 @@ public class Game implements Serializable {
         }
     }
 
-    public void changePieceOnTile(int row, int col, char pieceType, char color) {
+    //TODO: Error handling for parameters    
+    public void changePieceOnTile(int row, int col, char pieceType, char color, int... pawnRookKingInfo) {
 
         String pieceName = color + " " + pieceType;
         Tile tile = boardTiles[row][col];
@@ -374,16 +376,33 @@ public class Game implements Serializable {
                 tile.setPiece(new Knight(pieceName, color));
                 break;
             case 'P':
+                Pawn pawn = new Pawn(pieceName, color);
+                boolean hasPawnMoved        = (pawnRookKingInfo[0] == 1) ? true : false;
+                boolean movedTwoLastTurn    = (pawnRookKingInfo[1] == 1) ? true : false;
+                int     enPassentMoveNumber = pawnRookKingInfo[2];
+
+                pawn.setHasMoved(hasPawnMoved);
+                pawn.setMovedTwoLastTurn(movedTwoLastTurn);
+                pawn.setMoveNumberEnPassant(enPassentMoveNumber);
+
                 tile.setPiece(new Pawn(pieceName, color));
                 break;
             case 'R':
-                tile.setPiece(new Rook(pieceName, color));
+                Rook rook = new Rook(pieceName, color);
+                boolean hasRookMoved = (pawnRookKingInfo[0] == 1) ? true : false; 
+                rook.setHasMoved(hasRookMoved);
+                
+                tile.setPiece(rook);
                 break;
             case 'Q':
                 tile.setPiece(new Queen(pieceName, color));
                 break;
             case 'X':
-                tile.setPiece(new King(pieceName, color));
+                King king = new King(pieceName, color);
+                boolean hasKingMoved = (pawnRookKingInfo[0] == 1) ? true : false; 
+                king.setHasMoved(hasKingMoved);
+                
+                tile.setPiece(king);
                 break;
             default:
                 //TODO: Maybe change to something else than printing 
@@ -405,25 +424,69 @@ public class Game implements Serializable {
         return false; 
     }
 
+    // wR+0-wK-wB-wQ-wX+0-wB-wK-wR+0-wP+0+0+0-wP+0+0+0-wP+0+0+0-wP+0+0+0-wP+0+0+0-wP+0+0+0-wP+0+0+0-wP+0+0+0-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-bP+0+0+0-bP+0+0+0-bP+0+0+0-bP+0+0+0-bP+0+0+0-bP+0+0+0-bP+0+0+0-bP+0+0+0-bR+0-bK-bB-bQ-bX+0-bB-bK-bR+0-0
+    public void loadedGamePiecesPosition(String saveName) {
+        SaveGames loadGame = new SaveGames();
+        String saveGameString = loadGame.loadGame(saveName);
 
-    public HashMap<String, String> loadedGamePiecesPosition() {
-
-        HashMap<String, String> piecePositions = new HashMap<>();
-
+        String[] tileData = saveGameString.split("-");
+        System.out.println(tileData.length);
+        int turnNumber = Integer.parseInt(tileData[64]);
+        checkLegalMoves.setMoveNumber(turnNumber);
+        
+        this.makeBoard(); //Create an empty board
+        
+        int tileDataIndex = 0;
         for (Tile[] row : boardTiles) {
             for (Tile tile : row) {
+                String[] pieceWithAttributes = tileData[tileDataIndex].split("+");
 
-                String positionId = tile.getRow() + "" + tile.getCol();
+                switch (pieceWithAttributes.length) {
+                    case 1: //Other piece or empty
+                        String pieceOrNothing = pieceWithAttributes[0];
+                        if (!pieceOrNothing.equals("00")) {
+                            char color     = pieceOrNothing.charAt(0);
+                            char pieceType = pieceOrNothing.charAt(1);
 
-                if (tile.isOccupied())
-                    piecePositions.put(positionId, tile.getPiece().getSpriteId());
-                else
-                    piecePositions.put(positionId, null);
+                            changePieceOnTile(tile.getRow(), tile.getCol(), pieceType, color);
+                        }
+                        break;
+                    case 2: //Rook and King
+                        String rookOrKing    = pieceWithAttributes[0];
+                        char rookOrKingColor = rookOrKing.charAt(0);
+                        char pieceType       = rookOrKing.charAt(1);
+                        int hasMoved         = Integer.parseInt(pieceWithAttributes[1]);
+
+                        changePieceOnTile(tile.getRow(), tile.getCol(), pieceType, rookOrKingColor, hasMoved);
+                        break;
+                    case 4: //Pawn
+                        String pawn             = pieceWithAttributes[0];
+                        char pawnColor          = pawn.charAt(0);
+                        char pawnType           = pawn.charAt(1);
+                        int pawnHasMoved        = Integer.parseInt(pieceWithAttributes[1]);
+                        int movedTwoLastTurn    = Integer.parseInt(pieceWithAttributes[2]);
+                        int enPassentMoveNumber = Integer.parseInt(pieceWithAttributes[3]);
+
+                        changePieceOnTile(tile.getRow(), tile.getCol(), pawnType, pawnColor, 
+                                          pawnHasMoved, movedTwoLastTurn, enPassentMoveNumber);
+                        break;
+                    default:
+                        System.err.println("Invalid piece information.");
+                }
+
+                ++tileDataIndex;
             }
         }
 
-        return piecePositions;
+        printBoard();
     }
+    /*  SAVE INFO STRING STRUCTURE
+                                 (w/b)Char       (1 or 0)         (1 or 0)               Positive int
+        Pawn(P):            color and piece type+has moved+moved two spaces last turn+en passen move number-
+        King or rook(X/R):  color and piece type+has moved-
+        Other piece(Q/K/B): color and piece type-
+        Empty tile:         00-
+    */
 
     public void saveGame(String saveName) {
         SaveGames saveGameWriter = new SaveGames();
@@ -459,12 +522,13 @@ public class Game implements Serializable {
                 }
             }
         }
+
+        saveGameData += checkLegalMoves.getMoveNumber();
         
         saveGameWriter.saveGame(saveName, saveGameData);
 
         System.out.println(saveGameData);
     }
-    
 
     public static void main(String[] args) {
         
