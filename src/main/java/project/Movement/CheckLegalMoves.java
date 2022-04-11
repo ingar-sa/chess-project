@@ -2,6 +2,7 @@ package project.Movement;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -19,24 +20,32 @@ import project.Pieces.Pawn;
 
 //Trenger vel ikke å implementere Serializable her?
 public class CheckLegalMoves implements Serializable {
-    
-    //Mulig å bare ha 2?
+
+    private int gameStatus = Consts.GAME_NOT_OVER;
+
     private MovementPatterns whiteMovement;
     private MovementPatterns blackMovement;
     private MovementPatterns colorToMove;
     private MovementPatterns colorNotMoving;
-    
 
-    private int gameStatus = Consts.GAME_NOT_OVER;
-
-    //mulig å droppe whiteking og blackking?
     private int[] whiteKing;
     private int[] blackKing;
-    private int[] originalKingLocation;
+    private int[] originalKingLocationPlayerToMove;
     private int[] kingLocationPlayerToMove;
-    
-    //se hvordan dette skal gjøres
-    //Tur
+
+    //Important tiles for when white is Castling  
+    private final int[] whiteKingMoveCastlingRigth = new int[]{0, 6};
+    private final int[] whiteKingMoveCastlingLeft = new int[]{0, 2};
+    private final int[] whiteCastlingSkippedTileRigth = new int[]{0, 5};
+    private final int[] whiteCastlingSkippedTileLeft = new int[]{0, 3};
+
+    //Important tiles for when black is Castling  
+    private final int[] blackKingMoveCastlingRigth = new int[]{7, 6};
+    private final int[] blackKingMoveCastlingLeft = new int[]{7, 2};
+    private final int[] blackCastlingSkippedTileRigth = new int[]{7, 5};
+    private final int[] blackCastlingSkippedTileLeft = new int[]{7, 3};
+
+    //Turn number
     int moveNumber = 0; 
 
     public CheckLegalMoves() {
@@ -44,9 +53,8 @@ public class CheckLegalMoves implements Serializable {
         this.blackMovement = new MovementPatterns('b');
           
     }
-    //endret så den returnerer 
+
     //Generates all the possible moves for black or white when check is not considered 
-    //Legge inn movenumber her?
     private HashMap<int[], ArrayList<int[]>> populateAllMoves(MovementPatterns movementPattern, Tile[][] boardTiles) {
 
         HashMap<int[], ArrayList<int[]>> legalMoves = new HashMap<int[], ArrayList<int[]>>();
@@ -68,97 +76,58 @@ public class CheckLegalMoves implements Serializable {
     }
 
     private HashMap<int[], ArrayList<int[]>> eliminateChecks(Tile[][] currentGamePositionTiles) {
-        //MovementPatterns colorToMove;
-        //MovementPatterns colorNotMoving;
 
         setKingPositions(currentGamePositionTiles);
         setPlayerToMove();
         setOriginalKingLocationForPlayerToMove();
         setKingPositionForPlayerToMove();
 
-        // //lagre som felt isteden? - og bruke metode?
-        // if (moveNumber % 2 == 0) {
-        //     colorToMove = whiteMovement;
-        //     colorNotMoving = blackMovement;
-        // } 
-        // else {
-        //     colorToMove = blackMovement;
-        //     colorNotMoving = whiteMovement;
-        // }
-
-        //samme her?
-        // int[] originalKingLocation;
-
-        // if (colorToMove.getColor() == 'w') {
-        //     originalKingLocation = new int[]{0, 4};
-        // }
-        // else {
-        //     originalKingLocation = new int[]{7, 4};
-        // }
-
         HashMap<int[], ArrayList<int[]>> legalMoves = populateAllMoves(colorToMove, currentGamePositionTiles);
         
         for (int[] chosenPiecePlayerToMove : legalMoves.keySet()) {
 
             ArrayList<int[]> allMovesForAPiece = legalMoves.get(chosenPiecePlayerToMove);
-            //Moves that break check that should be removed 
-            //Endre til arraylist?
-            List<int[]> movesToBeRemoved = new ArrayList<int[]>();
+            ArrayList<int[]> movesToBeRemoved = new ArrayList<int[]>();
 
-            //Count for what element that should be removed
+            //Count for what move that should be removed from piece moves, move that is illegal because of CHECK
             int indexForMoveToRemove = 0;
 
-            for (int[] oneSpecificMove : allMovesForAPiece) {
+            for (int[] pieceWillMoveTo : allMovesForAPiece) {
  
-                // Name e.g. piecePositonNow
                 int piecePositionNowRow = chosenPiecePlayerToMove[0];
                 int piecePositionNowCol = chosenPiecePlayerToMove[1];
 
-                // Name e.g. pieceWillMoveTo
-                int movePieceToRow = oneSpecificMove[0];
-                int movePieceToCol = oneSpecificMove[1];
+                int movePieceToRow = pieceWillMoveTo[0];
+                int movePieceToCol = pieceWillMoveTo[1];
                 
                 Piece pieceToMove = currentGamePositionTiles[piecePositionNowRow][piecePositionNowCol].getPiece();
+                Piece pieceAtThespotWeAreMovingTo = currentGamePositionTiles[movePieceToRow][movePieceToCol].getPiece();
 
-                //sjekk for kongen, skal oppdatere område hvis han flytter 
-
+                //Checks if king moves, if yes, fields have to be updated
                 boolean kingMovedWhite = false;
                 boolean kingMovedBlacked = false;
+                boolean kingMoved = false;
 
                 if (pieceToMove instanceof King && pieceToMove.getColor() == 'w') {
                     this.whiteKing = new int[]{movePieceToRow, movePieceToCol};
+                    kingMoved = true;
                     kingMovedWhite = true;
                 }
                 
                  if (pieceToMove instanceof King && pieceToMove.getColor() == 'b') {
                     this.blackKing = new int[]{movePieceToRow, movePieceToCol};
+                    kingMoved = true;
                     kingMovedBlacked = true;
                 }
 
-                // pieceAtThespotWeAreMovingTo
-                Piece placeBackPiece = currentGamePositionTiles[movePieceToRow][movePieceToCol].getPiece();
-
-                //Se på dette iforhold til okupering osv - i piece klassn
+                //Moves the piece 
                 currentGamePositionTiles[piecePositionNowRow][piecePositionNowCol].removePiece();
-                //tester om dette funker 
-                //currentGamePositionTiles[piecePositionNowRow][piecePositionNowCol].setOccupied(false);
-
                 currentGamePositionTiles[movePieceToRow][movePieceToCol].setPiece(pieceToMove);
-                //Tester om dette funker fint 
-                //currentGamePositionTiles[movePieceToRow][movePieceToCol].isOccupied();
-
-                //Må vell gjøres her hvis kongen blir flyttet 
-                setKingPositionForPlayerToMove();
-                // int[] kingLocation;
-
-                //dette trengs ikke gjøres hver gang - flytt 
-            
-                // if (colorToMove.getColor() == 'w') {
-                //     kingLocation = this.whiteKing;
-                // }
-                // else {
-                //     kingLocation = this.blackKing;
-                // }
+                
+                //Updates the king position if the moved piece was king 
+                if (kingMoved) {
+                    setKingPositionForPlayerToMove();
+                }
 
                 HashMap<int[], ArrayList<int[]>> legalMovesOppositeColor = populateAllMoves(colorNotMoving, currentGamePositionTiles);
 
@@ -166,43 +135,43 @@ public class CheckLegalMoves implements Serializable {
 
                 for (ArrayList<int[]> oppositeColorPieceMoves: allOppositeMoves) {
                     for (int[] oneMoveForOppositePiece : oppositeColorPieceMoves) {
-                        if (oneMoveForOppositePiece[0] == kingLocationPlayerToMove[0] && oneMoveForOppositePiece[1] == kingLocationPlayerToMove[1]) {
 
-                            //tror ikke denne er nødvendig 
-                            //ArrayList<int[]> pieceMoves = legalMoves.get(specificPiece);
-                            
+                        if (Arrays.equals(kingLocationPlayerToMove, oneMoveForOppositePiece)) {
+
                             for (int[] oneOfAllMoves : allMovesForAPiece) {
-                                if (oneOfAllMoves[0] == oneSpecificMove[0] && oneOfAllMoves[1] == oneSpecificMove[1]) {
+                                if (Arrays.equals(oneOfAllMoves, pieceWillMoveTo)) {
                                     movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
                                 }
 
                             }
                 
                         }
-
-                        //håndtering av lovlig rokade
-
+                        
+                        //Handling of legal castling 
                         else if (pieceToMove instanceof King && !pieceToMove.getHasMoved()) {
                             if (colorToMove.getColor() == 'w') {
-                                if (movePieceToRow == 0 && movePieceToCol == 6) {
-                                    if (oneMoveForOppositePiece[0] == originalKingLocation[0] && oneMoveForOppositePiece[1] == originalKingLocation[1]) {
+
+                                //Checks if rigth castling for white is legal 
+                                if (Arrays.equals(pieceWillMoveTo, this.whiteKingMoveCastlingRigth)) {
+                                    if (Arrays.equals(oneMoveForOppositePiece, this.originalKingLocationPlayerToMove)) { //examines if the king is already in check
                                         movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
                                     }
-                                    else if (oneMoveForOppositePiece[0] == 0 && oneMoveForOppositePiece[1] == 5) { //Hvis feltet som paseres er sjakk 
+                                    else if (Arrays.equals(oneMoveForOppositePiece, this.whiteCastlingSkippedTileRigth)) { //examines if the tile that the king skips/moves over is check
                                         movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
                                     }
-                                    else if (currentGamePositionTiles[1][6].isOccupied()) { //håndtering hvis det er bonde som truer et felt 
+                                    else if (currentGamePositionTiles[1][6].isOccupied()) { //examines if there is a pawn that attacks the skipped tile
                                         if (currentGamePositionTiles[1][6].getPiece().getColor() == 'b' && currentGamePositionTiles[1][6].getPiece() instanceof Pawn) {
                                             movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
                                         }
                                     }
 
                                 }
-                                else if (movePieceToRow == 0 && movePieceToCol == 2) {         
-                                    if (oneMoveForOppositePiece[0] == originalKingLocation[0] && oneMoveForOppositePiece[1] == originalKingLocation[1]) {
+                                //Checks if left castling for white is legal 
+                                else if (Arrays.equals(pieceWillMoveTo, this.whiteKingMoveCastlingLeft)) {         
+                                    if (Arrays.equals(oneMoveForOppositePiece, this.originalKingLocationPlayerToMove)) {
                                         movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
                                     }
-                                    else if (oneMoveForOppositePiece[0] == 0 && oneMoveForOppositePiece[1] == 3) {
+                                    else if (Arrays.equals(oneMoveForOppositePiece, this.whiteCastlingSkippedTileLeft)) {
                                         movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
                                     }
                                     else if (currentGamePositionTiles[1][2].isOccupied()) { //håndtering hvis det er bonde som truer et felt 
@@ -213,11 +182,13 @@ public class CheckLegalMoves implements Serializable {
                                 }
                             }
                             else if (colorToMove.getColor() == 'b') {
-                                if (movePieceToRow == 7 && movePieceToCol == 6) {
-                                    if (oneMoveForOppositePiece[0] == originalKingLocation[0] && oneMoveForOppositePiece[1] == originalKingLocation[1]) {
+                                
+                                //Checks if rigth castling for black is legal 
+                                if (Arrays.equals(pieceWillMoveTo, this.blackKingMoveCastlingRigth)) {
+                                    if (Arrays.equals(oneMoveForOppositePiece, this.originalKingLocationPlayerToMove)) {
                                         movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
                                     }
-                                    else if (oneMoveForOppositePiece[0] == 7 && oneMoveForOppositePiece[1] == 5) { //Hvis feltet som paseres er sjakk 
+                                    else if (Arrays.equals(oneMoveForOppositePiece, this.blackCastlingSkippedTileRigth)) {
                                         movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
                                     }
                                     else if (currentGamePositionTiles[6][6].isOccupied()) { //håndtering hvis det er bonde som truer et felt 
@@ -227,11 +198,12 @@ public class CheckLegalMoves implements Serializable {
                                     }
 
                                 }
-                                else if (movePieceToRow == 7 && movePieceToCol == 2) {
-                                    if (oneMoveForOppositePiece[0] == originalKingLocation[0] && oneMoveForOppositePiece[1] == originalKingLocation[1]) {
+                                //Checks if left castling for black is legal 
+                                else if (Arrays.equals(pieceWillMoveTo, this.blackKingMoveCastlingLeft)) {
+                                    if (Arrays.equals(oneMoveForOppositePiece, this.originalKingLocationPlayerToMove)) {
                                         movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
                                     }
-                                    else if (oneMoveForOppositePiece[0] == 7 && oneMoveForOppositePiece[1] == 3) { //Hvis feltet som paseres er sjakk 
+                                    else if (Arrays.equals(oneMoveForOppositePiece, this.blackCastlingSkippedTileLeft)) {
                                         movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
                                     }
                                     else if (currentGamePositionTiles[6][2].isOccupied()) { //håndtering hvis det er bonde som truer et felt 
@@ -249,22 +221,22 @@ public class CheckLegalMoves implements Serializable {
                 }
                 
 
-                //flytt brikken tilbake, den som ble flyttet på - går vell å lage metode
+                //Moves the piece we moved back 
                 Piece pieceToMoveBack = currentGamePositionTiles[movePieceToRow][movePieceToCol].getPiece();
+                currentGamePositionTiles[piecePositionNowRow][piecePositionNowCol].setPiece(pieceToMoveBack);
 
+                //Replaces the piece that was at the spot we moved to 
                 currentGamePositionTiles[movePieceToRow][movePieceToCol].removePiece();
-                currentGamePositionTiles[movePieceToRow][movePieceToCol].setPiece(placeBackPiece);
+                currentGamePositionTiles[movePieceToRow][movePieceToCol].setPiece(pieceAtThespotWeAreMovingTo);
+
+                //Since setPiece also makes Occupied = True, this has to handeled
                 if (currentGamePositionTiles[movePieceToRow][movePieceToCol].getPiece() == null) {
                     currentGamePositionTiles[movePieceToRow][movePieceToCol].setOccupied(false);
-                    //overkill etter fix? - se på - setOccupied
                 }
                 
-                
                 currentGamePositionTiles[piecePositionNowRow][piecePositionNowCol].setPiece(pieceToMoveBack);
-                //overkill? - se på piece 
-                //currentGamePositionTiles[piecePositionNowRow][piecePositionNowCol].isOccupied();
 
-                //setter kongen tilbake
+                //Reset King field if king moved 
                 if (kingMovedWhite) {
                     this.whiteKing = new int[]{piecePositionNowRow, piecePositionNowCol};
                 }
@@ -283,42 +255,19 @@ public class CheckLegalMoves implements Serializable {
 
     public HashMap<int[], ArrayList<int[]>> CheckforCheckMateAndPat (Tile[][] currentGamePositionTiles) {
 
-        // MovementPatterns colorToMove;
-        // MovementPatterns colorNotMoving;
-
         HashMap<int[], ArrayList<int[]>> legalMoves = eliminateChecks(currentGamePositionTiles);
         
         boolean kingCanBetaken = false;
         boolean notGameOver = false;
 
         setKingPositionForPlayerToMove();
-
-        //metode for dette?
-        // if (moveNumber % 2 == 0) {
-        //     colorToMove = whiteMovement;
-        //     colorNotMoving = blackMovement;
-        // } 
-        // else {
-        //     colorToMove = blackMovement;
-        //     colorNotMoving = whiteMovement;
-        // }
-
-        // //kan lage metode på dette
-        // int[] kingLocation;
-                
-        // if (colorToMove.getColor() == 'w') {
-        //     kingLocation = this.whiteKing;
-        // }
-        // else {
-        //     kingLocation = this.blackKing;
-        // }
     
-        for (int[] colorToMovePiece : legalMoves.keySet()) {
+        for (int[] piecePlayerToMove : legalMoves.keySet()) {
             if (notGameOver) {
                 break;
             }
 
-            if (legalMoves.get(colorToMovePiece).size() != 0) {
+            if (legalMoves.get(piecePlayerToMove).size() != 0) {
                 notGameOver = true;
             }
         }
@@ -335,7 +284,7 @@ public class CheckLegalMoves implements Serializable {
                 }
 
                 for (int[] oneOppositeMove : movesOppositePiece) {
-                    if (oneOppositeMove[0] == kingLocationPlayerToMove[0] && oneOppositeMove[1] == kingLocationPlayerToMove[1]) {
+                    if (Arrays.equals(oneOppositeMove, kingLocationPlayerToMove)) {
 
                         kingCanBetaken = true;
                         break;
@@ -343,7 +292,7 @@ public class CheckLegalMoves implements Serializable {
                 }
             } 
         }
-        //byttet om her 
+        
         if (kingCanBetaken && !notGameOver) {
             this.gameStatus = Consts.CHECKMATE;
         } 
@@ -402,10 +351,10 @@ public class CheckLegalMoves implements Serializable {
 
     private void setOriginalKingLocationForPlayerToMove () {
         if (colorToMove.getColor() == 'w') {
-            this.originalKingLocation = new int[]{0, 4};
+            this.originalKingLocationPlayerToMove = new int[]{0, 4};
         }
         else {
-            this.originalKingLocation = new int[]{7, 4};
+            this.originalKingLocationPlayerToMove = new int[]{7, 4};
         }
     }
 
@@ -417,6 +366,31 @@ public class CheckLegalMoves implements Serializable {
             this.kingLocationPlayerToMove = this.blackKing;
         }
     }
+
+//Er vell også mulig å lage en form for Hashmap f.eks.
+
+//Notes castling
+
+//Possible to make one common if - with something like this, migth become a bit messy 
+
+// int[] castlingKingEndPosition = (colorToMove.getColor() == 'w')    ? 
+// (Arrays.equals(pieceWillMoveTo, this.whiteKingMoveCastlingLeft))   ? this.whiteKingMoveCastlingLeft : this.whiteKingMoveCastlingRigth 
+// : (Arrays.equals(pieceWillMoveTo, this.blackKingMoveCastlingLeft)) ? this.blackKingMoveCastlingLeft: this.blackKingMoveCastlingRigth;
+
+// int[] castlingKingSkippedPosition = (colorToMove.getColor() == 'w')   ? 
+// (Arrays.equals(pieceWillMoveTo, this.whiteCastlingSkippedTileLeft))   ? this.whiteCastlingSkippedTileLeft : this.whiteCastlingSkippedTileRigth 
+// : (Arrays.equals(pieceWillMoveTo, this.blackCastlingSkippedTileLeft)) ? this.blackCastlingSkippedTileLeft : this.blackCastlingSkippedTileRigth;
+
+// if (Arrays.equals(pieceWillMoveTo, castlingKingEndPosition)) {
+//     if (Arrays.equals(oneMoveForOppositePiece, this.originalKingLocation)) {
+//         movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
+//     }
+//     else if (Arrays.equals(oneMoveForOppositePiece, castlingKingSkippedPosition)) {
+//         movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
+//     }
+
+// }
+
 
     public static void main(String[] args) {
         long startTime = System.nanoTime();

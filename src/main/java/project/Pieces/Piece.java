@@ -2,7 +2,7 @@ package project.Pieces;
 
 import java.io.Serializable;
 
-public class Piece implements Serializable {
+public abstract class Piece implements Serializable {
     
     private String  name;
     private String  spriteId;

@@ -99,6 +99,7 @@ public class Game implements Serializable, Iterable<String[]> {
         }
         
         for (Tile tile : boardTiles[0]) {
+            //TODO: se på om hvordan vi håndterer setOccupied
             tile.setOccupied(true);
 
             if (tile.getCol() == 0 || tile.getCol() == 7) {
@@ -141,6 +142,7 @@ public class Game implements Serializable, Iterable<String[]> {
             }
 
         for (Tile tile : boardTiles[7]) {
+            //TODO: se på om hvordan vi håndterer setOccupied
             tile.setOccupied(true); 
 
             if (tile.getCol() == 0 || tile.getCol() == 7) {
@@ -492,8 +494,8 @@ public class Game implements Serializable, Iterable<String[]> {
     }
     /*  SAVE INFO STRING STRUCTURE
                                  (w/b)Char       (1 or 0)         (1 or 0)               Positive int
-        Pawn(P):            color and piece type+has moved+moved two spaces last turn+en passen move number-
-        King or rook(X/R):  color and piece type+has moved-
+        Pawn(P):            color and piece type=has moved+moved two spaces last turn=en passen move number-
+        King or rook(X/R):  color and piece type=has moved-
         Other piece(Q/K/B): color and piece type-
         Empty tile:         00-
     */

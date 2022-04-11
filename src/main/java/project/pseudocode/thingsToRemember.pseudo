@@ -17,6 +17,7 @@
 - Bytte ut hvordan sirkler fjernes til Observable list, som fjerner alle endringer?
 - Spørre om lagring av filer, hvorfor ingen execptions av filewriter
 - Fjerne alle unødvendige felter og metoder
-- HUSK INNKAPSLING AV PARAMETRE OSV! - f.eks. col, row number!
+- HUSK INNKAPSLING AV PARAMETRE OSV! - f.eks. col, row number - gjelder vel kun hvis metoden er public!
+- Se på if/ else if pawn Movementpatterns
 
 - SLETTE ALLE IKKE-JAVA FILER FØR INNLEVERING!!!

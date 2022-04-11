@@ -20,8 +20,6 @@ import project.Pieces.Rook;
 public class MovementPatterns implements Serializable {
 
     private char            color;
-    //private Tile[][]        boardTiles;
-    
 
     MovementPatterns (char color) {
         this.color = color;
@@ -42,7 +40,6 @@ public class MovementPatterns implements Serializable {
         return allMoves;
     }
 
-
     private ArrayList<int[]> pawnMoves(Tile tile, Tile[][] boardTiles, int moveNumber) {     
         
         Pawn pawn                       = (Pawn)tile.getPiece(); 
@@ -54,14 +51,11 @@ public class MovementPatterns implements Serializable {
         if (this.color == 'b') moveDirection = -1;
         
         Tile inFront  = boardTiles[row+(1*moveDirection)][col];
-        //Legger til 
-
         Tile twoInFront = null;
 
         if (!pawn.getHasMoved()) 
              twoInFront  = boardTiles[row + (2 * moveDirection)][col];
         
-
         Tile attackLeft = null;
         Tile attackRight = null;
          
@@ -78,11 +72,9 @@ public class MovementPatterns implements Serializable {
         
         if (this.color == 'w' && row == 4 && col != 0) 
             passantLeft = boardTiles[row][col-1];
-        
 
         if (this.color == 'b' && row == 3 && col != 0) 
             passantLeft = boardTiles[row][col-1];
-        
 
         if (this.color == 'w' && row == 4 && col != 7) 
             passantRight = boardTiles[row][col+1];
@@ -92,7 +84,6 @@ public class MovementPatterns implements Serializable {
         
         if (!inFront.isOccupied()) 
             legalPawnMoves.add(new int[]{inFront.getRow(), inFront.getCol()});
-        
         
         if (!pawn.getHasMoved() && twoInFront != null) {
             if (!twoInFront.isOccupied() 

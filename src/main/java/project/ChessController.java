@@ -156,8 +156,6 @@ public class ChessController implements Serializable {
             this.isPawnPromoted = false;
         }
 
-
-        
         if (!(this.pawnPromotion.equals(""))) return; 
         
         if (!pieceHasBeenChosen){
@@ -231,6 +229,7 @@ public class ChessController implements Serializable {
             }
 
             String castlingMove = game.isMoveCastling(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol);
+            //Updates the GUI if the move was castling 
             castling(castlingMove);
             
             //Retrieves the game state. 0 represents pat, 1 check mate for black and 2 is check mate for white 
@@ -273,12 +272,18 @@ public class ChessController implements Serializable {
         moveToImageView.setImage(new Image(chosenPieceSpriteUrl));
         */
         
-        if (gameOver == Consts.PAT)
+        if (gameOver == Consts.PAT) {
+            messageDisplay.setText("Pat");
             System.out.println("Pat");
-        else if (gameOver == Consts.CHECKMATE_FOR_BLACK) 
-            System.out.println("Check Mate for Black.");
-        else if (gameOver == Consts.CHECKMATE_FOR_WHITE) 
-            System.out.println("Check Mate for White.");
+        }
+        else if (gameOver == Consts.CHECKMATE_FOR_BLACK) { 
+            messageDisplay.setText("Check Mate for Black!");
+            System.out.println("Check Mate for Black!");
+        }
+        else if (gameOver == Consts.CHECKMATE_FOR_WHITE) {
+            messageDisplay.setText("Check Mate for White!");
+            System.out.println("Check Mate for White!");
+        }
     }
 
     @FXML
@@ -313,16 +318,18 @@ public class ChessController implements Serializable {
                 messageDisplay.setText( "Not a valid piece! Input must be: bishop, knight, rook or queen."); 
                 return;
         }
-        //La inn pawnImageView
+
         int tileRow = 7 - GridPane.getRowIndex(pawnImageView);
         int tileCol = GridPane.getColumnIndex(pawnImageView);
         game.changePieceOnTile(tileRow, tileCol, pieceType, color);
 
         pawnImageView.setImage(new Image(spritesFilePath + color + pieceType + ".png"));
+        promotionName.setText("");
 
         isPawnPromoted = true;
 
         this.pawnPromotion = "";
+
         //this.sprites.getChildren().remove(promotionText);
         isGameOver();
     }
