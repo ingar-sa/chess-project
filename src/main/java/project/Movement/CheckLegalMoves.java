@@ -63,7 +63,8 @@ public class CheckLegalMoves implements Serializable {
             for (Tile tile : row) {
                 if (tile.isOccupied() 
                     && tile.getPiece().getColor() == movementPattern.getColor()) {
-
+                    
+                    //TODO: kanskje bytte ut navn her 
                     int[] key = new int[] {tile.getRow(), tile.getCol()};
                     ArrayList<int[]> allMoves = movementPattern.moveHandler(tile, boardTiles, this.moveNumber);
 

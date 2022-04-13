@@ -21,6 +21,10 @@ public class BoardTileIterator implements Iterator<String[]> {
     @Override
     public String[] next() { //TODO: Change from tile to give pieceinfo array directly from game
 
+        if (!hasNext()) {
+            throw new IllegalArgumentException("No more tiles to itterate over!");
+        } 
+
         if (col == 8) {
             col = 0;
             ++row;
