@@ -234,7 +234,7 @@ public class Game implements Serializable, Iterable<String[]> {
         boolean          pieceCanMove             = false;
 
         for (int[] piece : allPiecesThatCanMove) {
-            if (Arrays.equals(piece, tilePieceToMoveIsOn)
+            if (piece[0] == tilePieceToMoveIsOn[0] && piece[1] == tilePieceToMoveIsOn[1]
                 && this.allLegalMovesAfterControl.get(piece).size() != 0) {
                     legalMovesForPieceToMove = this.allLegalMovesAfterControl.get(piece);       
                     pieceCanMove = true;
@@ -255,6 +255,8 @@ public class Game implements Serializable, Iterable<String[]> {
     }
 
     public String isMoveEnPassent(int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
+
+        testCoordinates(chosenPieceRow, chosenPieceCol, chosenPieceRow, chosenPieceCol);
 
         Piece pieceToMove = boardTiles[chosenPieceRow][chosenPieceCol].getPiece();
 
@@ -282,7 +284,20 @@ public class Game implements Serializable, Iterable<String[]> {
         return "";
     }
 
+    private void testCoordinates(int moveFromRow, int moveFromCol, int moveToRow, int moveToCol) {
+
+        if (   moveFromRow < 0 && moveFromRow > 7 
+            || moveFromCol < 0 && moveFromCol > 7 
+            || moveToRow   < 0 && moveToRow   > 7
+            || moveToCol   < 0 && moveToCol   > 7) {
+
+            throw new IllegalArgumentException("The coordinates are outside the board!");
+        }
+    }
+
     public String isMoveCastling (int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
+
+        testCoordinates(chosenPieceRow, chosenPieceCol, chosenPieceRow, chosenPieceCol);
         
         Piece pieceToMove = boardTiles[chosenPieceRow][chosenPieceCol].getPiece();
 
@@ -343,6 +358,8 @@ public class Game implements Serializable, Iterable<String[]> {
     
     //TODO: Error handling for parameters
     public void updateGameState(int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
+
+        testCoordinates(chosenPieceRow, chosenPieceCol, chosenPieceRow, chosenPieceCol);
         
         Piece pieceToMove = boardTiles[chosenPieceRow][chosenPieceCol].getPiece();
         pieceToMove.setHasMoved(true);
@@ -428,7 +445,7 @@ public class Game implements Serializable, Iterable<String[]> {
         int[] moveToPiece = boardTiles[moveToPieceRow][moveToPieceCol].getCoordinates();
 
         for (int[] piece : allPiecesThatCanMove) {
-            if (Arrays.equals(piece, moveToPiece)) {
+            if (piece[0] == moveToPiece[0] && piece[1] == moveToPiece[1]) {
                 return true;
             }
         }

@@ -21,6 +21,7 @@ public class BoardTileIterator implements Iterator<String[]> {
     @Override
     public String[] next() { //TODO: Change from tile to give pieceinfo array directly from game
 
+        //Håndtere det silk, eller ikke håndtere det her i det hele tatt?
         if (!hasNext()) {
             throw new IllegalArgumentException("No more tiles to itterate over!");
         } 

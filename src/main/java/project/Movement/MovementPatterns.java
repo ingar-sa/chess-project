@@ -22,7 +22,24 @@ public class MovementPatterns implements Serializable {
     private char            color;
 
     MovementPatterns (char color) {
+        validationOfLegalColor(color);
         this.color = color;
+    }
+
+    private void validationOfLegalColor(char color) {
+        char[] blackAndWhite= {'b', 'w'};
+
+        boolean legalColor = false;
+
+        for (char c : blackAndWhite) {
+            if (c == color);
+                legalColor = true;
+                break;
+        }
+
+        if (!legalColor) {
+            throw new IllegalArgumentException("Illegal color for MovementPatterns!");
+        }
     }
 
     public ArrayList<int[]> moveHandler(Tile tile, Tile[][] boardTiles, int moveNumber) {

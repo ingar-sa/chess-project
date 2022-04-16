@@ -18,6 +18,10 @@ public abstract class Piece implements Serializable {
         this.spriteId = color + "" + spriteType;
     }
 
+    //TODO: skriv valideringmetode av konstruktør og evetuelle settere!
+    private void validationOfPiece() {
+    }
+
     public String getSpriteId() {
         return this.spriteId;
     }
@@ -65,6 +69,8 @@ public abstract class Piece implements Serializable {
     public void setCaptured(boolean captured) {
         this.captured = captured;
     }
+
+    
 }
 
 
