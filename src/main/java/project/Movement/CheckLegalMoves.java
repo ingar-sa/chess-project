@@ -257,33 +257,40 @@ public class CheckLegalMoves implements Serializable {
     }
 
 
-    //TODO: Skal vel fjernes herfra 
-    private void validationOfBoard(Tile[][] currentGamePositionTiles) {
+    //TODO: Skal vel fjernes herfra  
+    private void validationOfKings(Tile[][] currentGamePositionTiles) {
 
         int rowCount = 0;
         int totalTileCount = 0;
-        int kingCount = 0;
+        int blackKingCount = 0;
+        int whitKingCount = 0;
 
         for (Tile[] row : currentGamePositionTiles) {
             rowCount += 1;
             totalTileCount += row.length; 
             for (Tile tile : row) {
                 if (tile.getPiece() instanceof King) {
-                    kingCount += 1;
+                    if (tile.getPiece().getColor() == 'b') {
+                        blackKingCount += 1;
+                    }
+                    else if (tile.getPiece().getColor() == 'w') {
+                        whitKingCount += 1;
+                    }
                 }
-
+                if (rowCount == 0 || rowCount == 7) {
+                    if (tile.getPiece() instanceof Pawn) {
+                        throw new IllegalArgumentException("There are pawns on row 1 or 8 this is not allowed!");
+                    }
+                }
             }
         }
 
-        if (   rowCount != 8
+        if (   rowCount       != 8
             || totalTileCount != 64 
-            || kingCount != 2) {
+            || blackKingCount != 1 
+            || whitKingCount  != 1 ){
                 throw new IllegalArgumentException("The board is not the correct size or there are too many kings!");
         }
-
-        boolean illegalWhitePawns = false;
-        boolean illegalBlackPawns = false;
-
 
         // for (int i = 0; i < 8; i++) {
         //     if (currentGamePositionTiles[0][i] instanceof Pawn &&) {
@@ -291,12 +298,14 @@ public class CheckLegalMoves implements Serializable {
         //     }
         // }
     }
+
+
     
 
     HashMap<int[], ArrayList<int[]>> CheckforCheckMateAndPat (Tile[][] currentGamePositionTiles) {
 
         //TODO: se mer på dette, kongene kan ikke være inntill hverandre kanskje, sjekke at max en spiller er i sjakk, sjekke at pawns ikke står feil, hvis kongen ikke står på start feltet må den ha flyttet på seg, samme med bonde og tårn!?
-        validationOfBoard(currentGamePositionTiles);
+        validationOfKings(currentGamePositionTiles);
 
         HashMap<int[], ArrayList<int[]>> legalMoves = eliminateChecks(currentGamePositionTiles);
         

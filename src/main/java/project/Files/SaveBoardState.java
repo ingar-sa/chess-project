@@ -70,6 +70,7 @@ public class SaveBoardState implements ISaveHandler {
 		try (BufferedReader reader = new BufferedReader(new FileReader("src/main/java/project/Files/savegames/" + saveName + ".txt"))) {
 			saveData = reader.readLine();
 		}
+		
 		return saveData;
 	}
 		

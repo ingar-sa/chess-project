@@ -402,7 +402,10 @@ public class ChessController implements Serializable {
 
         saveNameField.setText("");
         messageDisplay.setText("");
-
+        
+        //If there is a selected piece, it needs to be reset  
+        this.pieceHasBeenChosen = false;
+        removeCirclesForLegalMoves();
         placeSprites();
     }
 
