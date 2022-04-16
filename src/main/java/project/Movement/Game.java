@@ -1,4 +1,4 @@
-package project;
+package project.Movement;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -12,11 +12,10 @@ import java.util.Iterator;
 import java.util.Set;
 
 import javafx.scene.chart.PieChart;
+import project.BoardTileIterator;
+import project.Consts;
 import project.Board.Chessboard;
 import project.Board.Tile;
-import project.Files.SaveGames;
-import project.Movement.CheckLegalMoves;
-import project.Movement.TileCheckLegalMoves;
 import project.Pieces.Bishop;
 import project.Pieces.King;
 import project.Pieces.Knight;
@@ -33,24 +32,33 @@ public class Game implements Serializable, Iterable<String[]> {
     private Tile[][]                         boardTiles = new Tile[8][8];
     private CheckLegalMoves                  checkLegalMoves;
     private HashMap<int[], ArrayList<int[]>> allLegalMovesAfterControl;
+    private MovementPatterns                 whiteMovement;
+    private MovementPatterns                 blackMovement;
 
     public Game() {
         makeBoard();
         placePieces();
         this.checkLegalMoves = new CheckLegalMoves(); 
-        this.allLegalMovesAfterControl = checkLegalMoves.CheckforCheckMateAndPat(this.boardDeepCopyUsingSerialization()); //allLegalMovesAfterControl is initialized with whites available moves
+        this.allLegalMovesAfterControl = checkLegalMoves.CheckforCheckMateAndPat(this.getBoardDeepCopyUsingSerialization()); //allLegalMovesAfterControl is initialized with whites available moves
+        this.whiteMovement = new MovementPatterns('w');
+        this.blackMovement = new MovementPatterns('b');
     }
 
     public int isGameOver() {
         return checkLegalMoves.getGameStatus();
     }
 
+    //TODO: Rememerb to remove these!
     public Tile[][] getBoardTiles() {
         return boardTiles;
     }
 
     public Tile getTile(int row, int col) {
         return boardTiles[row][col]; 
+    }
+
+    public int getMoveNUmber() {
+        return checkLegalMoves.getMoveNumber();
     }
     
     //TODO: error handling for parameters
@@ -206,7 +214,7 @@ public class Game implements Serializable, Iterable<String[]> {
 
     //https://www.studytonight.com/java-examples/how-to-make-a-deep-copy-of-an-object-in-java
 
-    public Tile[][] boardDeepCopyUsingSerialization()
+    public Tile[][] getBoardDeepCopyUsingSerialization()
 	{
 		try
 		{
@@ -374,7 +382,7 @@ public class Game implements Serializable, Iterable<String[]> {
 
         //allLegalMovesAfterControl is updated with the opposite player's moves here, as opposed to updating it 
         //during the next call of getLegalMoves. This allows us to use getGameStatus() to check for a mate or pat
-        this.allLegalMovesAfterControl = checkLegalMoves.CheckforCheckMateAndPat(this.boardDeepCopyUsingSerialization());
+        this.allLegalMovesAfterControl = checkLegalMoves.CheckforCheckMateAndPat(this.getBoardDeepCopyUsingSerialization());
         
         this.printBoard();
         
@@ -453,12 +461,40 @@ public class Game implements Serializable, Iterable<String[]> {
         return false; 
     }
 
+    private boolean validationOfBoard() {
+
+            int rowCount = 0;
+            int totalTileCount = 0;
+            int kingCount = 0;
+    
+            for (Tile[] row : currentGamePositionTiles) {
+                rowCount += 1;
+                totalTileCount += row.length; 
+                for (Tile tile : row) {
+                    if (tile.getPiece() instanceof King) {
+                        kingCount += 1;
+                    }
+    
+                }
+            }
+    
+            if (   rowCount != 8
+                || totalTileCount != 64 
+                || kingCount != 2) {
+                    throw new IllegalArgumentException("The board is not the correct size or there are too many kings!");
+            }
+        }
+    }
+
     // wR+0-wK-wB-wQ-wX+0-wB-wK-wR+0-wP+0+0+0-wP+0+0+0-wP+0+0+0-wP+0+0+0-wP+0+0+0-wP+0+0+0-wP+0+0+0-wP+0+0+0-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-bP+0+0+0-bP+0+0+0-bP+0+0+0-bP+0+0+0-bP+0+0+0-bP+0+0+0-bP+0+0+0-bP+0+0+0-bR+0-bK-bB-bQ-bX+0-bB-bK-bR+0-0
-    public void loadedGamePiecesPosition(String saveName) {
-        SaveGames loadGame = new SaveGames();
-        String saveGameString = loadGame.loadGame(saveName);
+    
+    
+    public void loadedGamePiecesPosition(String saveGameString) {
 
         String[] tileData = saveGameString.split("-");
+        if (tileData.length != 65) {
+            throw new IllegalArgumentException("The file has wrong formatting!");
+        }
         System.out.println(tileData.length);
         int turnNumber = Integer.parseInt(tileData[64]);
         checkLegalMoves.setMoveNumber(turnNumber);
@@ -500,6 +536,7 @@ public class Game implements Serializable, Iterable<String[]> {
                                         pawnHasMoved, movedTwoLastTurn, enPassentMoveNumber);
                     break;
                 default:
+                    throw new IllegalArgumentException("The file has wrong formatting or wrong innformation!");
                     System.err.println("Invalid piece information.");
                 }
 
@@ -517,47 +554,47 @@ public class Game implements Serializable, Iterable<String[]> {
         Empty tile:         00-
     */
 
-    public void saveGame(String saveName) {
-        SaveGames saveGameWriter = new SaveGames();
-        String saveGameData = new String();
+    // public void saveGame(String saveName) {
+    //     SaveGames saveGameWriter = new SaveGames();
+    //     String saveGameData = new String();
 
-        for (Tile[] row : boardTiles) {
-            for (Tile tile : row) {
-                if (tile.isOccupied()) {
+    //     for (Tile[] row : boardTiles) {
+    //         for (Tile tile : row) {
+    //             if (tile.isOccupied()) {
                     
-                    Piece piece = tile.getPiece();
+    //                 Piece piece = tile.getPiece();
                     
-                    if (piece instanceof Pawn) {
-                        Pawn pawn = (Pawn)piece;                
+    //                 if (piece instanceof Pawn) {
+    //                     Pawn pawn = (Pawn)piece;                
 
-                        saveGameData += pawn.getSpriteId() + "=";
-                        saveGameData += ((pawn.getHasMoved()) ? "1" : "0") + "=";
-                        saveGameData += ((pawn.getMovedTwoLastTurn()) ? "1" : "0") + "=";
-                        saveGameData += pawn.getMoveNumberEnPassant();
-                    }
-                    else if (piece instanceof Rook || piece instanceof King) {
+    //                     saveGameData += pawn.getSpriteId() + "=";
+    //                     saveGameData += ((pawn.getHasMoved()) ? "1" : "0") + "=";
+    //                     saveGameData += ((pawn.getMovedTwoLastTurn()) ? "1" : "0") + "=";
+    //                     saveGameData += pawn.getMoveNumberEnPassant();
+    //                 }
+    //                 else if (piece instanceof Rook || piece instanceof King) {
 
-                        saveGameData += piece.getSpriteId() + "=";
-                        saveGameData += ((piece.getHasMoved()) ? "1" : "0");
-                    }
-                    else {
-                        saveGameData += piece.getSpriteId();
-                    }
+    //                     saveGameData += piece.getSpriteId() + "=";
+    //                     saveGameData += ((piece.getHasMoved()) ? "1" : "0");
+    //                 }
+    //                 else {
+    //                     saveGameData += piece.getSpriteId();
+    //                 }
 
-                    saveGameData += "-";
-                }
-                else {
-                    saveGameData += "00-";
-                }
-            }
-        }
+    //                 saveGameData += "-";
+    //             }
+    //             else {
+    //                 saveGameData += "00-";
+    //             }
+    //         }
+    //     }
 
-        saveGameData += checkLegalMoves.getMoveNumber();
+    //     saveGameData += checkLegalMoves.getMoveNumber();
         
-        saveGameWriter.saveGame(saveName, saveGameData);
+    //     saveGameWriter.saveGame(saveName, saveGameData);
 
-        System.out.println(saveGameData);
-    }
+    //     System.out.println(saveGameData);
+    // }
 
     @Override
     public BoardTileIterator iterator() {

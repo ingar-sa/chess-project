@@ -13,7 +13,7 @@ public class Tile implements Serializable {
     private boolean occupied;
     
     
-    public Tile(int row, int col, char color) {
+    public Tile (int row, int col, char color) {
         this.row   = row;
         this.col   = col;
         this.color = color;
@@ -36,7 +36,12 @@ public class Tile implements Serializable {
 
 
     public void setRow(int row) {
-        this.row = row;
+        if (row >= 0 && row < 8) {
+            this.row = row;
+        }
+        else {
+            throw new IllegalArgumentException();
+        }
     }
 
 

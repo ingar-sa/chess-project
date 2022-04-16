@@ -3,13 +3,14 @@ package project;
 import java.util.Iterator;
 
 import project.Board.Tile;
+import project.Movement.Game;
 
 public class BoardTileIterator implements Iterator<String[]> {
 
     private Game game;
     private int row, col = 0;
 
-    BoardTileIterator(Game game) {
+    public BoardTileIterator(Game game) {
         this.game = game;
     }
 

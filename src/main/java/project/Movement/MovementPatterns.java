@@ -21,7 +21,7 @@ public class MovementPatterns implements Serializable {
 
     private char            color;
 
-    MovementPatterns (char color) {
+    public MovementPatterns (char color) {
         validationOfLegalColor(color);
         this.color = color;
     }
@@ -42,7 +42,7 @@ public class MovementPatterns implements Serializable {
         }
     }
 
-    public ArrayList<int[]> moveHandler(Tile tile, Tile[][] boardTiles, int moveNumber) {
+    ArrayList<int[]> moveHandler(Tile tile, Tile[][] boardTiles, int moveNumber) {
 
         Piece piece               = tile.getPiece();
         ArrayList<int[]> allMoves = new ArrayList<int[]>();

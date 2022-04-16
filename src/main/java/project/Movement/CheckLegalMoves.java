@@ -256,6 +256,8 @@ public class CheckLegalMoves implements Serializable {
         return false;
     }
 
+
+    //TODO: Skal vel fjernes herfra 
     private void validationOfBoard(Tile[][] currentGamePositionTiles) {
 
         int rowCount = 0;
@@ -281,7 +283,7 @@ public class CheckLegalMoves implements Serializable {
     }
     
 
-    public HashMap<int[], ArrayList<int[]>> CheckforCheckMateAndPat (Tile[][] currentGamePositionTiles) {
+    HashMap<int[], ArrayList<int[]>> CheckforCheckMateAndPat (Tile[][] currentGamePositionTiles) {
 
         //TODO: se mer på dette, kongene kan ikke være inntill hverandre kanskje, sjekke at max en spiller er i sjakk, sjekke at pawns ikke står feil, hvis kongen ikke står på start feltet må den ha flyttet på seg, samme med bonde og tårn!?
         validationOfBoard(currentGamePositionTiles);

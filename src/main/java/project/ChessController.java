@@ -1,5 +1,6 @@
 package project;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +29,9 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
-import project.Files.SaveGames;
+import project.Files.SaveBoardState;
+import project.Movement.Game;
+
 
 
 public class ChessController implements Serializable {
@@ -71,6 +74,7 @@ public class ChessController implements Serializable {
     private ArrayList<String> legalMovesStrings;
     private boolean isPawnPromoted = false;
     private Game game;
+    private SaveBoardState saveBoardState;
 
     @FXML
     private void colorTiles() {
@@ -343,24 +347,51 @@ public class ChessController implements Serializable {
         System.out.println(saveName);
         this.saveNameField.setText("");
 
-        if (saveName.equals("") || saveName.matches("[^a-zA-Z0-9.-]")) {
+        if (saveName.equals("") || (saveName.contains("\\")) || (saveName.contains("/"))) {
             messageDisplay.setText("Illegal character(s) in file name!");
             return;
         }
 
-
         try {   
-            game.saveGame(saveName);
-
-        } catch (Exception e) {
+            saveBoardState.saveGame(saveName, game.getBoardDeepCopyUsingSerialization(), game.getMoveNUmber());
+        } 
+        catch (IOException e) {
+            messageDisplay.setText("Illegal character(s) in file name!");
             System.err.println(e.getStackTrace());
         }
+        catch (Exception e) {
+            messageDisplay.setText("Illegal character(s) in file name!");
+            System.out.println(e.getStackTrace());
+        }
+
     }
 
     @FXML
     public void loadGame() {
+
         String fileName = loadNameField.getText();
-        game.loadedGamePiecesPosition(fileName);
+        String saveGameString = new String();
+
+        try {
+            saveGameString = saveBoardState.loadGame(fileName);
+        }
+        catch (IOException e) {
+            messageDisplay.setText("There is no file with that name or the file is corrupted");
+            System.out.println("yoyo");
+            System.err.println(e.getStackTrace());
+        }
+        catch (Exception e) {
+            messageDisplay.setText("There is no file with that name or the file is corrupted");
+            System.out.println("hei");
+            System.out.println(e.getStackTrace());
+        }
+
+        try {
+            game.loadedGamePiecesPosition(saveGameString);
+        }
+        catch(IllegalArgumentException e) {
+
+        }
         
         saveNameField.setText("");
         messageDisplay.setText("");
@@ -379,8 +410,9 @@ public class ChessController implements Serializable {
 
     @FXML
     private void initialize()
-    {
-        game = new Game();
+    {   
+        this.game = new Game();
+        this.saveBoardState= new SaveBoardState();
         placeSprites();
         colorTiles();
     }

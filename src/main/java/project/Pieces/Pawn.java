@@ -2,9 +2,6 @@ package project.Pieces;
 
 public class Pawn extends Piece {
 
-    //overflødig? - movedtwo 
-    //private boolean movedTwo = false;
-    //Endre navnet til kun has movedTwo
     private boolean movedTwoLastTurn = false;
     private int moveNumberEnPassant;
     
@@ -25,7 +22,7 @@ public class Pawn extends Piece {
             this.moveNumberEnPassant = moveNumberEnPassant;
         } 
         else {
-            System.err.println("Illegal value for moveNumberEnPassant!");
+            throw new IllegalArgumentException("The value must be zero or positive, but was " + moveNumberEnPassant);
         }
     }
 
