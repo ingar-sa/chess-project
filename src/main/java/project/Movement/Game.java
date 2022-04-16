@@ -461,31 +461,6 @@ public class Game implements Serializable, Iterable<String[]> {
         return false; 
     }
 
-    private boolean validationOfBoard() {
-
-            int rowCount = 0;
-            int totalTileCount = 0;
-            int kingCount = 0;
-    
-            for (Tile[] row : currentGamePositionTiles) {
-                rowCount += 1;
-                totalTileCount += row.length; 
-                for (Tile tile : row) {
-                    if (tile.getPiece() instanceof King) {
-                        kingCount += 1;
-                    }
-    
-                }
-            }
-    
-            if (   rowCount != 8
-                || totalTileCount != 64 
-                || kingCount != 2) {
-                    throw new IllegalArgumentException("The board is not the correct size or there are too many kings!");
-            }
-        }
-    }
-
     // wR+0-wK-wB-wQ-wX+0-wB-wK-wR+0-wP+0+0+0-wP+0+0+0-wP+0+0+0-wP+0+0+0-wP+0+0+0-wP+0+0+0-wP+0+0+0-wP+0+0+0-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-bP+0+0+0-bP+0+0+0-bP+0+0+0-bP+0+0+0-bP+0+0+0-bP+0+0+0-bP+0+0+0-bP+0+0+0-bR+0-bK-bB-bQ-bX+0-bB-bK-bR+0-0
     
     
@@ -496,6 +471,8 @@ public class Game implements Serializable, Iterable<String[]> {
             throw new IllegalArgumentException("The file has wrong formatting!");
         }
         System.out.println(tileData.length);
+        System.out.println(checkLegalMoves.getMoveNumber());
+        System.out.println(Integer.parseInt(tileData[64]));
         int turnNumber = Integer.parseInt(tileData[64]);
         checkLegalMoves.setMoveNumber(turnNumber);
         
@@ -537,12 +514,15 @@ public class Game implements Serializable, Iterable<String[]> {
                     break;
                 default:
                     throw new IllegalArgumentException("The file has wrong formatting or wrong innformation!");
-                    System.err.println("Invalid piece information.");
                 }
 
                 ++tileDataIndex;
             }
         }
+
+        //TODO: legge til at man ikke kan lagre hvis spillet er over!
+
+        this.allLegalMovesAfterControl = checkLegalMoves.CheckforCheckMateAndPat(this.getBoardDeepCopyUsingSerialization());
 
         printBoard();
     }

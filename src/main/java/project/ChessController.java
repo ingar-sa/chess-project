@@ -352,6 +352,11 @@ public class ChessController implements Serializable {
             return;
         }
 
+        if (!(this.pawnPromotion.equals(""))) {
+            messageDisplay.setText("Promote pawn before saving!");
+            return;
+        }
+
         try {   
             saveBoardState.saveGame(saveName, game.getBoardDeepCopyUsingSerialization(), game.getMoveNUmber());
         } 
@@ -386,13 +391,15 @@ public class ChessController implements Serializable {
             System.out.println(e.getStackTrace());
         }
 
-        try {
-            game.loadedGamePiecesPosition(saveGameString);
-        }
-        catch(IllegalArgumentException e) {
+        game.loadedGamePiecesPosition(saveGameString);
 
-        }
-        
+        // try {
+        //     game.loadedGamePiecesPosition(saveGameString);
+        // }
+        // catch(IllegalArgumentException e) {
+
+        // }
+
         saveNameField.setText("");
         messageDisplay.setText("");
 

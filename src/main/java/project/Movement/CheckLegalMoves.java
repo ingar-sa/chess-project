@@ -280,6 +280,16 @@ public class CheckLegalMoves implements Serializable {
             || kingCount != 2) {
                 throw new IllegalArgumentException("The board is not the correct size or there are too many kings!");
         }
+
+        boolean illegalWhitePawns = false;
+        boolean illegalBlackPawns = false;
+
+
+        // for (int i = 0; i < 8; i++) {
+        //     if (currentGamePositionTiles[0][i] instanceof Pawn &&) {
+        //         i
+        //     }
+        // }
     }
     
 
