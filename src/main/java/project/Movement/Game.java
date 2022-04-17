@@ -250,7 +250,8 @@ public class Game implements Serializable, Iterable<String[]> {
 
     public ArrayList<String> getLegalMoves(int row, int col) {
 
-        //Piece pieceToMove                                       = this.boardTiles[row][col].getPiece();
+        validationOfCoordinates(row, col);
+
         int[]            tilePieceToMoveIsOn      = boardTiles[row][col].getCoordinates();            
         ArrayList<int[]> legalMovesForPieceToMove = new ArrayList<int[]>();
         Set<int[]>       allPiecesThatCanMove     = this.allLegalMovesAfterControl.keySet();
@@ -382,6 +383,11 @@ public class Game implements Serializable, Iterable<String[]> {
     //TODO: Error handling for parameters
     public void updateGameState(int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
 
+        validationOfCoordinates(chosenPieceRow, chosenPieceCol);
+        validationOfCoordinates(moveToPieceRow, moveToPieceCol);
+
+        //TODO: Make method to validate that the preformed move is legal - check where this needed!
+
         testCoordinates(chosenPieceRow, chosenPieceCol, chosenPieceRow, chosenPieceCol);
         
         Piece pieceToMove = boardTiles[chosenPieceRow][chosenPieceCol].getPiece();
@@ -415,7 +421,7 @@ public class Game implements Serializable, Iterable<String[]> {
     }
 
     //TODO: Error handling for parameters    
-    public void changePieceOnTile(int row, int col, char pieceType, char color, int... pawnRookKingInfo) {
+    public void changePieceOnTile(int row, int col, char pieceType, char color, boolean pawnPromotion, int... pawnRookKingInfo) {
 
         if (!(color == 'b' || color == 'w')) {
             throw new IllegalArgumentException("Only black (b) and white (w) color is allowed!");
@@ -448,10 +454,17 @@ public class Game implements Serializable, Iterable<String[]> {
                 tile.setPiece(pawn);
                 break;
             case 'R':
-                Rook rook = new Rook(pieceName, color);
-                boolean hasRookMoved = (pawnRookKingInfo[0] == 1) ? true : false; 
-                rook.setHasMoved(hasRookMoved);
+                Rook rook = new Rook(pieceName, color);                
+                boolean hasRookMoved = false;
+
+                if (pawnPromotion) {
+                    hasRookMoved = true;  
+                }
+                else {
+                hasRookMoved = (pawnRookKingInfo[0] == 1) ? true : false;
+                } 
                 
+                rook.setHasMoved(hasRookMoved);
                 tile.setPiece(rook);
                 break;
             case 'Q':
@@ -471,7 +484,18 @@ public class Game implements Serializable, Iterable<String[]> {
         }
     } 
 
+    private void validationOfCoordinates(int row, int col) {
+
+        if (row > 7 || row < 0) {
+            throw new IllegalArgumentException("The given row is outside the board!");
+        }
+        if (col > 7 || col < 0) {
+            throw new IllegalArgumentException("The given col is outside the board!");
+        }
+    }
+
     public boolean allLegalPieces(int moveToPieceRow, int moveToPieceCol) {
+        
         Set<int[]> allPiecesThatCanMove = allLegalMovesAfterControl.keySet();
         int[] moveToPiece = boardTiles[moveToPieceRow][moveToPieceCol].getCoordinates();
 
@@ -510,7 +534,7 @@ public class Game implements Serializable, Iterable<String[]> {
                             char color     = pieceOrNothing.charAt(0);
                             char pieceType = pieceOrNothing.charAt(1);
 
-                            changePieceOnTile(tile.getRow(), tile.getCol(), pieceType, color);
+                            changePieceOnTile(tile.getRow(), tile.getCol(), pieceType, color, false);
                         }
                         break;
                     case 2: //Rook and King
@@ -519,7 +543,7 @@ public class Game implements Serializable, Iterable<String[]> {
                         char pieceType       = rookOrKing.charAt(1);
                         int hasMoved         = Integer.parseInt(pieceWithAttributes[1]);
 
-                        changePieceOnTile(tile.getRow(), tile.getCol(), pieceType, rookOrKingColor, hasMoved);
+                        changePieceOnTile(tile.getRow(), tile.getCol(), pieceType, rookOrKingColor, false, hasMoved);
                         break;
                     case 4: //Pawn
                         String pawn             = pieceWithAttributes[0];
@@ -529,7 +553,7 @@ public class Game implements Serializable, Iterable<String[]> {
                         int movedTwoLastTurn    = Integer.parseInt(pieceWithAttributes[2]);
                         int enPassentMoveNumber = Integer.parseInt(pieceWithAttributes[3]);
 
-                        changePieceOnTile(tile.getRow(), tile.getCol(), pawnType, pawnColor, 
+                        changePieceOnTile(tile.getRow(), tile.getCol(), pawnType, pawnColor, false,
                                             pawnHasMoved, movedTwoLastTurn, enPassentMoveNumber);
                         break;
                     default:
@@ -591,7 +615,7 @@ public class Game implements Serializable, Iterable<String[]> {
                     }
                 }
 
-                else if (chosenPiece instanceof Rook) {// Checks if Rook has moved if it is not placed on the start tile it has moved
+                else if (chosenPiece instanceof Rook) {// Checks if Rook has moved 
                     if (chosenPiece.getColor() == 'w') {
                         if (!(checkForSameCoordinates(chosenPieceCoordinates, this.whiteRookLeftStartTile) || checkForSameCoordinates(chosenPieceCoordinates, this.whiteRookRightStartTile))) {
                             if (chosenPiece.getHasMoved() == false) {
@@ -611,7 +635,7 @@ public class Game implements Serializable, Iterable<String[]> {
 
                 }
 
-                else if (chosenPiece instanceof Pawn) {
+                else if (chosenPiece instanceof Pawn) { //checks if Pawn has moved, moved two last turn and that they are not placed on illegal rows
 
                     if (rowCount == 0 || rowCount == 7) {
                         throw new IllegalArgumentException("There are pawns on row 1 or 8 this is not allowed!");

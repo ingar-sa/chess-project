@@ -6,10 +6,7 @@ public abstract class Piece implements Serializable {
     
     private String  name;
     private String  spriteId;
-    private char    pieceType;
     private char    color;
-    protected int   moveNumber;
-    private boolean captured = false;
     private boolean hasMoved = false;
 
     protected Piece (String name,  char color, char spriteType) {
@@ -26,10 +23,6 @@ public abstract class Piece implements Serializable {
         return this.spriteId;
     }
 
-    public void capture() {
-        this.captured = true;
-    }
-
     public void setHasMoved(boolean hasMoved) {
         this.hasMoved = hasMoved;
     }
@@ -42,35 +35,10 @@ public abstract class Piece implements Serializable {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public char getColor() {
         return color;
     }
 
-    public void setColor(char color) {
-        this.color = color;
-    }
-
-    public char getPieceType() {
-        return pieceType;
-    }
-
-    public void setPieceType(char pieceType) {
-        this.pieceType = pieceType;
-    }
-
-    public boolean isCaptured() {
-        return captured;
-    }
-
-    public void setCaptured(boolean captured) {
-        this.captured = captured;
-    }
-
-    
 }
 
 

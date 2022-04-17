@@ -1,11 +1,9 @@
 package project.Movement;
 
-import java.io.Serializable;
+
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
-import project.Board.Chessboard;
 import project.Board.Tile;
 import project.Pieces.Bishop;
 import project.Pieces.King;
@@ -17,7 +15,7 @@ import project.Pieces.Rook;
 
 // Husk en passant må skje rett etter motstander har flyttet + queen promotion
 
-public class MovementPatterns implements Serializable {
+public class MovementPatterns {
 
     private char            color;
 

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import project.Board.Tile;
+import project.Pieces.Pawn;
+
 public class Testy {
 
     public void test() {
@@ -23,6 +26,14 @@ public class Testy {
     public static void main(String[] args) {
         Testy t = new Testy();
         t.test();
+        Tile tile = new Tile(2, 2, 'w');
+        Pawn pawn = new Pawn("hei", 'w');
+        tile.setPiece(pawn);
+
+        Pawn pawn1 = ((Pawn)tile.getPiece());
+        pawn1 = new Pawn("testy", 'b');
+
+        
         
     }
 }

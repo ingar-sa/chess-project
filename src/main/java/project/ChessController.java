@@ -329,7 +329,7 @@ public class ChessController implements Serializable {
 
         int tileRow = 7 - GridPane.getRowIndex(pawnImageView);
         int tileCol = GridPane.getColumnIndex(pawnImageView);
-        game.changePieceOnTile(tileRow, tileCol, pieceType, color);
+        game.changePieceOnTile(tileRow, tileCol, pieceType, color, true);
 
         pawnImageView.setImage(new Image(spritesFilePath + color + pieceType + ".png"));
         promotionName.setText("");

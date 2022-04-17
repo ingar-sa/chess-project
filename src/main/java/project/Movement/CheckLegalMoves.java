@@ -1,11 +1,8 @@
 package project.Movement;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 
 import project.Consts;
 import project.Board.Chessboard;
@@ -18,8 +15,8 @@ import project.Pieces.Queen;
 import project.Pieces.Rook;
 import project.Pieces.Pawn;
 
-//Trenger vel ikke å implementere Serializable her?
-public class CheckLegalMoves implements Serializable {
+
+public class CheckLegalMoves {
 
     private int gameStatus = Consts.GAME_NOT_OVER;
 

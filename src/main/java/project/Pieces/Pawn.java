@@ -31,7 +31,6 @@ public class Pawn extends Piece {
     }
 
     public static void main(String[] args) {
-        Pawn testPawn = new Pawn("pawn", 'w');
-        testPawn.setColor('c');
+        
     }
 }

@@ -1,10 +1,11 @@
 package project.Board;
+
 import java.io.Serializable;
 
 import project.Pieces.*;
 
 
-public class Tile implements Serializable {
+public class Tile implements Serializable{
 
     private Piece   piece;
     private int     row;
@@ -12,7 +13,7 @@ public class Tile implements Serializable {
     private char    color;
     private boolean occupied;
     
-    
+    //TODO: make validation!
     public Tile (int row, int col, char color) {
         this.row   = row;
         this.col   = col;
@@ -24,7 +25,6 @@ public class Tile implements Serializable {
         return this.piece;
     }
 
-
     public void setPiece(Piece piece) {
         this.occupied = true;
         this.piece = piece;
@@ -34,41 +34,17 @@ public class Tile implements Serializable {
         return this.row;
     }
 
-
-    public void setRow(int row) {
-        if (row >= 0 && row < 8) {
-            this.row = row;
-        }
-        else {
-            throw new IllegalArgumentException();
-        }
-    }
-
-
     public int getCol() {
         return this.col;
     }
-
-
-    public void setCol(int col) {
-        this.col = col;
-    }
-    
 
     public char getTileColor() {
         return this.color;
     }
 
-
-    public void setTileColor(char color) {
-        this.color = color;
-    }
-
-
     public boolean isOccupied() {
         return this.occupied;
     }
-
 
     public void setOccupied(boolean occupied) {
         this.occupied = occupied;
@@ -80,7 +56,6 @@ public class Tile implements Serializable {
     }
 
     public int[] getCoordinates() {
-        //
         return new int[] {this.row, this.col};
     }
     
