@@ -553,7 +553,23 @@ public class Game implements Serializable, Iterable<String[]> {
             }
         }
 
-        catch (Exception e) {
+        //TODO: Dette blir kanskje for generelt 
+        catch (NullPointerException e ) {
+            this.boardTiles = currentGamePosition;
+            checkLegalMoves.setMoveNumber(currentMoveNumber);
+            throw new IllegalArgumentException("The String has wrong formatting, no change is made!");
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            this.boardTiles = currentGamePosition;
+            checkLegalMoves.setMoveNumber(currentMoveNumber);
+            throw new IllegalArgumentException("The String has wrong formatting, no change is made!");
+        }
+        catch (StringIndexOutOfBoundsException e) {
+            this.boardTiles = currentGamePosition;
+            checkLegalMoves.setMoveNumber(currentMoveNumber);
+            throw new IllegalArgumentException("The String has wrong formatting, no change is made!");
+        }
+        catch (IllegalArgumentException e) {
             this.boardTiles = currentGamePosition;
             checkLegalMoves.setMoveNumber(currentMoveNumber);
             throw new IllegalArgumentException("The String has wrong formatting, no change is made!");
@@ -562,12 +578,13 @@ public class Game implements Serializable, Iterable<String[]> {
         try {
             validationOfGameState();
         }
-        catch(IllegalArgumentException e) {
+        catch (IllegalArgumentException e) {
             this.boardTiles = currentGamePosition;
             checkLegalMoves.setMoveNumber(currentMoveNumber);
             throw new IllegalArgumentException("This is not a legal chess position, no change was made!");
         }
 
+        //This is needed to update allLegalMovesAfterControl attribute
         this.allLegalMovesAfterControl = checkLegalMoves.CheckforCheckMateAndPat(this.getBoardDeepCopyUsingSerialization());
 
         printBoard();
@@ -699,41 +716,52 @@ public class Game implements Serializable, Iterable<String[]> {
             throw new IllegalArgumentException("Too many or too few kings, only two are allowed!");
         }
 
-        HashMap<int[], ArrayList<int[]>> allMovesWhite = checkLegalMoves.populateAllMoves(whiteMovement, this.getBoardDeepCopyUsingSerialization());
-        HashMap<int[], ArrayList<int[]>> allMovesBlack = checkLegalMoves.populateAllMoves(blackMovement, this.getBoardDeepCopyUsingSerialization());
+        boolean playerNotToMoveInCheck = false;
 
-        
-        Collection<ArrayList<int[]>> onlyValuesAllMovesWhite = allMovesWhite.values();
-        Collection<ArrayList<int[]>> onlyValuesAllMovesBlack = allMovesBlack.values();
-
-
-        boolean whiteKingInCheck = false;
-        boolean blackKingInCheck = false;
+        if (setPlayerToMove()) {
+            HashMap<int[], ArrayList<int[]>> allMovesWhite = checkLegalMoves.populateAllMoves(whiteMovement, this.getBoardDeepCopyUsingSerialization());
+            Collection<ArrayList<int[]>> onlyValuesAllMovesWhite = allMovesWhite.values();
             
-        for (ArrayList<int[]> allMovesForAPiece: onlyValuesAllMovesWhite) {
-            for (int[] oneMove : allMovesForAPiece) {
-                if (checkForSameCoordinates(oneMove, blackKingLocation)) {
-                    blackKingInCheck = true;
+            for (ArrayList<int[]> allMovesForAPiece: onlyValuesAllMovesWhite) {
+                for (int[] oneMove : allMovesForAPiece) {
+                    if (checkForSameCoordinates(oneMove, blackKingLocation)) {
+                        playerNotToMoveInCheck = true;
+                    }
                 }
             }
-        }
 
-        for (ArrayList<int[]> allMovesForAPiece: onlyValuesAllMovesBlack) {
-            for (int[] oneMove : allMovesForAPiece) {
-                if (checkForSameCoordinates(oneMove, whiteKingLocation)) {
-                    whiteKingInCheck = true;
+        }
+        else {
+            HashMap<int[], ArrayList<int[]>> allMovesBlack = checkLegalMoves.populateAllMoves(blackMovement, this.getBoardDeepCopyUsingSerialization());
+            Collection<ArrayList<int[]>> onlyValuesAllMovesBlack = allMovesBlack.values();
+
+            for (ArrayList<int[]> allMovesForAPiece: onlyValuesAllMovesBlack) {
+                for (int[] oneMove : allMovesForAPiece) {
+                    if (checkForSameCoordinates(oneMove, whiteKingLocation)) {
+                        playerNotToMoveInCheck = true;
+                    }
                 }
             }
         }
         
-        if (whiteKingInCheck && blackKingInCheck) {
-            throw new IllegalArgumentException("Both kings cant be in check!");
+        if (playerNotToMoveInCheck) {
+            throw new IllegalArgumentException("The player not moving is in check, this is not allowed!");
         }
     }
 
 
     private boolean checkForSameCoordinates(int[] coordinateOne, int[] coordinateTwo) {
+
         if (coordinateOne[0] == coordinateTwo[0] && coordinateOne[1] == coordinateTwo[1]) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean setPlayerToMove () { //Returns true if white is moving and false if black is moving 
+
+        int moveNumber = checkLegalMoves.getMoveNumber();
+        if (moveNumber % 2 == 0) {
             return true;
         }
         return false;

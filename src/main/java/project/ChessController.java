@@ -373,10 +373,6 @@ public class ChessController implements Serializable {
             messageDisplay.setText("Illegal character(s) in file name!");
             System.err.println(e.getStackTrace());
         }
-        catch (Exception e) {
-            messageDisplay.setText("Illegal character(s) in file name!");
-            System.out.println(e.getStackTrace());
-        }
 
     }
 
@@ -394,11 +390,6 @@ public class ChessController implements Serializable {
             System.out.println("yoyo");
             System.err.println(e.getStackTrace());
         }
-        catch (Exception e) {
-            messageDisplay.setText("There is no file with that name or the file is corrupted");
-            System.out.println("hei");
-            System.out.println(e.getStackTrace());
-        }
 
         //game.loadedGamePiecesPosition(saveGameString);
 
@@ -407,7 +398,6 @@ public class ChessController implements Serializable {
         }
         catch(IllegalArgumentException e) {
             this.pieceHasBeenChosen = false;
-            removeCirclesForLegalMoves();
             messageDisplay.setText("The formatting for the file is wrong!");
             return;
         }

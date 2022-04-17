@@ -3,6 +3,7 @@ package project.Files;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,7 +21,7 @@ import project.Pieces.Rook;
 public class SaveBoardState implements ISaveHandler {
 
 	@Override
-	public void saveGame(String saveName, Tile[][] chessboard, int moveNumber) throws IOException, Exception {
+	public void saveGame(String saveName, Tile[][] chessboard, int moveNumber) throws IOException {
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/java/project/Files/savegames/" + saveName + ".txt"))) {
 
 		String saveGameData = new String();
@@ -63,7 +64,7 @@ public class SaveBoardState implements ISaveHandler {
 	}
 
 	@Override
-	public String loadGame(String saveName) throws IOException, Exception {
+	public String loadGame(String saveName) throws IOException {
 
 		String saveData = new String();
 
