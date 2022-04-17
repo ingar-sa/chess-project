@@ -499,7 +499,7 @@ public class Game implements Serializable, Iterable<String[]> {
     //wR=0-wK-wB-wQ-wX=0-wB-wK-wR=0-wP=0=0=0-wP=0=0=0-00-wP=0=0=0-00-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-00-00-00-00-00-00-00-00-00-00-00-wP=1=1=0-bP=1=0=3-00-00-00-00-wP=1=0=4-bP=1=1=5-00-00-00-00-00-00-00-00-00-00-00-00-bP=0=0=0-bP=0=0=0-bP=0=0=0-00-bP=0=0=0-00-bP=0=0=0-bP=0=0=0-bR=0-bK-bB-bQ-bX=0-bB-bK-bR=0-6
     public void loadedGamePiecesPosition(String saveGameString) {
 
-        Tile[][] currentGamePosition = this.boardTiles;
+        Tile[][] currentGamePosition = this.getBoardDeepCopyUsingSerialization();
         int currentMoveNumber = checkLegalMoves.getMoveNumber();
 
         try { 
@@ -575,6 +575,7 @@ public class Game implements Serializable, Iterable<String[]> {
 
     //This method validates that the loaded game position is valid according to chess rules, e.g, 
     //there are no pawns on row 1 and 8, there are no pawns, rooks or kings that is not placed on their orginal position and that has moved etc.
+    //From this you can write your own chess positions as strings
     private void validationOfGameState() {
 
         int[] whiteKingLocation = new int[]{};
