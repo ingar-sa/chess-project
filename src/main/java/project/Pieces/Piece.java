@@ -16,8 +16,6 @@ public abstract class Piece implements Serializable {
     }
 
     //TODO: skriv valideringmetode av konstruktør og evetuelle settere!
-    private void validationOfPiece() {
-    }
 
     public String getSpriteId() {
         return this.spriteId;

@@ -406,6 +406,8 @@ public class ChessController implements Serializable {
             game.loadedGamePiecesPosition(saveGameString);
         }
         catch(IllegalArgumentException e) {
+            this.pieceHasBeenChosen = false;
+            removeCirclesForLegalMoves();
             messageDisplay.setText("The formatting for the file is wrong!");
             return;
         }

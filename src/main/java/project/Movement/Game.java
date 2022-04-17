@@ -33,19 +33,17 @@ import project.Pieces.Rook;
 
 public class Game implements Serializable, Iterable<String[]> {
 
-    //Chessboard                            chessboard;
-    //private Tile[][]                        boardTiles;
-    private final int[]                      columnLetters = {0, 1, 2, 3, 4, 5, 6, 7};
-    private Tile[][]                         boardTiles = new Tile[8][8];
-    private CheckLegalMoves                  checkLegalMoves;
-    private HashMap<int[], ArrayList<int[]>> allLegalMovesAfterControl; 
-    private MovementPatterns                 whiteMovement;
-    private MovementPatterns                 blackMovement;
+    private final int[]                          columnLetters = {0, 1, 2, 3, 4, 5, 6, 7};
+    private Tile[][]                             boardTiles = new Tile[8][8];
+    private CheckLegalMoves                      checkLegalMoves;
+    private HashMap<int[], ArrayList<int[]>>     allLegalMovesAfterControl; 
+    private MovementPatterns                     whiteMovement;
+    private MovementPatterns                     blackMovement;
     
-    private final int[] whiteRookRightStartTile = new int[]{0, 7};
-    private final int[] whiteRookLeftStartTile = new int[]{0, 0}; 
-    private final int[] blackRookRightStartTile = new int[]{7, 7};
-    private final int[] blackRookLeftStartTile = new int[]{7, 0};
+    private final int[] whiteRookRightStartTile  = new int[]{0, 7};
+    private final int[] whiteRookLeftStartTile   = new int[]{0, 0}; 
+    private final int[] blackRookRightStartTile  = new int[]{7, 7};
+    private final int[] blackRookLeftStartTile   = new int[]{7, 0};
 
     private final int[] orginalWhiteKingLocation = new int[]{0, 4};
     private final int[] orginalBlackKingLocation = new int[]{7, 4};
@@ -280,7 +278,8 @@ public class Game implements Serializable, Iterable<String[]> {
 
     public String isMoveEnPassent(int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
 
-        testCoordinates(chosenPieceRow, chosenPieceCol, chosenPieceRow, chosenPieceCol);
+        validationOfCoordinates(chosenPieceRow, chosenPieceCol);
+        validationOfCoordinates(moveToPieceRow, moveToPieceCol);
 
         Piece pieceToMove = boardTiles[chosenPieceRow][chosenPieceCol].getPiece();
 
@@ -308,20 +307,11 @@ public class Game implements Serializable, Iterable<String[]> {
         return "";
     }
 
-    private void testCoordinates(int moveFromRow, int moveFromCol, int moveToRow, int moveToCol) {
-
-        if (   moveFromRow < 0 && moveFromRow > 7 
-            || moveFromCol < 0 && moveFromCol > 7 
-            || moveToRow   < 0 && moveToRow   > 7
-            || moveToCol   < 0 && moveToCol   > 7) {
-
-            throw new IllegalArgumentException("The coordinates are outside the board!");
-        }
-    }
 
     public String isMoveCastling (int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
 
-        testCoordinates(chosenPieceRow, chosenPieceCol, chosenPieceRow, chosenPieceCol);
+        validationOfCoordinates(chosenPieceRow, chosenPieceCol);
+        validationOfCoordinates(moveToPieceRow, moveToPieceCol);
         
         Piece pieceToMove = boardTiles[chosenPieceRow][chosenPieceCol].getPiece();
 
@@ -386,9 +376,8 @@ public class Game implements Serializable, Iterable<String[]> {
         validationOfCoordinates(chosenPieceRow, chosenPieceCol);
         validationOfCoordinates(moveToPieceRow, moveToPieceCol);
 
-        //TODO: Make method to validate that the preformed move is legal - check where this needed!
+        //TODO: Make method to validate that the preformed move is legal
 
-        testCoordinates(chosenPieceRow, chosenPieceCol, chosenPieceRow, chosenPieceCol);
         
         Piece pieceToMove = boardTiles[chosenPieceRow][chosenPieceCol].getPiece();
         pieceToMove.setHasMoved(true);
@@ -479,7 +468,6 @@ public class Game implements Serializable, Iterable<String[]> {
 
                 break;
             default:
-                //TODO: Maybe change to something else than printing 
                 throw new IllegalArgumentException("Illegal piece Type!");
         }
     } 
@@ -571,13 +559,22 @@ public class Game implements Serializable, Iterable<String[]> {
             throw new IllegalArgumentException("The String has wrong formatting, no change is made!");
         }
 
-        validationOfGameState();
+        try {
+            validationOfGameState();
+        }
+        catch(IllegalArgumentException e) {
+            this.boardTiles = currentGamePosition;
+            checkLegalMoves.setMoveNumber(currentMoveNumber);
+            throw new IllegalArgumentException("This is not a legal chess position, no change was made!");
+        }
 
         this.allLegalMovesAfterControl = checkLegalMoves.CheckforCheckMateAndPat(this.getBoardDeepCopyUsingSerialization());
 
         printBoard();
     }
 
+    //This method validates that the loaded game position is valid according to chess rules, e.g, 
+    //there are no pawns on row 1 and 8, there are no pawns, rooks or kings that is not placed on their orginal position and that has moved etc.
     private void validationOfGameState() {
 
         int[] whiteKingLocation = new int[]{};
@@ -656,6 +653,15 @@ public class Game implements Serializable, Iterable<String[]> {
                         }
                         else if (rowCount != 4 && chosenPiece.getColor() == 'b') {
                             throw new IllegalArgumentException("Black pawn cant have moved two last turn, but input says it has!"); 
+                        }
+                    }
+
+                    if (chosenPiece.getHasMoved() == false) {
+                        if (chosenPiece.getColor() == 'w' && rowCount != 1) {
+                            throw new IllegalArgumentException("A white pawn has moves, but input says it has!");
+                        }
+                        else if (chosenPiece.getColor() == 'b' && rowCount != 6) {
+                            throw new IllegalArgumentException("A white pawn has moves, but input says it has!");
                         }
                     }
 
@@ -790,6 +796,7 @@ public class Game implements Serializable, Iterable<String[]> {
     } 
 
     public static void main(String[] args) {
-        
+        Game game = new Game();
+        game.isMoveCastling(8, -1, 0, 2);
     }
 }
