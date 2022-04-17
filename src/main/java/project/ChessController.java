@@ -75,6 +75,7 @@ public class ChessController implements Serializable {
     private boolean isPawnPromoted = false;
     private Game game;
     private SaveBoardState saveBoardState;
+    private boolean gameIsOver = false;
 
     @FXML
     private void colorTiles() {
@@ -278,14 +279,17 @@ public class ChessController implements Serializable {
         
         if (gameOver == Consts.PAT) {
             messageDisplay.setText("Pat");
+            gameIsOver = true;
             System.out.println("Pat");
         }
         else if (gameOver == Consts.CHECKMATE_FOR_BLACK) { 
             messageDisplay.setText("Check Mate for Black!");
+            gameIsOver = true;
             System.out.println("Check Mate for Black!");
         }
         else if (gameOver == Consts.CHECKMATE_FOR_WHITE) {
             messageDisplay.setText("Check Mate for White!");
+            gameIsOver = true;
             System.out.println("Check Mate for White!");
         }
     }
@@ -357,6 +361,11 @@ public class ChessController implements Serializable {
             return;
         }
 
+        if (gameIsOver) {
+            messageDisplay.setText("Cant save a game that is over!");
+            return;
+        }
+
         try {   
             saveBoardState.saveGame(saveName, game.getBoardDeepCopyUsingSerialization(), game.getMoveNUmber());
         } 
@@ -391,14 +400,15 @@ public class ChessController implements Serializable {
             System.out.println(e.getStackTrace());
         }
 
-        game.loadedGamePiecesPosition(saveGameString);
+        //game.loadedGamePiecesPosition(saveGameString);
 
-        // try {
-        //     game.loadedGamePiecesPosition(saveGameString);
-        // }
-        // catch(IllegalArgumentException e) {
-
-        // }
+        try {
+            game.loadedGamePiecesPosition(saveGameString);
+        }
+        catch(IllegalArgumentException e) {
+            messageDisplay.setText("The formatting for the file is wrong!");
+            return;
+        }
 
         saveNameField.setText("");
         messageDisplay.setText("");

@@ -7,9 +7,16 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javafx.scene.chart.PieChart;
 import project.BoardTileIterator;
@@ -31,9 +38,17 @@ public class Game implements Serializable, Iterable<String[]> {
     private final int[]                      columnLetters = {0, 1, 2, 3, 4, 5, 6, 7};
     private Tile[][]                         boardTiles = new Tile[8][8];
     private CheckLegalMoves                  checkLegalMoves;
-    private HashMap<int[], ArrayList<int[]>> allLegalMovesAfterControl;
+    private HashMap<int[], ArrayList<int[]>> allLegalMovesAfterControl; 
     private MovementPatterns                 whiteMovement;
     private MovementPatterns                 blackMovement;
+    
+    private final int[] whiteRookRightStartTile = new int[]{0, 7};
+    private final int[] whiteRookLeftStartTile = new int[]{0, 0}; 
+    private final int[] blackRookRightStartTile = new int[]{7, 7};
+    private final int[] blackRookLeftStartTile = new int[]{7, 0};
+
+    private final int[] orginalWhiteKingLocation = new int[]{0, 4};
+    private final int[] orginalBlackKingLocation = new int[]{7, 4};
 
     public Game() {
         makeBoard();
@@ -48,8 +63,8 @@ public class Game implements Serializable, Iterable<String[]> {
         return checkLegalMoves.getGameStatus();
     }
 
-    //TODO: Rememerb to remove these!
-    public Tile[][] getBoardTiles() {
+    //TODO: Rememerb to remove these! make private!
+    private Tile[][] getBoardTiles() {
         return boardTiles;
     }
 
@@ -402,6 +417,10 @@ public class Game implements Serializable, Iterable<String[]> {
     //TODO: Error handling for parameters    
     public void changePieceOnTile(int row, int col, char pieceType, char color, int... pawnRookKingInfo) {
 
+        if (!(color == 'b' || color == 'w')) {
+            throw new IllegalArgumentException("Only black (b) and white (w) color is allowed!");
+        }
+
         String pieceName = color + " " + pieceType;
         Tile tile = boardTiles[row][col];
 
@@ -418,11 +437,15 @@ public class Game implements Serializable, Iterable<String[]> {
                 boolean movedTwoLastTurn    = (pawnRookKingInfo[1] == 1) ? true : false;
                 int     enPassentMoveNumber = pawnRookKingInfo[2];
 
+                if (!(enPassentMoveNumber >= 0)) {
+                    throw new IllegalArgumentException("The Pawn cant have a negative move number!");
+                }
+
                 pawn.setHasMoved(hasPawnMoved);
                 pawn.setMovedTwoLastTurn(movedTwoLastTurn);
                 pawn.setMoveNumberEnPassant(enPassentMoveNumber);
 
-                tile.setPiece(new Pawn(pieceName, color));
+                tile.setPiece(pawn);
                 break;
             case 'R':
                 Rook rook = new Rook(pieceName, color);
@@ -440,11 +463,11 @@ public class Game implements Serializable, Iterable<String[]> {
                 king.setHasMoved(hasKingMoved);
                 
                 tile.setPiece(king);
+
                 break;
             default:
                 //TODO: Maybe change to something else than printing 
-                System.err.println("Invalid piece type");
-                return;
+                throw new IllegalArgumentException("Illegal piece Type!");
         }
     } 
 
@@ -461,71 +484,232 @@ public class Game implements Serializable, Iterable<String[]> {
         return false; 
     }
 
-    // wR+0-wK-wB-wQ-wX+0-wB-wK-wR+0-wP+0+0+0-wP+0+0+0-wP+0+0+0-wP+0+0+0-wP+0+0+0-wP+0+0+0-wP+0+0+0-wP+0+0+0-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-bP+0+0+0-bP+0+0+0-bP+0+0+0-bP+0+0+0-bP+0+0+0-bP+0+0+0-bP+0+0+0-bP+0+0+0-bR+0-bK-bB-bQ-bX+0-bB-bK-bR+0-0
-    
-    
+    //wR=0-wK-wB-wQ-wX=0-wB-wK-wR=0-wP=0=0=0-wP=0=0=0-00-wP=0=0=0-00-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-00-00-00-00-00-00-00-00-00-00-00-wP=1=1=0-bP=1=0=3-00-00-00-00-wP=1=0=4-bP=1=1=5-00-00-00-00-00-00-00-00-00-00-00-00-bP=0=0=0-bP=0=0=0-bP=0=0=0-00-bP=0=0=0-00-bP=0=0=0-bP=0=0=0-bR=0-bK-bB-bQ-bX=0-bB-bK-bR=0-6
     public void loadedGamePiecesPosition(String saveGameString) {
 
-        String[] tileData = saveGameString.split("-");
-        if (tileData.length != 65) {
-            throw new IllegalArgumentException("The file has wrong formatting!");
-        }
-        System.out.println(tileData.length);
-        System.out.println(checkLegalMoves.getMoveNumber());
-        System.out.println(Integer.parseInt(tileData[64]));
-        int turnNumber = Integer.parseInt(tileData[64]);
-        checkLegalMoves.setMoveNumber(turnNumber);
-        
-        this.makeBoard(); //Create an empty board
-        
-        int tileDataIndex = 0;
-        for (Tile[] row : boardTiles) {
-            for (Tile tile : row) {
-                String[] pieceWithAttributes = tileData[tileDataIndex].split("=");
+        Tile[][] currentGamePosition = this.boardTiles;
+        int currentMoveNumber = checkLegalMoves.getMoveNumber();
 
-                switch (pieceWithAttributes.length) {
-                case 1: //Other piece or empty
-                    String pieceOrNothing = pieceWithAttributes[0];
-                    if (!pieceOrNothing.equals("00")) {
-                        char color     = pieceOrNothing.charAt(0);
-                        char pieceType = pieceOrNothing.charAt(1);
+        try { 
 
-                        changePieceOnTile(tile.getRow(), tile.getCol(), pieceType, color);
+            String[] tileData = saveGameString.split("-");
+            int turnNumber = Integer.parseInt(tileData[64]);
+            checkLegalMoves.setMoveNumber(turnNumber);
+            
+            this.makeBoard(); //Create an empty board
+            
+            int tileDataIndex = 0;
+            for (Tile[] row : boardTiles) {
+                for (Tile tile : row) {
+                    String[] pieceWithAttributes = tileData[tileDataIndex].split("=");
+
+                    switch (pieceWithAttributes.length) {
+                    case 1: //Other piece or empty
+                        String pieceOrNothing = pieceWithAttributes[0];
+                        if (!pieceOrNothing.equals("00")) {
+                            char color     = pieceOrNothing.charAt(0);
+                            char pieceType = pieceOrNothing.charAt(1);
+
+                            changePieceOnTile(tile.getRow(), tile.getCol(), pieceType, color);
+                        }
+                        break;
+                    case 2: //Rook and King
+                        String rookOrKing    = pieceWithAttributes[0];
+                        char rookOrKingColor = rookOrKing.charAt(0);
+                        char pieceType       = rookOrKing.charAt(1);
+                        int hasMoved         = Integer.parseInt(pieceWithAttributes[1]);
+
+                        changePieceOnTile(tile.getRow(), tile.getCol(), pieceType, rookOrKingColor, hasMoved);
+                        break;
+                    case 4: //Pawn
+                        String pawn             = pieceWithAttributes[0];
+                        char pawnColor          = pawn.charAt(0);
+                        char pawnType           = pawn.charAt(1);
+                        int pawnHasMoved        = Integer.parseInt(pieceWithAttributes[1]);
+                        int movedTwoLastTurn    = Integer.parseInt(pieceWithAttributes[2]);
+                        int enPassentMoveNumber = Integer.parseInt(pieceWithAttributes[3]);
+
+                        changePieceOnTile(tile.getRow(), tile.getCol(), pawnType, pawnColor, 
+                                            pawnHasMoved, movedTwoLastTurn, enPassentMoveNumber);
+                        break;
+                    default:
+                        throw new IllegalArgumentException("The String has wrong formatting or wrong information!");
                     }
-                    break;
-                case 2: //Rook and King
-                    String rookOrKing    = pieceWithAttributes[0];
-                    char rookOrKingColor = rookOrKing.charAt(0);
-                    char pieceType       = rookOrKing.charAt(1);
-                    int hasMoved         = Integer.parseInt(pieceWithAttributes[1]);
 
-                    changePieceOnTile(tile.getRow(), tile.getCol(), pieceType, rookOrKingColor, hasMoved);
-                    break;
-                case 4: //Pawn
-                    String pawn             = pieceWithAttributes[0];
-                    char pawnColor          = pawn.charAt(0);
-                    char pawnType           = pawn.charAt(1);
-                    int pawnHasMoved        = Integer.parseInt(pieceWithAttributes[1]);
-                    int movedTwoLastTurn    = Integer.parseInt(pieceWithAttributes[2]);
-                    int enPassentMoveNumber = Integer.parseInt(pieceWithAttributes[3]);
-
-                    changePieceOnTile(tile.getRow(), tile.getCol(), pawnType, pawnColor, 
-                                        pawnHasMoved, movedTwoLastTurn, enPassentMoveNumber);
-                    break;
-                default:
-                    throw new IllegalArgumentException("The file has wrong formatting or wrong innformation!");
+                    ++tileDataIndex;
                 }
-
-                ++tileDataIndex;
             }
         }
 
-        //TODO: legge til at man ikke kan lagre hvis spillet er over!
+        catch (Exception e) {
+            this.boardTiles = currentGamePosition;
+            checkLegalMoves.setMoveNumber(currentMoveNumber);
+            throw new IllegalArgumentException("The String has wrong formatting, no change is made!");
+        }
+
+        validationOfGameState();
 
         this.allLegalMovesAfterControl = checkLegalMoves.CheckforCheckMateAndPat(this.getBoardDeepCopyUsingSerialization());
 
         printBoard();
     }
+
+    private void validationOfGameState() {
+
+        int[] whiteKingLocation = new int[]{};
+        int[] blackKingLocation = new int[]{};
+        int whiteKingCount = 0;
+        int blackKingCount = 0;
+        int rowCount = -1;
+        ArrayList<Integer> pawnMoveNumbers = new ArrayList<Integer>();
+        
+
+        for (Tile[] row : boardTiles) {
+            rowCount++;
+            for (Tile tile : row) {
+
+                Piece chosenPiece = tile.getPiece();
+                int[] chosenPieceCoordinates = tile.getCoordinates();
+                
+                if (tile.getPiece() instanceof King) { //Checks that there is only one black king and that if it is not placed on the start tile it has moved
+                    if (chosenPiece.getColor() == 'b') {
+                        blackKingCount++;
+                        blackKingLocation = chosenPieceCoordinates;
+                        if ((!(checkForSameCoordinates(this.orginalBlackKingLocation, chosenPieceCoordinates))) && chosenPiece.getHasMoved() == false) {
+                            System.out.println("BK");
+                            throw new IllegalArgumentException("The Black king has moved, but the input says it has not!");
+                        }
+
+                    }
+                    else if (chosenPiece.getColor() == 'w') {
+                        whiteKingCount++;
+                        whiteKingLocation = chosenPieceCoordinates;
+                        if ((!(checkForSameCoordinates(this.orginalWhiteKingLocation, chosenPieceCoordinates))) && chosenPiece.getHasMoved() == false) {
+                            System.out.println("WK");
+                            throw new IllegalArgumentException("The White king has moved, but the input says it has not!");
+                        }
+                    }
+                }
+
+                else if (chosenPiece instanceof Rook) {// Checks if Rook has moved if it is not placed on the start tile it has moved
+                    if (chosenPiece.getColor() == 'w') {
+                        if (!(checkForSameCoordinates(chosenPieceCoordinates, this.whiteRookLeftStartTile) || checkForSameCoordinates(chosenPieceCoordinates, this.whiteRookRightStartTile))) {
+                            if (chosenPiece.getHasMoved() == false) {
+                                System.out.println("WR");
+                                throw new IllegalArgumentException("The white rook has moved, but input says it has not!");
+                            }
+                        }
+                    }
+                    else if (chosenPiece.getColor() == 'b') {
+                        if (!(checkForSameCoordinates(chosenPieceCoordinates, this.blackRookLeftStartTile) || checkForSameCoordinates(chosenPieceCoordinates, this.blackRookRightStartTile))) {
+                            if (chosenPiece.getHasMoved() == false) {
+                                System.out.println("BR");
+                                throw new IllegalArgumentException("The black rook has moved, but input says it has not!");
+                            }
+                        }
+                    }
+
+                }
+
+                else if (chosenPiece instanceof Pawn) {
+
+                    if (rowCount == 0 || rowCount == 7) {
+                        throw new IllegalArgumentException("There are pawns on row 1 or 8 this is not allowed!");
+                    }
+
+                    if (chosenPiece.getHasMoved() == true || ((Pawn)chosenPiece).getMovedTwoLastTurn() == true) {
+                        if (rowCount == 1 && chosenPiece.getColor() == 'w') {
+                            throw new IllegalArgumentException("White pawn has not moved, but input says it has!");
+                        }
+                        else if (rowCount == 6 && chosenPiece.getColor() == 'b') {
+                            throw new IllegalArgumentException("Black pawn has not moved, but input says it has!");
+                        }
+                    }
+
+                    if (((Pawn)chosenPiece).getMovedTwoLastTurn() == true) {
+                        if (rowCount != 3 && chosenPiece.getColor() == 'w') {
+                            throw new IllegalArgumentException("White pawn cant have moved two last turn, but input says it has!"); 
+                        }
+                        else if (rowCount != 4 && chosenPiece.getColor() == 'b') {
+                            throw new IllegalArgumentException("Black pawn cant have moved two last turn, but input says it has!"); 
+                        }
+                    }
+
+                    pawnMoveNumbers.add(((Pawn)chosenPiece).getMoveNumberEnPassant());
+
+                }
+            }
+        }
+
+        int highestPawnMoveNumber = Collections.max(pawnMoveNumbers);
+
+        if (checkLegalMoves.getMoveNumber() == 0) {
+            if (highestPawnMoveNumber > 0) {
+                throw new IllegalArgumentException("The pawn has a illegal move number, it is higher than the move number for the game!");
+            }
+        }
+        else {
+            if (highestPawnMoveNumber + 1 > checkLegalMoves.getMoveNumber()) {
+                throw new IllegalArgumentException("The pawn has a illegal move number, it is higher than the move number for the game!");
+            }
+        }
+
+        List<Integer> pawnMoveNumbersLargerThanZero = pawnMoveNumbers.stream()
+                                                                     .filter(i -> i > 0)
+                                                                     .toList();
+
+        Set<Integer> uniquePawnMoveNumber = new HashSet<Integer>(pawnMoveNumbersLargerThanZero);
+
+        if (pawnMoveNumbersLargerThanZero.size() != uniquePawnMoveNumber.size()) {
+            throw new IllegalArgumentException("Two pawns cant have the same move number!");
+        }
+    
+        if (whiteKingCount != 1 || blackKingCount != 1) {
+            throw new IllegalArgumentException("Too many or too few kings, only two are allowed!");
+        }
+
+        HashMap<int[], ArrayList<int[]>> allMovesWhite = checkLegalMoves.populateAllMoves(whiteMovement, this.getBoardDeepCopyUsingSerialization());
+        HashMap<int[], ArrayList<int[]>> allMovesBlack = checkLegalMoves.populateAllMoves(blackMovement, this.getBoardDeepCopyUsingSerialization());
+
+        
+        Collection<ArrayList<int[]>> onlyValuesAllMovesWhite = allMovesWhite.values();
+        Collection<ArrayList<int[]>> onlyValuesAllMovesBlack = allMovesBlack.values();
+
+
+        boolean whiteKingInCheck = false;
+        boolean blackKingInCheck = false;
+            
+        for (ArrayList<int[]> allMovesForAPiece: onlyValuesAllMovesWhite) {
+            for (int[] oneMove : allMovesForAPiece) {
+                if (checkForSameCoordinates(oneMove, blackKingLocation)) {
+                    blackKingInCheck = true;
+                }
+            }
+        }
+
+        for (ArrayList<int[]> allMovesForAPiece: onlyValuesAllMovesBlack) {
+            for (int[] oneMove : allMovesForAPiece) {
+                if (checkForSameCoordinates(oneMove, whiteKingLocation)) {
+                    whiteKingInCheck = true;
+                }
+            }
+        }
+        
+        if (whiteKingInCheck && blackKingInCheck) {
+            throw new IllegalArgumentException("Both kings cant be in check!");
+        }
+    }
+
+
+    private boolean checkForSameCoordinates(int[] coordinateOne, int[] coordinateTwo) {
+        if (coordinateOne[0] == coordinateTwo[0] && coordinateOne[1] == coordinateTwo[1]) {
+            return true;
+        }
+        return false;
+    }
+
+
+
     /*  SAVE INFO STRING STRUCTURE
                                  (w/b)Char       (1 or 0)         (1 or 0)               Positive int
         Pawn(P):            color and piece type=has moved+moved two spaces last turn=en passen move number-
