@@ -1,5 +1,6 @@
 package project;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +29,9 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
-import project.Files.SaveGames;
+import project.Files.SaveBoardState;
+import project.Movement.Game;
+
 
 
 public class ChessController implements Serializable {
@@ -71,6 +74,8 @@ public class ChessController implements Serializable {
     private ArrayList<String> legalMovesStrings;
     private boolean isPawnPromoted = false;
     private Game game;
+    private SaveBoardState saveBoardState;
+    private boolean gameIsOver = false;
 
     @FXML
     private void colorTiles() {
@@ -156,8 +161,6 @@ public class ChessController implements Serializable {
             this.isPawnPromoted = false;
         }
 
-
-        
         if (!(this.pawnPromotion.equals(""))) return; 
         
         if (!pieceHasBeenChosen){
@@ -231,6 +234,7 @@ public class ChessController implements Serializable {
             }
 
             String castlingMove = game.isMoveCastling(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol);
+            //Updates the GUI if the move was castling 
             castling(castlingMove);
             
             //Retrieves the game state. 0 represents pat, 1 check mate for black and 2 is check mate for white 
@@ -273,12 +277,21 @@ public class ChessController implements Serializable {
         moveToImageView.setImage(new Image(chosenPieceSpriteUrl));
         */
         
-        if (gameOver == Consts.PAT)
+        if (gameOver == Consts.PAT) {
+            messageDisplay.setText("Pat");
+            gameIsOver = true;
             System.out.println("Pat");
-        else if (gameOver == Consts.CHECKMATE_FOR_BLACK) 
-            System.out.println("Check Mate for Black.");
-        else if (gameOver == Consts.CHECKMATE_FOR_WHITE) 
-            System.out.println("Check Mate for White.");
+        }
+        else if (gameOver == Consts.CHECKMATE_FOR_BLACK) { 
+            messageDisplay.setText("Check Mate for Black!");
+            gameIsOver = true;
+            System.out.println("Check Mate for Black!");
+        }
+        else if (gameOver == Consts.CHECKMATE_FOR_WHITE) {
+            messageDisplay.setText("Check Mate for White!");
+            gameIsOver = true;
+            System.out.println("Check Mate for White!");
+        }
     }
 
     @FXML
@@ -313,16 +326,18 @@ public class ChessController implements Serializable {
                 messageDisplay.setText( "Not a valid piece! Input must be: bishop, knight, rook or queen."); 
                 return;
         }
-        //La inn pawnImageView
+
         int tileRow = 7 - GridPane.getRowIndex(pawnImageView);
         int tileCol = GridPane.getColumnIndex(pawnImageView);
-        game.changePieceOnTile(tileRow, tileCol, pieceType, color);
+        game.changePieceOnTile(tileRow, tileCol, pieceType, color, true);
 
         pawnImageView.setImage(new Image(spritesFilePath + color + pieceType + ".png"));
+        promotionName.setText("");
 
         isPawnPromoted = true;
 
         this.pawnPromotion = "";
+
         //this.sprites.getChildren().remove(promotionText);
         isGameOver();
     }
@@ -336,28 +351,60 @@ public class ChessController implements Serializable {
         System.out.println(saveName);
         this.saveNameField.setText("");
 
-        if (saveName.equals("") || saveName.matches("[^a-zA-Z0-9.-]")) {
+        if (saveName.equals("") || (saveName.contains("\\")) || (saveName.contains("/"))) {
             messageDisplay.setText("Illegal character(s) in file name!");
             return;
         }
 
+        if (!(this.pawnPromotion.equals(""))) {
+            messageDisplay.setText("Promote pawn before saving!");
+            return;
+        }
+
+        if (gameIsOver) {
+            messageDisplay.setText("Cant save a game that is over!");
+            return;
+        }
 
         try {   
-            game.saveGame(saveName);
-
-        } catch (Exception e) {
+            saveBoardState.saveGame(saveName, game.getBoardDeepCopyUsingSerialization(), game.getMoveNumber());
+        } 
+        catch (IOException e) {
+            messageDisplay.setText("Illegal character(s) in file name!");
             System.err.println(e.getStackTrace());
         }
+
     }
 
     @FXML
     public void loadGame() {
+
         String fileName = loadNameField.getText();
-        game.loadedGamePiecesPosition(fileName);
-        
+        String saveGameString = new String();
+
+        try {
+            saveGameString = saveBoardState.loadGame(fileName);
+        }
+        catch (IOException e) {
+            messageDisplay.setText("There is no file with that name or the file is corrupted");
+            System.err.println(e.getStackTrace());
+        }
+
+        try {
+            game.loadedGamePiecesPosition(saveGameString);
+        }
+        catch(IllegalArgumentException e) {
+            this.pieceHasBeenChosen = false;
+            messageDisplay.setText("The formatting for the file is wrong!");
+            return;
+        }
+
         saveNameField.setText("");
         messageDisplay.setText("");
-
+        
+        //If there is a selected piece, it needs to be reset  
+        this.pieceHasBeenChosen = false;
+        removeCirclesForLegalMoves();
         placeSprites();
     }
 
@@ -372,8 +419,9 @@ public class ChessController implements Serializable {
 
     @FXML
     private void initialize()
-    {
-        game = new Game();
+    {   
+        this.game = new Game();
+        this.saveBoardState= new SaveBoardState();
         placeSprites();
         colorTiles();
     }

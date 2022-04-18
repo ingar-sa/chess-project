@@ -1,11 +1,9 @@
 package project.Movement;
 
-import java.io.Serializable;
+
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
-import project.Board.Chessboard;
 import project.Board.Tile;
 import project.Pieces.Bishop;
 import project.Pieces.King;
@@ -17,17 +15,32 @@ import project.Pieces.Rook;
 
 // Husk en passant må skje rett etter motstander har flyttet + queen promotion
 
-public class MovementPatterns implements Serializable {
+public class MovementPatterns {
 
     private char            color;
-    //private Tile[][]        boardTiles;
-    
 
-    MovementPatterns (char color) {
+    public MovementPatterns (char color) {
+        validationOfLegalColor(color);
         this.color = color;
     }
 
-    public ArrayList<int[]> moveHandler(Tile tile, Tile[][] boardTiles, int moveNumber) {
+    private void validationOfLegalColor(char color) {
+        char[] blackAndWhite= {'b', 'w'};
+
+        boolean legalColor = false;
+
+        for (char c : blackAndWhite) {
+            if (c == color);
+                legalColor = true;
+                break;
+        }
+
+        if (!legalColor) {
+            throw new IllegalArgumentException("Illegal color for MovementPatterns!");
+        }
+    }
+
+    ArrayList<int[]> moveHandler(Tile tile, Tile[][] boardTiles, int moveNumber) {
 
         Piece piece               = tile.getPiece();
         ArrayList<int[]> allMoves = new ArrayList<int[]>();
@@ -42,7 +55,6 @@ public class MovementPatterns implements Serializable {
         return allMoves;
     }
 
-
     private ArrayList<int[]> pawnMoves(Tile tile, Tile[][] boardTiles, int moveNumber) {     
         
         Pawn pawn                       = (Pawn)tile.getPiece(); 
@@ -54,14 +66,11 @@ public class MovementPatterns implements Serializable {
         if (this.color == 'b') moveDirection = -1;
         
         Tile inFront  = boardTiles[row+(1*moveDirection)][col];
-        //Legger til 
-
         Tile twoInFront = null;
 
         if (!pawn.getHasMoved()) 
              twoInFront  = boardTiles[row + (2 * moveDirection)][col];
         
-
         Tile attackLeft = null;
         Tile attackRight = null;
          
@@ -78,11 +87,9 @@ public class MovementPatterns implements Serializable {
         
         if (this.color == 'w' && row == 4 && col != 0) 
             passantLeft = boardTiles[row][col-1];
-        
 
         if (this.color == 'b' && row == 3 && col != 0) 
             passantLeft = boardTiles[row][col-1];
-        
 
         if (this.color == 'w' && row == 4 && col != 7) 
             passantRight = boardTiles[row][col+1];
@@ -92,7 +99,6 @@ public class MovementPatterns implements Serializable {
         
         if (!inFront.isOccupied()) 
             legalPawnMoves.add(new int[]{inFront.getRow(), inFront.getCol()});
-        
         
         if (!pawn.getHasMoved() && twoInFront != null) {
             if (!twoInFront.isOccupied() 

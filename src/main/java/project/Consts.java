@@ -10,6 +10,6 @@ public final class Consts {
 
     private Consts() {
     //This class should never be constructed, and this prevents that 
-    throw new AssertionError();
+    throw new AssertionError("Cannot be constructed");
   }
 }

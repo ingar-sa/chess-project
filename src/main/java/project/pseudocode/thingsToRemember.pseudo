@@ -17,6 +17,14 @@
 - Bytte ut hvordan sirkler fjernes til Observable list, som fjerner alle endringer?
 - Spørre om lagring av filer, hvorfor ingen execptions av filewriter
 - Fjerne alle unødvendige felter og metoder
-- HUSK INNKAPSLING AV PARAMETRE OSV! - f.eks. col, row number!
+- HUSK INNKAPSLING AV PARAMETRE OSV! - f.eks. col, row number - gjelder vel kun hvis metoden er public!
+- Se på if/ else if pawn Movementpatterns
+
+- Innkapsling kun 1 konge 
+- Sette alle public metoder øverst 
+- Gi beskjed om feil i save/load game 
+- Kanskje skrive at man utfører ulovelige trekk? 
+- Vi må lage interface for skriving til fil!
+- Se på synlighetsmodifikatorer 
 
 - SLETTE ALLE IKKE-JAVA FILER FØR INNLEVERING!!!
