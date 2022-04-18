@@ -284,6 +284,7 @@ public class Game implements Serializable, Iterable<String[]> {
         return new ArrayList<String>(coordinateString);
     }
 
+    //Validates that the desired move is legal
     private void validationOfMove (int fromRow, int fromCol, int ToRow, int ToCol) {
 
         validationOfCoordinates(fromRow, fromCol);
@@ -319,7 +320,6 @@ public class Game implements Serializable, Iterable<String[]> {
 
     public String isMoveEnPassent(int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
 
-        //Makes
         if (gameIsOver) {
             throw new IllegalStateException("The game is over, no pieces to move!");
         }
@@ -490,6 +490,10 @@ public class Game implements Serializable, Iterable<String[]> {
             throw new IllegalStateException("The game is over!");
         }
 
+        if (pieceReadyToMove) {
+            throw new IllegalStateException("Move a piece before updateing the game!");
+        }
+
         checkLegalMoves.increaseMoveNumber();
 
         //allLegalMovesAfterControl is updated with the opposite player's moves here, as opposed to updating it 
@@ -520,6 +524,10 @@ public class Game implements Serializable, Iterable<String[]> {
     //Må få inn valideringen av endringen også
     //Eventuelt putte game of kontrolleren i samme mappe      
     public void changePieceOnTile(int row, int col, char pieceType, char color, boolean pawnPromotion, int... pawnRookKingInfo) {
+
+        if (this.gameIsOver) {
+            throw new IllegalStateException("The game is over!")
+        } 
 
         validationOfCoordinates(row, col);
         
