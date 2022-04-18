@@ -26,6 +26,8 @@ public class TileCheckLegalMoves implements Serializable {
 
     private int gameStatus = Consts.GAME_NOT_OVER;
 
+    //TODO: legge til at man ikke kan kalle på metodene hvis spillet er over.
+
     //må vell egentlig hentes fra hovedbrettet
     private int[] whiteKing;
     private int[] blackKing;

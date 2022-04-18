@@ -42,6 +42,8 @@ public class CheckLegalMoves {
     private final int[] blackCastlingSkippedTileRigth = new int[]{7, 5};
     private final int[] blackCastlingSkippedTileLeft = new int[]{7, 3};
 
+    //TODO: legge til at man ikke kan kalle på metodene hvis spillet er over.
+
     //Turn number
     int moveNumber = 0; 
 
@@ -239,7 +241,7 @@ public class CheckLegalMoves {
                 
                 indexForMoveToRemove ++;
             }
-
+            //Removes all the illegal moves for a piece that breaks check
             allMovesForAPiece.removeAll(movesToBeRemoved);
         }
 
@@ -295,9 +297,6 @@ public class CheckLegalMoves {
         //     }
         // }
     }
-
-
-    
 
     HashMap<int[], ArrayList<int[]>> CheckforCheckMateAndPat (Tile[][] currentGamePositionTiles) {
 

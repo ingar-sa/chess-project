@@ -39,7 +39,12 @@ public class Game implements Serializable, Iterable<String[]> {
     private HashMap<int[], ArrayList<int[]>>     allLegalMovesAfterControl; 
     private MovementPatterns                     whiteMovement;
     private MovementPatterns                     blackMovement;
-    
+    private boolean                              loadingGame = false;
+    private boolean                              gameIsOver = false;
+    private boolean                              updatedGameCastlingEnpassent = true;
+    private boolean                              pieceReadyToMove = true;
+    private int[]                                legalMoveCoordinatesIfCastlingOrEnPassent = new int[]{};         
+
     private final int[] whiteRookRightStartTile  = new int[]{0, 7};
     private final int[] whiteRookLeftStartTile   = new int[]{0, 0}; 
     private final int[] blackRookRightStartTile  = new int[]{7, 7};
@@ -47,6 +52,8 @@ public class Game implements Serializable, Iterable<String[]> {
 
     private final int[] orginalWhiteKingLocation = new int[]{0, 4};
     private final int[] orginalBlackKingLocation = new int[]{7, 4};
+
+    //TODO: legge til at man ikke kan kalle på metodene hvis spillet er over.
 
     public Game() {
         makeBoard();
@@ -70,7 +77,7 @@ public class Game implements Serializable, Iterable<String[]> {
         return boardTiles[row][col]; 
     }
 
-    public int getMoveNUmber() {
+    public int getMoveNumber() {
         return checkLegalMoves.getMoveNumber();
     }
     
@@ -242,7 +249,8 @@ public class Game implements Serializable, Iterable<String[]> {
 		}
 		catch(Exception e)
 		{
-			return null;
+			//TODO: Burde vell endre dette
+            return null;
 		}	
 	}
 
@@ -276,73 +284,133 @@ public class Game implements Serializable, Iterable<String[]> {
         return new ArrayList<String>(coordinateString);
     }
 
-    public String isMoveEnPassent(int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
+    private void validationOfMove (int fromRow, int fromCol, int ToRow, int ToCol) {
 
-        validationOfCoordinates(chosenPieceRow, chosenPieceCol);
-        validationOfCoordinates(moveToPieceRow, moveToPieceCol);
+        validationOfCoordinates(fromRow, fromCol);
+        validationOfCoordinates(ToRow, ToCol);
 
-        Piece pieceToMove = boardTiles[chosenPieceRow][chosenPieceCol].getPiece();
+        int[]            desiredPiece             = new int[]{fromRow, fromCol};
+        int[]            desiredMove              = new int[]{ToRow, ToCol};          
+        ArrayList<int[]> legalMovesForPieceToMove = new ArrayList<int[]>();
+        Set<int[]>       allPiecesThatCanMove     = this.allLegalMovesAfterControl.keySet();
+        boolean legalPiece = false;
+        boolean legalMove = false;
 
-        if (pieceToMove instanceof Pawn) {
-            int moveNumber = checkLegalMoves.getMoveNumber();
-            ((Pawn)pieceToMove).setMoveNumberEnPassant(moveNumber);
-            if (pieceToMove.getHasMoved()) {
-                ((Pawn)pieceToMove).setMovedTwoLastTurn(false);
+
+        for (int[] Piece : allPiecesThatCanMove) {
+            if (checkForSameCoordinates(desiredPiece , Piece)) {
+                legalMovesForPieceToMove = this.allLegalMovesAfterControl.get(Piece);
+                legalPiece = true;
             }
-            else if (Math.abs(chosenPieceRow - moveToPieceRow) == 2) {
-                ((Pawn)pieceToMove).setMovedTwoLastTurn(true);
-            }
+        }
 
-            if (!boardTiles[moveToPieceRow][moveToPieceCol].isOccupied() && Math.abs(chosenPieceCol-moveToPieceCol) == 1) {
-                if (pieceToMove.getColor() == 'w') {
-                    this.boardTiles[moveToPieceRow - 1][moveToPieceCol].removePiece();
-                    return (moveToPieceRow - 1) + "" + moveToPieceCol;
-                }
-                else if (pieceToMove.getColor() == 'b') {
-                    this.boardTiles[moveToPieceRow + 1][moveToPieceCol].removePiece();
-                    return (moveToPieceRow + 1) + "" + moveToPieceCol;
+        if (legalPiece) {
+            for (int[] moves : legalMovesForPieceToMove) {
+                if (checkForSameCoordinates(desiredMove, moves)) {
+                    legalMove = true;
                 }
             }
         }
+
+        if (!legalMove) {
+            throw new IllegalArgumentException("The desired move is not legal!");
+        }
+    }
+
+    public String isMoveEnPassent(int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
+
+        //Makes
+        if (gameIsOver) {
+            throw new IllegalStateException("The game is over, no pieces to move!");
+        }
+
+        validationOfMove(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol);
+
+        //Makes sure you can only move one Piece before you need to update the game state  
+        if (this.updatedGameCastlingEnpassent && this.pieceReadyToMove) {
+
+            Piece pieceToMove = boardTiles[chosenPieceRow][chosenPieceCol].getPiece();
+
+            if (pieceToMove instanceof Pawn) {
+                int moveNumber = checkLegalMoves.getMoveNumber();
+                ((Pawn)pieceToMove).setMoveNumberEnPassant(moveNumber);
+                if (pieceToMove.getHasMoved()) {
+                    ((Pawn)pieceToMove).setMovedTwoLastTurn(false);
+                }
+                else if (Math.abs(chosenPieceRow - moveToPieceRow) == 2) {
+                    ((Pawn)pieceToMove).setMovedTwoLastTurn(true);
+                }
+
+                if (!boardTiles[moveToPieceRow][moveToPieceCol].isOccupied() && Math.abs(chosenPieceCol-moveToPieceCol) == 1) {
+                    if (pieceToMove.getColor() == 'w') {
+                        this.boardTiles[moveToPieceRow - 1][moveToPieceCol].removePiece();
+                        this.legalMoveCoordinatesIfCastlingOrEnPassent = new int[]{chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol};
+                        this.updatedGameCastlingEnpassent = false;
+                        return (moveToPieceRow - 1) + "" + moveToPieceCol;
+                    }
+                    else if (pieceToMove.getColor() == 'b') {
+                        this.boardTiles[moveToPieceRow + 1][moveToPieceCol].removePiece();
+                        this.legalMoveCoordinatesIfCastlingOrEnPassent = new int[]{chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol};
+                        this.updatedGameCastlingEnpassent = false;
+                        return (moveToPieceRow + 1) + "" + moveToPieceCol;
+                    }
+                }
+            }
+        }
+
         return "";
     }
 
 
     public String isMoveCastling (int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
 
-        validationOfCoordinates(chosenPieceRow, chosenPieceCol);
-        validationOfCoordinates(moveToPieceRow, moveToPieceCol);
-        
-        Piece pieceToMove = boardTiles[chosenPieceRow][chosenPieceCol].getPiece();
+        if (gameIsOver) {
+            throw new IllegalStateException("The game is over, cant move pieces!");
+        }
 
-        if (pieceToMove instanceof King) {
-            if (!pieceToMove.getHasMoved())  {
-                if (pieceToMove.getColor() == 'w') {
-                    if (moveToPieceCol == 6) {
-                        Rook castlingRook = ((Rook)this.boardTiles[0][7].getPiece());
-                        this.boardTiles[0][7].removePiece();
-                        this.boardTiles[0][5].setPiece(castlingRook);
-                        return "05";
+        validationOfMove(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol);
+        
+        if (this.updatedGameCastlingEnpassent && this.pieceReadyToMove) {
+
+            Piece pieceToMove = boardTiles[chosenPieceRow][chosenPieceCol].getPiece();
+
+            if (pieceToMove instanceof King) {
+                if (!pieceToMove.getHasMoved())  {
+                    if (pieceToMove.getColor() == 'w') {
+                        if (moveToPieceCol == 6) {
+                            Rook castlingRook = ((Rook)this.boardTiles[0][7].getPiece());
+                            this.boardTiles[0][7].removePiece();
+                            this.boardTiles[0][5].setPiece(castlingRook);
+                            this.updatedGameCastlingEnpassent = false;
+                            this.legalMoveCoordinatesIfCastlingOrEnPassent = new int[]{chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol};
+                            return "05";
+                        }
+                        else if (moveToPieceCol == 2) {
+                            Rook castlingRook = ((Rook)this.boardTiles[0][0].getPiece());
+                            this.boardTiles[0][0].removePiece();
+                            this.boardTiles[0][3].setPiece(castlingRook);
+                            this.updatedGameCastlingEnpassent = false;
+                            this.legalMoveCoordinatesIfCastlingOrEnPassent = new int[]{chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol};
+                            return "03";
+                        }
                     }
-                    else if (moveToPieceCol == 2) {
-                        Rook castlingRook = ((Rook)this.boardTiles[0][0].getPiece());
-                        this.boardTiles[0][0].removePiece();
-                        this.boardTiles[0][3].setPiece(castlingRook);
-                        return "03";
-                    }
-                }
-                else if (pieceToMove.getColor() == 'b') {
-                    if (moveToPieceCol == 6) {
-                        Rook castlingRook = ((Rook)this.boardTiles[7][7].getPiece());
-                        this.boardTiles[7][7].removePiece();
-                        this.boardTiles[7][5].setPiece(castlingRook);
-                        return "75";
-                    }
-                    else if (moveToPieceCol == 2) {
-                        Rook castlingRook = ((Rook)this.boardTiles[7][0].getPiece());
-                        this.boardTiles[7][0].removePiece();
-                        this.boardTiles[7][3].setPiece(castlingRook);
-                        return "73";
+                    else if (pieceToMove.getColor() == 'b') {
+                        if (moveToPieceCol == 6) {
+                            Rook castlingRook = ((Rook)this.boardTiles[7][7].getPiece());
+                            this.boardTiles[7][7].removePiece();
+                            this.boardTiles[7][5].setPiece(castlingRook);
+                            this.updatedGameCastlingEnpassent = false;
+                            this.legalMoveCoordinatesIfCastlingOrEnPassent = new int[]{chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol};
+                            return "75";
+                        }
+                        else if (moveToPieceCol == 2) {
+                            Rook castlingRook = ((Rook)this.boardTiles[7][0].getPiece());
+                            this.boardTiles[7][0].removePiece();
+                            this.boardTiles[7][3].setPiece(castlingRook);
+                            this.updatedGameCastlingEnpassent = false;
+                            this.legalMoveCoordinatesIfCastlingOrEnPassent = new int[]{chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol};
+                            return "73";
+                        }
                     }
                 }
             }
@@ -370,23 +438,57 @@ public class Game implements Serializable, Iterable<String[]> {
         return "";
     }
     
-    //TODO: Error handling for parameters
+    //TODO: Error handling for parameters, burde kanskje bytte navn?
     public void updateGameState(int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
 
-        validationOfCoordinates(chosenPieceRow, chosenPieceCol);
-        validationOfCoordinates(moveToPieceRow, moveToPieceCol);
-
-        //TODO: Make method to validate that the preformed move is legal
-
+        if (this.gameIsOver) {
+            throw new IllegalStateException("The game is over, cant move pieces!");
+        }
         
-        Piece pieceToMove = boardTiles[chosenPieceRow][chosenPieceCol].getPiece();
-        pieceToMove.setHasMoved(true);
-       
-        this.boardTiles[chosenPieceRow][chosenPieceCol].removePiece();
-        this.boardTiles[moveToPieceRow][moveToPieceCol].setPiece(pieceToMove);
+        validationOfMove(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol);
+
+        if (this.pieceReadyToMove) {
+
+            if (this.updatedGameCastlingEnpassent == false) {
+                if (   chosenPieceRow == legalMoveCoordinatesIfCastlingOrEnPassent[0]
+                    && chosenPieceCol == legalMoveCoordinatesIfCastlingOrEnPassent[1]
+                    && moveToPieceRow == legalMoveCoordinatesIfCastlingOrEnPassent[2]
+                    && moveToPieceCol  == legalMoveCoordinatesIfCastlingOrEnPassent[3]) {
+                        Piece pieceToMove = boardTiles[chosenPieceRow][chosenPieceCol].getPiece();
+                        pieceToMove.setHasMoved(true);
+        
+                        this.boardTiles[chosenPieceRow][chosenPieceCol].removePiece();
+                        this.boardTiles[moveToPieceRow][moveToPieceCol].setPiece(pieceToMove);
+
+                        this.pieceReadyToMove = false;
+                }
+                else {
+                    throw new IllegalStateException("You have to move the piece which is connected to castling or en passent!");
+                }
+
+            }
+
+            else {
+                Piece pieceToMove = boardTiles[chosenPieceRow][chosenPieceCol].getPiece();
+                pieceToMove.setHasMoved(true);
+            
+                this.boardTiles[chosenPieceRow][chosenPieceCol].removePiece();
+                this.boardTiles[moveToPieceRow][moveToPieceCol].setPiece(pieceToMove);
+    
+                this.pieceReadyToMove = false;
+            }
+    
+        }
+        else {
+            throw new IllegalStateException("A piece is already moved, update the game state!");
+        }      
     }
 
     public int checkForGameOver() {
+
+        if (gameIsOver) {
+            throw new IllegalStateException("The game is over!");
+        }
 
         checkLegalMoves.increaseMoveNumber();
 
@@ -394,14 +496,19 @@ public class Game implements Serializable, Iterable<String[]> {
         //during the next call of getLegalMoves. This allows us to use getGameStatus() to check for a mate or pat
         this.allLegalMovesAfterControl = checkLegalMoves.CheckforCheckMateAndPat(this.getBoardDeepCopyUsingSerialization());
         
+        this.updatedGameCastlingEnpassent = true;
+        this.pieceReadyToMove = true;
+
         this.printBoard();
         
         int gameStatus = checkLegalMoves.getGameStatus(); //gameStatus returns 1 if it is pat, 2 if it is check mate, and otherwise 0
 
         if (gameStatus == Consts.PAT) {
+            gameIsOver = true;
             return Consts.PAT;
         }
         else if (gameStatus == Consts.CHECKMATE) {
+            gameIsOver = true;
             return (checkLegalMoves.getMoveNumber() % 2 == 0) ? Consts.CHECKMATE_FOR_BLACK : Consts.CHECKMATE_FOR_WHITE;  //When movenumber is even, black has check mate, when it's odd, white has check mate. 
         }
         else {
@@ -409,9 +516,13 @@ public class Game implements Serializable, Iterable<String[]> {
         }
     }
 
-    //TODO: Error handling for parameters    
+    //TODO: Error handling for parameters
+    //Må få inn valideringen av endringen også
+    //Eventuelt putte game of kontrolleren i samme mappe      
     public void changePieceOnTile(int row, int col, char pieceType, char color, boolean pawnPromotion, int... pawnRookKingInfo) {
 
+        validationOfCoordinates(row, col);
+        
         if (!(color == 'b' || color == 'w')) {
             throw new IllegalArgumentException("Only black (b) and white (w) color is allowed!");
         }
@@ -470,6 +581,11 @@ public class Game implements Serializable, Iterable<String[]> {
             default:
                 throw new IllegalArgumentException("Illegal piece Type!");
         }
+
+        if (!loadingGame) {
+            validationOfGameState();
+        }
+
     } 
 
     private void validationOfCoordinates(int row, int col) {
@@ -501,7 +617,9 @@ public class Game implements Serializable, Iterable<String[]> {
 
         Tile[][] currentGamePosition = this.getBoardDeepCopyUsingSerialization();
         int currentMoveNumber = checkLegalMoves.getMoveNumber();
+        this.loadingGame = true;
 
+        //TODO: Burde nok endre dette så den sjekker strengen
         try { 
 
             String[] tileData = saveGameString.split("-");
@@ -574,6 +692,9 @@ public class Game implements Serializable, Iterable<String[]> {
             checkLegalMoves.setMoveNumber(currentMoveNumber);
             throw new IllegalArgumentException("The String has wrong formatting, no change is made!");
         }
+        finally {
+            this.loadingGame = false;
+        }
 
         try {
             validationOfGameState();
@@ -583,14 +704,14 @@ public class Game implements Serializable, Iterable<String[]> {
             checkLegalMoves.setMoveNumber(currentMoveNumber);
             throw new IllegalArgumentException("This is not a legal chess position, no change was made!");
         }
-
+    
         //This is needed to update allLegalMovesAfterControl attribute
         this.allLegalMovesAfterControl = checkLegalMoves.CheckforCheckMateAndPat(this.getBoardDeepCopyUsingSerialization());
 
         printBoard();
     }
 
-    //This method validates that the loaded game position is valid according to chess rules, e.g, 
+    //This method validates that the loaded game position/move is valid according to chess rules, e.g, 
     //there are no pawns on row 1 and 8, there are no pawns, rooks or kings that is not placed on their orginal position and that has moved etc.
     //From this you can write your own chess positions as strings
     private void validationOfGameState() {
@@ -676,10 +797,10 @@ public class Game implements Serializable, Iterable<String[]> {
 
                     if (chosenPiece.getHasMoved() == false) {
                         if (chosenPiece.getColor() == 'w' && rowCount != 1) {
-                            throw new IllegalArgumentException("A white pawn has moves, but input says it has!");
+                            throw new IllegalArgumentException("A white pawn has moved, but input says it has not!");
                         }
                         else if (chosenPiece.getColor() == 'b' && rowCount != 6) {
-                            throw new IllegalArgumentException("A white pawn has moves, but input says it has!");
+                            throw new IllegalArgumentException("A white pawn has moved, but input says it has not!");
                         }
                     }
 
@@ -689,7 +810,10 @@ public class Game implements Serializable, Iterable<String[]> {
             }
         }
 
-        int highestPawnMoveNumber = Collections.max(pawnMoveNumbers);
+        int highestPawnMoveNumber = 0;
+
+        if (pawnMoveNumbers.size() != 0)
+            highestPawnMoveNumber = Collections.max(pawnMoveNumbers);
 
         if (checkLegalMoves.getMoveNumber() == 0) {
             if (highestPawnMoveNumber > 0) {
@@ -718,6 +842,7 @@ public class Game implements Serializable, Iterable<String[]> {
 
         boolean playerNotToMoveInCheck = false;
 
+        //If setPplayerMove returns true - white is moving
         if (setPlayerToMove()) {
             HashMap<int[], ArrayList<int[]>> allMovesWhite = checkLegalMoves.populateAllMoves(whiteMovement, this.getBoardDeepCopyUsingSerialization());
             Collection<ArrayList<int[]>> onlyValuesAllMovesWhite = allMovesWhite.values();

@@ -367,7 +367,7 @@ public class ChessController implements Serializable {
         }
 
         try {   
-            saveBoardState.saveGame(saveName, game.getBoardDeepCopyUsingSerialization(), game.getMoveNUmber());
+            saveBoardState.saveGame(saveName, game.getBoardDeepCopyUsingSerialization(), game.getMoveNumber());
         } 
         catch (IOException e) {
             messageDisplay.setText("Illegal character(s) in file name!");
@@ -387,11 +387,8 @@ public class ChessController implements Serializable {
         }
         catch (IOException e) {
             messageDisplay.setText("There is no file with that name or the file is corrupted");
-            System.out.println("yoyo");
             System.err.println(e.getStackTrace());
         }
-
-        //game.loadedGamePiecesPosition(saveGameString);
 
         try {
             game.loadedGamePiecesPosition(saveGameString);
