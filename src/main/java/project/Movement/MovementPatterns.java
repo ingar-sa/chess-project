@@ -17,31 +17,15 @@ import project.Pieces.Rook;
 
 public class MovementPatterns {
 
-    private char            color;
+    private char color;
 
     public MovementPatterns (char color) {
-        validationOfLegalColor(color);
-        this.color = color;
+        if (color == 'w' || color == 'b') this.color = color;
+        else
+            throw new IllegalArgumentException("Illegal color");
     }
 
-    private void validationOfLegalColor(char color) {
-        char[] blackAndWhite= {'b', 'w'};
-
-        boolean legalColor = false;
-
-        for (char c : blackAndWhite) {
-            if (c == color);
-                legalColor = true;
-                break;
-        }
-
-        if (!legalColor) {
-            throw new IllegalArgumentException("Illegal color for MovementPatterns!");
-        }
-    }
-
-    ArrayList<int[]> moveHandler(Tile tile, Tile[][] boardTiles, int moveNumber) {
-
+    public ArrayList<int[]> moveHandler(Tile tile, Tile[][] boardTiles, int moveNumber) {
         Piece piece               = tile.getPiece();
         ArrayList<int[]> allMoves = new ArrayList<int[]>();
         
@@ -56,7 +40,6 @@ public class MovementPatterns {
     }
 
     private ArrayList<int[]> pawnMoves(Tile tile, Tile[][] boardTiles, int moveNumber) {     
-        
         Pawn pawn                       = (Pawn)tile.getPiece(); 
         int row                         = tile.getRow();
         int col                         = tile.getCol();
@@ -389,14 +372,6 @@ public class MovementPatterns {
         }
 
         return legalMoves;
-    }
-    
-    void makeMove(Tile ourTile, ArrayList<int[]> legalMoves, int[] debugChoice, Tile[][] boardTiles) {
-        
-        Tile newTile = boardTiles[debugChoice[0]][debugChoice[1]];
-
-        newTile.setPiece(ourTile.getPiece());
-        ourTile.setPiece(null);
     }
 
     public char getColor() {

@@ -40,7 +40,7 @@ public class Chessboard implements Serializable {
 
                 tileColor = (col % 2 == 1) ? firstColor : secondColor;
 
-                Tile tile = new Tile(row, col, tileColor);
+                Tile tile = new Tile(row, col);
                 boardTiles[row][col] = tile;
             }
         }

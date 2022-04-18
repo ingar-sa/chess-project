@@ -10,16 +10,23 @@ public class Tile implements Serializable{
     private Piece   piece;
     private int     row;
     private int     col;
-    private char    color;
     private boolean occupied;
     
-    //TODO: make validation!
-    public Tile (int row, int col, char color) {
-        this.row   = row;
-        this.col   = col;
-        this.color = color;
+    public Tile (int row, int col) {
+        if (checkBounds(row)) 
+            this.row = row;
+        else 
+            throw new IllegalArgumentException("The row has to be between 0-7");
+
+        if (checkBounds(col)) 
+            this.col = col;
+        else 
+            throw new IllegalArgumentException("The col has to be between 0-7");
     }
 
+    private boolean checkBounds(int rowOrCol) {
+        return (rowOrCol >= 0 && rowOrCol < 8);
+    }
 
     public Piece getPiece() {
         return this.piece;
@@ -36,10 +43,6 @@ public class Tile implements Serializable{
 
     public int getCol() {
         return this.col;
-    }
-
-    public char getTileColor() {
-        return this.color;
     }
 
     public boolean isOccupied() {

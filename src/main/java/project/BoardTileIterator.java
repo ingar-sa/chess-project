@@ -22,11 +22,6 @@ public class BoardTileIterator implements Iterator<String[]> {
     @Override
     public String[] next() { //TODO: Change from tile to give pieceinfo array directly from game
 
-        //Håndtere det silk, eller ikke håndtere det her i det hele tatt?
-        if (!hasNext()) {
-            throw new IllegalArgumentException("No more tiles to itterate over!");
-        } 
-
         if (col == 8) {
             col = 0;
             ++row;
@@ -37,13 +32,6 @@ public class BoardTileIterator implements Iterator<String[]> {
         ++col;
         return pieceInfo;
     }
-    
-    // //Just for testing manipulation of Tile[][]
-    // public void manipulator () {
-    //     for (Tile[] rowWithTiles : game) {
-    //         rowWithTiles[0] = new Tile(0, 6, 'w');
-    //     }
-    // }
     
     public static void main(String[] args) {
     //     Game game = new Game();

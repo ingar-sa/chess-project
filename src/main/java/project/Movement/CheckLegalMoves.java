@@ -25,10 +25,7 @@ public class CheckLegalMoves {
     private MovementPatterns colorToMove;
     private MovementPatterns colorNotMoving;
 
-    private int[] whiteKing;
-    private int[] blackKing;
-    private int[] originalKingLocationPlayerToMove;
-    private int[] kingLocationPlayerToMove;
+    //private int[] kingLocationPlayerToMove;
 
     //Important tiles for when white is Castling  
     private final int[] whiteKingMoveCastlingRigth = new int[]{0, 6};
@@ -77,10 +74,39 @@ public class CheckLegalMoves {
 
     private HashMap<int[], ArrayList<int[]>> eliminateChecks(Tile[][] currentGamePositionTiles) {
 
-        setKingPositions(currentGamePositionTiles);
+        int[] whiteKing = new int[]{};
+        int[] blackKing = new int[]{};
+
+        for (Tile[] tileRow : currentGamePositionTiles) {
+            for (Tile tile: tileRow) {
+                if (tile.getPiece() instanceof King && ((King)tile.getPiece()).getColor() == 'w') {
+                    whiteKing = new int[]{tile.getRow(), tile.getCol()};
+                }
+                else if (tile.getPiece() instanceof King && ((King)tile.getPiece()).getColor() == 'b') {
+                    blackKing = new int[]{tile.getRow(), tile.getCol()};
+                }
+            }
+        }
+
         setPlayerToMove();
-        setOriginalKingLocationForPlayerToMove();
-        setKingPositionForPlayerToMove();
+
+        int[] originalKingLocationPlayerToMove;
+
+        if (colorToMove.getColor() == 'w') {
+            originalKingLocationPlayerToMove = new int[]{0, 4};
+        }
+        else {
+            originalKingLocationPlayerToMove = new int[]{7, 4};
+        }
+
+        int[] kingLocationPlayerToMove;
+
+        if (colorToMove.getColor() == 'w') {
+            kingLocationPlayerToMove = whiteKing;
+        }
+        else {
+            kingLocationPlayerToMove = blackKing;
+        }
 
         HashMap<int[], ArrayList<int[]>> legalMoves = populateAllMoves(colorToMove, currentGamePositionTiles);
         
@@ -108,12 +134,12 @@ public class CheckLegalMoves {
                 boolean kingMovedBlacked = false;
 
                 if (pieceToMove instanceof King && pieceToMove.getColor() == 'w') {
-                    this.whiteKing = new int[]{movePieceToRow, movePieceToCol};
+                    whiteKing = new int[]{movePieceToRow, movePieceToCol};
                     kingMovedWhite = true;
                 }
                 
                 if (pieceToMove instanceof King && pieceToMove.getColor() == 'b') {
-                    this.blackKing = new int[]{movePieceToRow, movePieceToCol};
+                    blackKing = new int[]{movePieceToRow, movePieceToCol};
                     kingMovedBlacked = true;
                 }
 
@@ -121,8 +147,13 @@ public class CheckLegalMoves {
                 currentGamePositionTiles[piecePositionNowRow][piecePositionNowCol].removePiece();
                 currentGamePositionTiles[movePieceToRow][movePieceToCol].setPiece(pieceToMove);
                 
-                //Updates the king position 
-                setKingPositionForPlayerToMove();
+                //Updates the king position
+                if (colorToMove.getColor() == 'w') {
+                    kingLocationPlayerToMove = whiteKing;
+                }
+                 else {
+                    kingLocationPlayerToMove = blackKing;
+                }
 
                 HashMap<int[], ArrayList<int[]>> legalMovesOppositeColor = populateAllMoves(colorNotMoving, currentGamePositionTiles);
 
@@ -148,7 +179,7 @@ public class CheckLegalMoves {
 
                                 //Checks if rigth castling for white is legal 
                                 if (checkForSameCoordinates(pieceWillMoveTo, this.whiteKingMoveCastlingRigth)) {
-                                    if (checkForSameCoordinates(oneMoveForOppositePiece, this.originalKingLocationPlayerToMove)) { //examines if the king is already in check
+                                    if (checkForSameCoordinates(oneMoveForOppositePiece, originalKingLocationPlayerToMove)) { //examines if the king is already in check
                                         movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
                                     }
                                     else if (checkForSameCoordinates(oneMoveForOppositePiece, this.whiteCastlingSkippedTileRigth)) { //examines if the tile that the king skips/moves over is check
@@ -163,7 +194,7 @@ public class CheckLegalMoves {
                                 }
                                 //Checks if left castling for white is legal 
                                 else if (checkForSameCoordinates(pieceWillMoveTo, this.whiteKingMoveCastlingLeft)) {         
-                                    if (checkForSameCoordinates(oneMoveForOppositePiece, this.originalKingLocationPlayerToMove)) {
+                                    if (checkForSameCoordinates(oneMoveForOppositePiece, originalKingLocationPlayerToMove)) {
                                         movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
                                     }
                                     else if (checkForSameCoordinates(oneMoveForOppositePiece, this.whiteCastlingSkippedTileLeft)) {
@@ -180,7 +211,7 @@ public class CheckLegalMoves {
                                 
                                 //Checks if rigth castling for black is legal 
                                 if (checkForSameCoordinates(pieceWillMoveTo, this.blackKingMoveCastlingRigth)) {
-                                    if (checkForSameCoordinates(oneMoveForOppositePiece, this.originalKingLocationPlayerToMove)) {
+                                    if (checkForSameCoordinates(oneMoveForOppositePiece, originalKingLocationPlayerToMove)) {
                                         movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
                                     }
                                     else if (checkForSameCoordinates(oneMoveForOppositePiece, this.blackCastlingSkippedTileRigth)) {
@@ -195,7 +226,7 @@ public class CheckLegalMoves {
                                 }
                                 //Checks if left castling for black is legal 
                                 else if (checkForSameCoordinates(pieceWillMoveTo, this.blackKingMoveCastlingLeft)) {
-                                    if (checkForSameCoordinates(oneMoveForOppositePiece, this.originalKingLocationPlayerToMove)) {
+                                    if (checkForSameCoordinates(oneMoveForOppositePiece, originalKingLocationPlayerToMove)) {
                                         movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
                                     }
                                     else if (checkForSameCoordinates(oneMoveForOppositePiece, this.blackCastlingSkippedTileLeft)) {
@@ -233,10 +264,10 @@ public class CheckLegalMoves {
 
                 //Reset King field if king moved 
                 if (kingMovedWhite) {
-                    this.whiteKing = new int[]{piecePositionNowRow, piecePositionNowCol};
+                    whiteKing = new int[]{piecePositionNowRow, piecePositionNowCol};
                 }
                 if (kingMovedBlacked) {
-                     this.blackKing = new int[]{piecePositionNowRow, piecePositionNowCol};
+                    blackKing = new int[]{piecePositionNowRow, piecePositionNowCol};
                 }
                 
                 indexForMoveToRemove ++;
@@ -254,8 +285,7 @@ public class CheckLegalMoves {
         }
         return false;
     }
-
-
+    
     //TODO: Skal vel fjernes herfra  
     private void validationOfKings(Tile[][] currentGamePositionTiles) {
 
@@ -298,7 +328,7 @@ public class CheckLegalMoves {
         // }
     }
 
-    HashMap<int[], ArrayList<int[]>> CheckforCheckMateAndPat (Tile[][] currentGamePositionTiles) {
+    public HashMap<int[], ArrayList<int[]>> checkforCheckMateAndPat (Tile[][] currentGamePositionTiles) {
 
         //TODO: se mer på dette, kongene kan ikke være inntill hverandre kanskje, sjekke at max en spiller er i sjakk, sjekke at pawns ikke står feil, hvis kongen ikke står på start feltet må den ha flyttet på seg, samme med bonde og tårn!?
         // validationOfKings(currentGamePositionTiles);
@@ -308,8 +338,29 @@ public class CheckLegalMoves {
         boolean kingCanBetaken = false;
         boolean notGameOver = false;
 
-        setKingPositionForPlayerToMove();
-    
+        int[] whiteKing = new int[]{};
+        int[] blackKing = new int[]{};
+
+        for (Tile[] tileRow : currentGamePositionTiles) {
+            for (Tile tile: tileRow) {
+                if (tile.getPiece() instanceof King && ((King)tile.getPiece()).getColor() == 'w') {
+                    whiteKing = new int[]{tile.getRow(), tile.getCol()};
+                }
+                else if (tile.getPiece() instanceof King && ((King)tile.getPiece()).getColor() == 'b') {
+                    blackKing = new int[]{tile.getRow(), tile.getCol()};
+                }
+            }
+        }
+
+        int[] kingLocationPlayerToMove;
+
+        if (colorToMove.getColor() == 'w') {
+            kingLocationPlayerToMove = whiteKing;
+        }
+        else {
+            kingLocationPlayerToMove = blackKing;
+        }
+
         for (int[] piecePlayerToMove : legalMoves.keySet()) {
             if (notGameOver) {
                 break;
@@ -372,20 +423,6 @@ public class CheckLegalMoves {
         }
     }
 
-    private void setKingPositions(Tile[][] currentGamePositionTiles) {
-
-        for (Tile[] tileRow : currentGamePositionTiles) {
-            for (Tile tile: tileRow) {
-                if (tile.getPiece() instanceof King && ((King)tile.getPiece()).getColor() == 'w') {
-                    this.whiteKing = new int[]{tile.getRow(), tile.getCol()};
-                }
-                else if (tile.getPiece() instanceof King && ((King)tile.getPiece()).getColor() == 'b') {
-                    this.blackKing = new int[]{tile.getRow(), tile.getCol()};
-                }
-            }
-        }
-    }
-
     private void setPlayerToMove () {
         if (moveNumber % 2 == 0) {
             this.colorToMove = whiteMovement;
@@ -397,23 +434,23 @@ public class CheckLegalMoves {
         }
     }
 
-    private void setOriginalKingLocationForPlayerToMove () {
-        if (colorToMove.getColor() == 'w') {
-            this.originalKingLocationPlayerToMove = new int[]{0, 4};
-        }
-        else {
-            this.originalKingLocationPlayerToMove = new int[]{7, 4};
-        }
-    }
+    // private void setOriginalKingLocationForPlayerToMove () {
+    //     if (colorToMove.getColor() == 'w') {
+    //         this.originalKingLocationPlayerToMove = new int[]{0, 4};
+    //     }
+    //     else {
+    //         this.originalKingLocationPlayerToMove = new int[]{7, 4};
+    //     }
+    // }
 
-    private void setKingPositionForPlayerToMove() {
-        if (colorToMove.getColor() == 'w') {
-            this.kingLocationPlayerToMove = this.whiteKing;
-        }
-        else {
-            this.kingLocationPlayerToMove = this.blackKing;
-        }
-    }
+    // private void setKingPositionForPlayerToMove() {
+    //     if (colorToMove.getColor() == 'w') {
+    //         this.kingLocationPlayerToMove = this.whiteKing;
+    //     }
+    //     else {
+    //         this.kingLocationPlayerToMove = this.blackKing;
+    //     }
+    // }
 
 //Er vell også mulig å lage en form for Hashmap f.eks.
 

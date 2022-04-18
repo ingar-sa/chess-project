@@ -13,6 +13,7 @@
 - se på tekst som skal dukke opp 
 - se på brikkene dekker hele bildet, nedskalere 
 - bytte ut "" med null?
+- Lagre noe annet enn spilltilstand og refere til begrensninger i dokumentasjonen
 
 - Bytte ut hvordan sirkler fjernes til Observable list, som fjerner alle endringer?
 - Spørre om lagring av filer, hvorfor ingen execptions av filewriter

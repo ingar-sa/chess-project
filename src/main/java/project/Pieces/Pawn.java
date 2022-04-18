@@ -18,19 +18,15 @@ public class Pawn extends Piece {
     }
 
     public void setMoveNumberEnPassant(int moveNumberEnPassant) {
-        if (moveNumberEnPassant >= 0) {
+        if (moveNumberEnPassant >= 0) 
             this.moveNumberEnPassant = moveNumberEnPassant;
-        } 
-        else {
+        else 
             throw new IllegalArgumentException("The value must be zero or positive, but was " + moveNumberEnPassant);
-        }
+        
     }
 
     public int getMoveNumberEnPassant() {
          return this.moveNumberEnPassant;
     }
 
-    public static void main(String[] args) {
-        
-    }
 }

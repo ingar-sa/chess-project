@@ -11,11 +11,15 @@ public abstract class Piece implements Serializable {
 
     protected Piece (String name,  char color, char spriteType) {
         this.name = name;
-        this.color = color; //Add verification for correct type
-        this.spriteId = color + "" + spriteType;
+        if (color == 'w' || color == 'b') 
+            this.color = color; //Add verification for correct type
+        else
+            throw new IllegalArgumentException("Color must be w or b");
+        
+        //spriteType is never given by someone creating a Piece object. The specific piece class's constructor
+        //only takes in name and color, and passes it's own spriteType to the Piece constructor.
+        this.spriteId = color + "" + spriteType; 
     }
-
-    //TODO: skriv valideringmetode av konstruktør og evetuelle settere!
 
     public String getSpriteId() {
         return this.spriteId;

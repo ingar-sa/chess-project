@@ -1,6 +1,5 @@
 package project.Files;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import project.Board.Tile;

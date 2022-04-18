@@ -46,6 +46,9 @@ public class ChessController implements Serializable {
     private Button promotePawn;
 
     @FXML
+    private Button resetGame;
+
+    @FXML
     private TextField saveNameField;
 
     @FXML
@@ -96,6 +99,16 @@ public class ChessController implements Serializable {
             }
         }
     }
+
+    @FXML
+    private void placeSprites() {
+        for (String[] tileInfo : game) {
+            ImageView tileView = (ImageView)sprites.lookup("#" + tileInfo[0]);
+            Image image = (tileInfo[1].equals("")) ? null : new Image(spritesFilePath + tileInfo[1] + ".png");
+            tileView.setImage(image);
+        }        
+    }
+
 
     private void drawCirclesForLegalMoves(ArrayList<String> legalMovesStrings) {
         for (String legalMove : legalMovesStrings) {
@@ -154,7 +167,7 @@ public class ChessController implements Serializable {
     }
 
     @FXML
-    private void testClick (MouseEvent event) {
+    private void clickedOnPiece (MouseEvent event) {
 
         if (isPawnPromoted) {
             messageDisplay.setText("");
@@ -295,7 +308,7 @@ public class ChessController implements Serializable {
     }
 
     @FXML
-    public void pawnPromotion() {
+    private void pawnPromotion() {
 
         messageDisplay.setText("");
 
@@ -341,9 +354,8 @@ public class ChessController implements Serializable {
         //this.sprites.getChildren().remove(promotionText);
         isGameOver();
     }
-
     @FXML
-    public void saveGame() {
+    private void saveGame() {
 
         messageDisplay.setText("");
 
@@ -361,7 +373,7 @@ public class ChessController implements Serializable {
             return;
         }
 
-        if (gameIsOver) {
+        if (this.gameIsOver) {
             messageDisplay.setText("Cant save a game that is over!");
             return;
         }
@@ -377,10 +389,11 @@ public class ChessController implements Serializable {
     }
 
     @FXML
-    public void loadGame() {
+    private void loadGame() {
 
         String fileName = loadNameField.getText();
         String saveGameString = new String();
+        this.loadNameField.setText("");
 
         try {
             saveGameString = saveBoardState.loadGame(fileName);
@@ -395,7 +408,7 @@ public class ChessController implements Serializable {
         }
         catch(IllegalArgumentException e) {
             this.pieceHasBeenChosen = false;
-            messageDisplay.setText("The formatting for the file is wrong!");
+            messageDisplay.setText("The formatting for the file is wrong or the game is over (press reset)");
             return;
         }
 
@@ -409,21 +422,18 @@ public class ChessController implements Serializable {
     }
 
     @FXML
-    private void placeSprites() {
-        for (String[] tileInfo : game) {
-            ImageView tileView = (ImageView)sprites.lookup("#" + tileInfo[0]);
-            Image image = (tileInfo[1].equals("")) ? null : new Image(spritesFilePath + tileInfo[1] + ".png");
-            tileView.setImage(image);
-        }        
+    private void resetGame() {
+        this.game = new Game();
+        this.gameIsOver = false;
+        placeSprites();
+        colorTiles();
     }
 
     @FXML
     private void initialize()
-    {   
-        this.game = new Game();
-        this.saveBoardState= new SaveBoardState();
-        placeSprites();
-        colorTiles();
+    {    
+        resetGame();
+        this.saveBoardState = new SaveBoardState();
     }
 
 

@@ -26,7 +26,7 @@ public class Testy {
     public static void main(String[] args) {
         Testy t = new Testy();
         t.test();
-        Tile tile = new Tile(2, 2, 'w');
+        Tile tile = new Tile(2, 2);
         Pawn pawn = new Pawn("hei", 'w');
         tile.setPiece(pawn);
 

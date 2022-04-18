@@ -59,7 +59,7 @@ public class Game implements Serializable, Iterable<String[]> {
         makeBoard();
         placePieces();
         this.checkLegalMoves = new CheckLegalMoves(); 
-        this.allLegalMovesAfterControl = checkLegalMoves.CheckforCheckMateAndPat(this.getBoardDeepCopyUsingSerialization()); //allLegalMovesAfterControl is initialized with whites available moves
+        this.allLegalMovesAfterControl = checkLegalMoves.checkforCheckMateAndPat(this.getBoardDeepCopyUsingSerialization()); //allLegalMovesAfterControl is initialized with whites available moves
         this.whiteMovement = new MovementPatterns('w');
         this.blackMovement = new MovementPatterns('b');
     }
@@ -107,7 +107,7 @@ public class Game implements Serializable, Iterable<String[]> {
 
                 tileColor = (col % 2 == 0) ? firstColor : secondColor;
 
-                Tile tile = new Tile(row, col, tileColor);
+                Tile tile = new Tile(row, col);
                 boardTiles[row][col] = tile;
             }
         }
@@ -249,7 +249,6 @@ public class Game implements Serializable, Iterable<String[]> {
 		}
 		catch(Exception e)
 		{
-			//TODO: Burde vell endre dette
             return null;
 		}	
 	}
@@ -498,7 +497,7 @@ public class Game implements Serializable, Iterable<String[]> {
 
         //allLegalMovesAfterControl is updated with the opposite player's moves here, as opposed to updating it 
         //during the next call of getLegalMoves. This allows us to use getGameStatus() to check for a mate or pat
-        this.allLegalMovesAfterControl = checkLegalMoves.CheckforCheckMateAndPat(this.getBoardDeepCopyUsingSerialization());
+        this.allLegalMovesAfterControl = checkLegalMoves.checkforCheckMateAndPat(this.getBoardDeepCopyUsingSerialization());
         
         this.updatedGameCastlingEnpassent = true;
         this.pieceReadyToMove = true;
@@ -526,7 +525,7 @@ public class Game implements Serializable, Iterable<String[]> {
     public void changePieceOnTile(int row, int col, char pieceType, char color, boolean pawnPromotion, int... pawnRookKingInfo) {
 
         if (this.gameIsOver) {
-            throw new IllegalStateException("The game is over!")
+            throw new IllegalStateException("The game is over!");
         } 
 
         validationOfCoordinates(row, col);
@@ -700,10 +699,21 @@ public class Game implements Serializable, Iterable<String[]> {
             checkLegalMoves.setMoveNumber(currentMoveNumber);
             throw new IllegalArgumentException("The String has wrong formatting, no change is made!");
         }
+        catch (IllegalStateException e) {
+            this.boardTiles = currentGamePosition;
+            checkLegalMoves.setMoveNumber(currentMoveNumber);
+            throw new IllegalArgumentException("The String has wrong formatting, no change is made!");
+        }
+        catch(Exception e) {
+            this.boardTiles = currentGamePosition;
+            checkLegalMoves.setMoveNumber(currentMoveNumber);
+            throw new IllegalArgumentException("The String has wrong formatting, no change is made!");
+        }
         finally {
             this.loadingGame = false;
         }
 
+        //TODO: Spørre om dette er en ok måte.
         try {
             validationOfGameState();
         }
@@ -714,7 +724,7 @@ public class Game implements Serializable, Iterable<String[]> {
         }
     
         //This is needed to update allLegalMovesAfterControl attribute
-        this.allLegalMovesAfterControl = checkLegalMoves.CheckforCheckMateAndPat(this.getBoardDeepCopyUsingSerialization());
+        this.allLegalMovesAfterControl = checkLegalMoves.checkforCheckMateAndPat(this.getBoardDeepCopyUsingSerialization());
 
         printBoard();
     }
@@ -732,7 +742,7 @@ public class Game implements Serializable, Iterable<String[]> {
         ArrayList<Integer> pawnMoveNumbers = new ArrayList<Integer>();
         
 
-        for (Tile[] row : boardTiles) {
+        for (Tile[] row : this.boardTiles) {
             rowCount++;
             for (Tile tile : row) {
 
@@ -744,7 +754,6 @@ public class Game implements Serializable, Iterable<String[]> {
                         blackKingCount++;
                         blackKingLocation = chosenPieceCoordinates;
                         if ((!(checkForSameCoordinates(this.orginalBlackKingLocation, chosenPieceCoordinates))) && chosenPiece.getHasMoved() == false) {
-                            System.out.println("BK");
                             throw new IllegalArgumentException("The Black king has moved, but the input says it has not!");
                         }
 
@@ -753,7 +762,6 @@ public class Game implements Serializable, Iterable<String[]> {
                         whiteKingCount++;
                         whiteKingLocation = chosenPieceCoordinates;
                         if ((!(checkForSameCoordinates(this.orginalWhiteKingLocation, chosenPieceCoordinates))) && chosenPiece.getHasMoved() == false) {
-                            System.out.println("WK");
                             throw new IllegalArgumentException("The White king has moved, but the input says it has not!");
                         }
                     }
@@ -763,7 +771,6 @@ public class Game implements Serializable, Iterable<String[]> {
                     if (chosenPiece.getColor() == 'w') {
                         if (!(checkForSameCoordinates(chosenPieceCoordinates, this.whiteRookLeftStartTile) || checkForSameCoordinates(chosenPieceCoordinates, this.whiteRookRightStartTile))) {
                             if (chosenPiece.getHasMoved() == false) {
-                                System.out.println("WR");
                                 throw new IllegalArgumentException("The white rook has moved, but input says it has not!");
                             }
                         }
@@ -771,7 +778,6 @@ public class Game implements Serializable, Iterable<String[]> {
                     else if (chosenPiece.getColor() == 'b') {
                         if (!(checkForSameCoordinates(chosenPieceCoordinates, this.blackRookLeftStartTile) || checkForSameCoordinates(chosenPieceCoordinates, this.blackRookRightStartTile))) {
                             if (chosenPiece.getHasMoved() == false) {
-                                System.out.println("BR");
                                 throw new IllegalArgumentException("The black rook has moved, but input says it has not!");
                             }
                         }
@@ -850,7 +856,7 @@ public class Game implements Serializable, Iterable<String[]> {
 
         boolean playerNotToMoveInCheck = false;
 
-        //If setPplayerMove returns true - white is moving
+        // If setPlayerMove returns true - white is moving
         if (setPlayerToMove()) {
             HashMap<int[], ArrayList<int[]>> allMovesWhite = checkLegalMoves.populateAllMoves(whiteMovement, this.getBoardDeepCopyUsingSerialization());
             Collection<ArrayList<int[]>> onlyValuesAllMovesWhite = allMovesWhite.values();
