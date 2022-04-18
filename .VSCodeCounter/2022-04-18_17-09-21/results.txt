@@ -1,0 +1,78 @@
+Date : 2022-04-18 17:09:21
+Directory : c:\School\oop_project\TDT4100_prosjekt_ingara
+Total : 35 files,  3209 codes, 405 comments, 966 blanks, all 4580 lines
+
+Languages
++--------------------+------------+------------+------------+------------+------------+
+| language           | files      | code       | comment    | blank      | total      |
++--------------------+------------+------------+------------+------------+------------+
+| Java               |         25 |      2,426 |        334 |        816 |      3,576 |
+| XML                |          3 |        541 |          1 |         16 |        558 |
+| Generic Pseudocode |          6 |        182 |         70 |        105 |        357 |
+| Markdown           |          1 |         60 |          0 |         29 |         89 |
++--------------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                     | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                        |         35 |      3,209 |        405 |        966 |      4,580 |
+| src                                                                                                      |         33 |      3,102 |        404 |        927 |      4,433 |
+| src\main                                                                                                 |         32 |      3,077 |        404 |        918 |      4,399 |
+| src\main\java                                                                                            |         30 |      2,583 |        404 |        912 |      3,899 |
+| src\main\java\exampleproject                                                                             |          3 |         53 |         22 |         19 |         94 |
+| src\main\java\project                                                                                    |         26 |      2,524 |        382 |        892 |      3,798 |
+| src\main\java\project\Board                                                                              |          2 |        188 |          3 |         58 |        249 |
+| src\main\java\project\Files                                                                              |          2 |         67 |         23 |         36 |        126 |
+| src\main\java\project\Movement                                                                           |          3 |      1,390 |        264 |        464 |      2,118 |
+| src\main\java\project\Pieces                                                                             |          7 |         86 |          2 |         42 |        130 |
+| src\main\java\project\pseudocode                                                                         |          6 |        182 |         70 |        105 |        357 |
+| src\main\resources                                                                                       |          2 |        494 |          0 |          6 |        500 |
+| src\main\resources\exampleproject                                                                        |          1 |         18 |          0 |          3 |         21 |
+| src\main\resources\project                                                                               |          1 |        476 |          0 |          3 |        479 |
+| src\test                                                                                                 |          1 |         25 |          0 |          9 |         34 |
+| src\test\java                                                                                            |          1 |         25 |          0 |          9 |         34 |
+| src\test\java\exampleproject                                                                             |          1 |         25 |          0 |          9 |         34 |
++----------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| filename                                                                                                 | language           | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| c:\School\oop_project\TDT4100_prosjekt_ingara\README.md                                                  | Markdown           |         60 |          0 |         29 |         89 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\pom.xml                                                    | XML                |         47 |          1 |         10 |         58 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\exampleproject\Calculator.java               | Java               |         10 |         22 |          4 |         36 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\exampleproject\ExampleProjectApp.java        | Java               |         17 |          0 |          7 |         24 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\exampleproject\ExampleProjectController.java | Java               |         26 |          0 |          8 |         34 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\module-info.java                             | Java               |          6 |          0 |          1 |          7 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\BoardTileIterator.java               | Java               |         27 |          4 |         13 |         44 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Board\Chessboard.java                | Java               |        137 |          3 |         38 |        178 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Board\Tile.java                      | Java               |         51 |          0 |         20 |         71 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\ChessApp.java                        | Java               |         18 |          1 |          8 |         27 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\ChessController.java                 | Java               |        340 |         11 |         93 |        444 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Consts.java                          | Java               |         11 |          1 |          4 |         16 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Files\ISaveHandler.java              | Java               |          7 |          0 |          7 |         14 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Files\SaveBoardState.java            | Java               |         60 |         23 |         29 |        112 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Movement\CheckLegalMoves.java        | Java               |        399 |         73 |        136 |        608 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Movement\Game.java                   | Java               |        719 |         64 |        188 |        971 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Movement\MovementPatterns.java       | Java               |        272 |        127 |        140 |        539 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Pieces\Bishop.java                   | Java               |          6 |          0 |          5 |         11 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Pieces\King.java                     | Java               |          7 |          0 |          4 |         11 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Pieces\Knight.java                   | Java               |          6 |          0 |          2 |          8 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Pieces\Pawn.java                     | Java               |         23 |          0 |         10 |         33 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Pieces\Piece.java                    | Java               |         31 |          2 |         14 |         47 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Pieces\Queen.java                    | Java               |          7 |          0 |          4 |         11 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Pieces\Rook.java                     | Java               |          6 |          0 |          3 |          9 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\TerminalChess.java                   | Java               |        186 |          3 |         58 |        247 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Testy.java                           | Java               |         29 |          0 |         11 |         40 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\pseudocode\PlayerMove.pseudo         | Generic Pseudocode |         92 |          9 |         57 |        158 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\pseudocode\controller.pseudo         | Generic Pseudocode |         32 |         61 |         21 |        114 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\pseudocode\dokumentasjon.pseudo      | Generic Pseudocode |          0 |          0 |          1 |          1 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\pseudocode\notater.pseudo            | Generic Pseudocode |         11 |          0 |         11 |         22 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\pseudocode\savegame.pseudo           | Generic Pseudocode |         19 |          0 |         12 |         31 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\pseudocode\thingsToRemember.pseudo   | Generic Pseudocode |         28 |          0 |          3 |         31 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\resources\exampleproject\App.fxml                 | XML                |         18 |          0 |          3 |         21 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\resources\project\Chessboard.fxml                 | XML                |        476 |          0 |          3 |        479 |
+| c:\School\oop_project\TDT4100_prosjekt_ingara\src\test\java\exampleproject\CalculatorTest.java           | Java               |         25 |          0 |          9 |         34 |
+| Total                                                                                                    |                    |      3,209 |        405 |        966 |      4,580 |
++----------------------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
