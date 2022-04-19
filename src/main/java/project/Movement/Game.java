@@ -40,7 +40,6 @@ public class Game implements Serializable, Iterable<String[]> {
     private HashMap<int[], ArrayList<int[]>>     allLegalMovesAfterControl; 
     private MovementPatterns                     whiteMovement;
     private MovementPatterns                     blackMovement;
-    private boolean                              loadingGame = false;
     private boolean                              gameIsOver = false;
     private boolean                              updatedGameCastlingEnpassent = true;
     private boolean                              pieceReadyToMove = true;
@@ -277,7 +276,7 @@ public class Game implements Serializable, Iterable<String[]> {
         int[]            desiredMove              = new int[]{ToRow, ToCol};          
         ArrayList<int[]> legalMovesForPieceToMove = new ArrayList<int[]>();
         Set<int[]>       allPiecesThatCanMove     = this.allLegalMovesAfterControl.keySet();
-        boolean legalPiece = false;
+        boolean          legalPiece               = false;
 
 
 
@@ -708,7 +707,7 @@ public class Game implements Serializable, Iterable<String[]> {
 
     public void loadedGamePiecesPosition(String saveGameString) {
 
-        //Saves the orginal game State if something is wrong
+        //Saves the orginal game state if something is wrong
         Tile[][] currentGamePosition = this.getBoardDeepCopyUsingSerialization();
         int currentMoveNumber = checkLegalMoves.getMoveNumber();
 
@@ -766,13 +765,14 @@ public class Game implements Serializable, Iterable<String[]> {
             validationOfGameState(boardTiles);
         }
         catch (IllegalArgumentException e) {
-            //resets the game if something about the game state was wrong
+
+            //resets the game if something about the game state was wrong, e.g, pawns in row 1 and 8. 
             this.boardTiles = currentGamePosition;
             checkLegalMoves.setMoveNumber(currentMoveNumber);
             throw new IllegalArgumentException("This is not a legal chess position, no change was made!");
         }
     
-        //Reset attribues after the game is loaded
+        //Reset attributes after the game is loaded
         this.gameIsOver = false;
         updatedGameCastlingEnpassent = true;
         pieceReadyToMove = true;
@@ -782,13 +782,15 @@ public class Game implements Serializable, Iterable<String[]> {
         printBoard();
     }
 
-    // Skrive teksten bedre her!
     // This method validates that the loaded game position is valid according to the logic used to play the game.
-    // From this you can write your own chess positions as strings.
-    // This method will allow illegal chess positions, if they dont break the logic used in the program.
-    // E.g. the king can start at a chosen position, but there needs to be 1 white king and 1 black king. 
+    // Validating the string directly is much harder, therefore this method checks that game is in a legal state according to the game logic after loading a game.
+    // This method will allow illegal chess positions, if they dont break the logic used in the program, and from the loaded position it will follow normal chess rules.
+    // Exampels of positions that are allowed:
+    // The king can start at a chosen position, but there needs to be 1 white king and 1 black king, and the player not Moving cant be in check. 
     // Pawns cant be placed at row 1 and 8.
-    // And some other requirements that could/will break the game logic are checked.   
+    // And some other requirements that could/will break the game logic are checked.
+    // From this you can write your own chess positions as strings and make custom starts that follow normal chess rules from that point. 
+
     private void validationOfGameState(Tile[][] currentGamePosition) {
 
         int[] whiteKingLocation = new int[]{};
@@ -954,7 +956,7 @@ public class Game implements Serializable, Iterable<String[]> {
         return false;
     }
 
-    private boolean setPlayerToMove () { //Returns true if white is moving and false if black is moving 
+    private boolean setPlayerToMove() { //Returns true if white is moving and false if black is moving 
 
         int moveNumber = checkLegalMoves.getMoveNumber();
         if (moveNumber % 2 == 0) {
@@ -965,6 +967,7 @@ public class Game implements Serializable, Iterable<String[]> {
 
     @Override
     public BoardTileIterator iterator() {
+
         return new BoardTileIterator(this);
     } 
 
