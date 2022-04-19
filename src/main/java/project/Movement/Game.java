@@ -712,6 +712,73 @@ public class Game implements Serializable, Iterable<String[]> {
         return false; 
     }
 
+    private boolean validationOfString (String saveGameString) {
+
+        if (saveGameString.length() == 0) {
+            return false;
+        }
+
+        String[] tileData = saveGameString.split("-");
+
+        if (tileData.length != 65) {
+            return false;
+        }
+
+        if (!(tileData[64].matches("^[0-9]+$"))) {
+            return false;
+        }
+
+        List<String> listWithoutTurnNumber = new ArrayList<String>(Arrays.asList(tileData));
+        listWithoutTurnNumber.remove(64);
+
+        for (String string : listWithoutTurnNumber) {
+            if (   string.length() == 0 
+                || string.length() == 1   
+                || string.length() == 3 
+                || string.length() == 5 
+                || string.length() == 6 
+                || string.length() == 7 ) 
+            {
+                return false;    
+            }
+            else if (string.length() == 2) {
+                if (!(string.matches("00") || string.matches("[wb][KQB]"))) {
+                    return false;
+                }
+            }
+            else if (string.length() == 4) {
+                if (!(string.matches("[wb][RX][=][01]"))) {
+                    return false;
+                }
+            }
+            else if (string.length() == 8) {
+                if (!(string.matches("[wb][P][=][01][=][01][=][0-9]+$"))) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public void loadGameFromString(String saveGameString) {
+        
+        try {
+            
+            String[] tileData = saveGameString.split("-");
+
+
+            int turnNumber = Integer.parseInt(tileData[64]);
+            checkLegalMoves.setMoveNumber(turnNumber);
+        }
+        catch (NullPointerException e) {
+
+        } 
+        catch (IllegalArgumentException e) {
+
+        }      
+    }
+
     //wR=0-wK-wB-wQ-wX=0-wB-wK-wR=0-wP=0=0=0-wP=0=0=0-00-wP=0=0=0-00-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-00-00-00-00-00-00-00-00-00-00-00-wP=1=1=0-bP=1=0=3-00-00-00-00-wP=1=0=4-bP=1=1=5-00-00-00-00-00-00-00-00-00-00-00-00-bP=0=0=0-bP=0=0=0-bP=0=0=0-00-bP=0=0=0-00-bP=0=0=0-bP=0=0=0-bR=0-bK-bB-bQ-bX=0-bB-bK-bR=0-6
     public void loadedGamePiecesPosition(String saveGameString) {
 
@@ -720,6 +787,10 @@ public class Game implements Serializable, Iterable<String[]> {
 
         //TODO: Burde nok endre dette så den sjekker strengen
         try { 
+
+            if (validationOfString(saveGameString)) {
+                System.out.println("yoyo");
+            }
 
             String[] tileData = saveGameString.split("-");
             int turnNumber = Integer.parseInt(tileData[64]);
