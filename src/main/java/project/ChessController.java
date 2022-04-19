@@ -251,7 +251,7 @@ public class ChessController implements Serializable {
             castling(castlingMove);
             
             //Retrieves the game state. 0 represents pat, 1 check mate for black and 2 is check mate for white 
-            game.updateGameState(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol);
+            game.moveChosenPiece(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol);
             chosenPieceImageView.setImage(null);
             moveToImageView.setImage(new Image(chosenPieceSpriteUrl));
             
@@ -314,10 +314,12 @@ public class ChessController implements Serializable {
 
         if (pawnPromotion.equals("")) {
             messageDisplay.setText("You have no pawns to promote!");
+            promotionName.setText("");
             return;
         }
 
         String userInput = promotionName.getText().toLowerCase();
+        promotionName.setText("");
         ImageView pawnImageView = (ImageView)sprites.lookup("#" + this.pawnPromotion);
         char color = (pawnPromotion.charAt(0) == '0') ? 'b' : 'w';
         char pieceType = '\0';
@@ -342,7 +344,8 @@ public class ChessController implements Serializable {
 
         int tileRow = 7 - GridPane.getRowIndex(pawnImageView);
         int tileCol = GridPane.getColumnIndex(pawnImageView);
-        game.changePieceOnTile(tileRow, tileCol, pieceType, color, true);
+        game.promotePawn(tileRow, tileCol, pieceType, color);
+        // game.changePieceOnTile(tileRow, tileCol, pieceType, color, true);
 
         pawnImageView.setImage(new Image(spritesFilePath + color + pieceType + ".png"));
         promotionName.setText("");
@@ -395,6 +398,11 @@ public class ChessController implements Serializable {
         String saveGameString = new String();
         this.loadNameField.setText("");
 
+        if (!(this.pawnPromotion.equals(""))) {
+            messageDisplay.setText("Promote pawn before loading game!");
+            return;
+        }
+
         try {
             saveGameString = saveBoardState.loadGame(fileName);
         }
@@ -425,6 +433,10 @@ public class ChessController implements Serializable {
     private void resetGame() {
         this.game = new Game();
         this.gameIsOver = false;
+        this.pawnPromotion = "";
+        this.promotionName.setText("");
+        this.messageDisplay.setText("");
+        this.isPawnPromoted = false;
         placeSprites();
         colorTiles();
     }

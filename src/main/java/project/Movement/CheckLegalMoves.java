@@ -402,6 +402,7 @@ public class CheckLegalMoves {
         return legalMoves;
     }
 
+    //TODO: Må vi validere noe tilstand her?
     public void increaseMoveNumber () {
         this.moveNumber ++;
     }

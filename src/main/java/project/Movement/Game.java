@@ -2,6 +2,7 @@ package project.Movement;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -43,6 +44,7 @@ public class Game implements Serializable, Iterable<String[]> {
     private boolean                              gameIsOver = false;
     private boolean                              updatedGameCastlingEnpassent = true;
     private boolean                              pieceReadyToMove = true;
+    private boolean                              promotionPawn = false;
     private int[]                                legalMoveCoordinatesIfCastlingOrEnPassent = new int[]{};         
 
     private final int[] whiteRookRightStartTile  = new int[]{0, 7};
@@ -83,7 +85,7 @@ public class Game implements Serializable, Iterable<String[]> {
     
     //TODO: error handling for parameters
     public String[] getPieceInfoFromTile(int row, int col) {
-        Tile tile = boardTiles[row][col];
+        Tile tile = this.boardTiles[row][col];
         return (tile.isOccupied()) ? new String[] {tile.coordinatesToString(), tile.getPiece().getSpriteId()} 
                                    : new String[] {tile.coordinatesToString(), ""};
     }
@@ -91,24 +93,9 @@ public class Game implements Serializable, Iterable<String[]> {
     private void makeBoard() {
         for (int row = 0; row < 8; ++row) {
             for (int col = 0; col < 8; ++col) {
-                
-                char firstColor;
-                char secondColor; 
-                char tileColor;
-
-                if (row % 2 == 1) {
-                    firstColor = 'w';
-                    secondColor = 'b';
-                } 
-                else {
-                    firstColor = 'b';
-                    secondColor = 'w';
-                }
-
-                tileColor = (col % 2 == 0) ? firstColor : secondColor;
 
                 Tile tile = new Tile(row, col);
-                boardTiles[row][col] = tile;
+                this.boardTiles[row][col] = tile;
             }
         }
     }
@@ -118,17 +105,14 @@ public class Game implements Serializable, Iterable<String[]> {
         
         //White
 
-        for (Tile tile : boardTiles[1]) {
-            tile.setOccupied(true);
+        for (Tile tile : this.boardTiles[1]) {
 
             String name = "wP" + tile.getCol();
             Pawn pawn = new Pawn(name, 'w');
             tile.setPiece(pawn);
         }
         
-        for (Tile tile : boardTiles[0]) {
-            //TODO: se på om hvordan vi håndterer setOccupied
-            tile.setOccupied(true);
+        for (Tile tile : this.boardTiles[0]) {
 
             if (tile.getCol() == 0 || tile.getCol() == 7) {
                 String name = "wR" + tile.getCol();
@@ -161,17 +145,14 @@ public class Game implements Serializable, Iterable<String[]> {
 
         //Black
 
-        for (Tile tile : boardTiles[6]) {
-            tile.setOccupied(true);
+        for (Tile tile : this.boardTiles[6]) {
 
             String name = "bP" + tile.getCol();
             Pawn pawn = new Pawn(name, 'b');
             tile.setPiece(pawn);
             }
 
-        for (Tile tile : boardTiles[7]) {
-            //TODO: se på om hvordan vi håndterer setOccupied
-            tile.setOccupied(true); 
+        for (Tile tile : this.boardTiles[7]) { 
 
             if (tile.getCol() == 0 || tile.getCol() == 7) {
                 String name = "bR" + tile.getCol();
@@ -210,7 +191,7 @@ public class Game implements Serializable, Iterable<String[]> {
             String ofRow = (row) + " ";
             for (int col = 0; col < 8; ++col) {
                 
-                Tile tile = boardTiles[row][col];
+                Tile tile = this.boardTiles[row][col];
                 try {
                     String piece = tile.getPiece().getName();
                     ofRow += "| " + piece + ' ';
@@ -234,6 +215,7 @@ public class Game implements Serializable, Iterable<String[]> {
 
     //https://www.studytonight.com/java-examples/how-to-make-a-deep-copy-of-an-object-in-java
 
+    //Fjerne try catch? - kommer til å krasje uansett, eller legge til sikkerhet der den brukes
     public Tile[][] getBoardDeepCopyUsingSerialization()
 	{
 		try
@@ -247,15 +229,19 @@ public class Game implements Serializable, Iterable<String[]> {
 			
 			return (Tile[][])objectInput.readObject();
 		}
-		catch(Exception e)
-		{
+        catch (IOException e) {
             return null;
-		}	
+        } 
+        catch (ClassNotFoundException e) {
+            return null;
+        }
 	}
 
     public ArrayList<String> getLegalMoves(int row, int col) {
 
-        validationOfCoordinates(row, col);
+        if (!(validationOfCoordinates(row, col))) {
+            throw new IllegalArgumentException("The given coordinates are Illegal! Valid values: 0-7");
+        }
 
         int[]            tilePieceToMoveIsOn      = boardTiles[row][col].getCoordinates();            
         ArrayList<int[]> legalMovesForPieceToMove = new ArrayList<int[]>();
@@ -284,17 +270,24 @@ public class Game implements Serializable, Iterable<String[]> {
     }
 
     //Validates that the desired move is legal
-    private void validationOfMove (int fromRow, int fromCol, int ToRow, int ToCol) {
+    private boolean validationOfMove (int fromRow, int fromCol, int ToRow, int ToCol) {
 
-        validationOfCoordinates(fromRow, fromCol);
-        validationOfCoordinates(ToRow, ToCol);
+        boolean legalMove = false;
+
+        if (!(validationOfCoordinates(fromRow, fromCol))) {
+            return legalMove;
+        }
+
+        if (!(validationOfCoordinates(ToRow, ToCol))) {
+            return legalMove;
+        }
 
         int[]            desiredPiece             = new int[]{fromRow, fromCol};
         int[]            desiredMove              = new int[]{ToRow, ToCol};          
         ArrayList<int[]> legalMovesForPieceToMove = new ArrayList<int[]>();
         Set<int[]>       allPiecesThatCanMove     = this.allLegalMovesAfterControl.keySet();
         boolean legalPiece = false;
-        boolean legalMove = false;
+
 
 
         for (int[] Piece : allPiecesThatCanMove) {
@@ -312,9 +305,7 @@ public class Game implements Serializable, Iterable<String[]> {
             }
         }
 
-        if (!legalMove) {
-            throw new IllegalArgumentException("The desired move is not legal!");
-        }
+        return legalMove;
     }
 
     public String isMoveEnPassent(int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
@@ -323,7 +314,9 @@ public class Game implements Serializable, Iterable<String[]> {
             throw new IllegalStateException("The game is over, no pieces to move!");
         }
 
-        validationOfMove(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol);
+        if (!(validationOfMove(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol))) {
+            throw new IllegalArgumentException("The move is not legal!");
+        }
 
         //Makes sure you can only move one Piece before you need to update the game state  
         if (this.updatedGameCastlingEnpassent && this.pieceReadyToMove) {
@@ -367,7 +360,9 @@ public class Game implements Serializable, Iterable<String[]> {
             throw new IllegalStateException("The game is over, cant move pieces!");
         }
 
-        validationOfMove(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol);
+        if (!(validationOfMove(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol))) {
+            throw new IllegalArgumentException("The move is Illegal!");
+        }
         
         if (this.updatedGameCastlingEnpassent && this.pieceReadyToMove) {
 
@@ -438,13 +433,15 @@ public class Game implements Serializable, Iterable<String[]> {
     }
     
     //TODO: Error handling for parameters, burde kanskje bytte navn?
-    public void updateGameState(int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
+    public void moveChosenPiece(int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
 
         if (this.gameIsOver) {
             throw new IllegalStateException("The game is over, cant move pieces!");
         }
         
-        validationOfMove(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol);
+        if (!(validationOfMove(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol))) {
+            throw new IllegalArgumentException("The move is illegal!");
+        }
 
         if (this.pieceReadyToMove) {
 
@@ -452,7 +449,7 @@ public class Game implements Serializable, Iterable<String[]> {
                 if (   chosenPieceRow == legalMoveCoordinatesIfCastlingOrEnPassent[0]
                     && chosenPieceCol == legalMoveCoordinatesIfCastlingOrEnPassent[1]
                     && moveToPieceRow == legalMoveCoordinatesIfCastlingOrEnPassent[2]
-                    && moveToPieceCol  == legalMoveCoordinatesIfCastlingOrEnPassent[3]) {
+                    && moveToPieceCol == legalMoveCoordinatesIfCastlingOrEnPassent[3]) {
                         Piece pieceToMove = boardTiles[chosenPieceRow][chosenPieceCol].getPiece();
                         pieceToMove.setHasMoved(true);
         
@@ -479,8 +476,21 @@ public class Game implements Serializable, Iterable<String[]> {
     
         }
         else {
-            throw new IllegalStateException("A piece is already moved, update the game state!");
-        }      
+            throw new IllegalStateException("A piece is already moved, update the game state (checkForGameOver)!");
+        } 
+        
+        for (Tile tile : boardTiles[7]) {
+            if (tile.getPiece() instanceof Pawn) {
+                promotionPawn = true;
+            } 
+        }
+
+        for (Tile tile: boardTiles[0]) {
+            if (tile.getPiece() instanceof Pawn) {
+                promotionPawn = true;
+            }
+        }
+
     }
 
     public int checkForGameOver() {
@@ -489,16 +499,19 @@ public class Game implements Serializable, Iterable<String[]> {
             throw new IllegalStateException("The game is over!");
         }
 
+        if (promotionPawn) {
+            throw new IllegalStateException("Promote pawn before updating the game!");
+        }
+
         if (pieceReadyToMove) {
-            throw new IllegalStateException("Move a piece before updateing the game!");
+            throw new IllegalStateException("Move a piece before updating the game!");
         }
 
         checkLegalMoves.increaseMoveNumber();
 
         //allLegalMovesAfterControl is updated with the opposite player's moves here, as opposed to updating it 
         //during the next call of getLegalMoves. This allows us to use getGameStatus() to check for a mate or pat
-        this.allLegalMovesAfterControl = checkLegalMoves.checkforCheckMateAndPat(this.getBoardDeepCopyUsingSerialization());
-        
+        this.allLegalMovesAfterControl = checkLegalMoves.checkforCheckMateAndPat(this.getBoardDeepCopyUsingSerialization());  
         this.updatedGameCastlingEnpassent = true;
         this.pieceReadyToMove = true;
 
@@ -519,16 +532,94 @@ public class Game implements Serializable, Iterable<String[]> {
         }
     }
 
-    //TODO: Error handling for parameters
-    //Må få inn valideringen av endringen også
-    //Eventuelt putte game of kontrolleren i samme mappe      
-    public void changePieceOnTile(int row, int col, char pieceType, char color, boolean pawnPromotion, int... pawnRookKingInfo) {
+
+    //TODO: This need to be checked for bugs 
+    //TODO: Move out to help methods 
+    public void promotePawn(int row, int col, char pieceType, char color) {
+
+        if (!(validationOfCoordinates(row, col))) {
+            throw new IllegalArgumentException("The given coordinates are Illegal! Valid values: 0-7");
+        }
+
+
+        if (gameIsOver) {
+            throw new IllegalStateException("The game is over!");
+        }
+
+        if (!promotionPawn) {
+            throw new IllegalStateException("No pawn to promote");
+        }
+
+        if (!(color == 'w' || color == 'b')) {
+            throw new IllegalArgumentException("Illegal color for Piece");
+        }  
+
+        if ((row == 7 && color == 'b') || (row == 0 && color == 'w')) {
+            throw new IllegalArgumentException("Wrong color for the piece to be promoted!");
+        }
+
+        int[] inputCoordinates = new int[]{row, col};
+        int[] pawnPromotionCoordinates = new int[]{};
+
+        if (color == 'w') 
+            for (Tile tile : boardTiles[7]) {
+                if (tile.getPiece() instanceof Pawn) {
+                    pawnPromotionCoordinates = tile.getCoordinates();
+                }
+        }
+
+        else if (color == 'b') {
+            for (Tile tile : boardTiles[0]) {
+                if (tile.getPiece() instanceof Pawn) {
+                    pawnPromotionCoordinates = tile.getCoordinates();
+                }
+            }
+        }
+
+        if (pawnPromotionCoordinates.length == 0) {
+            throw new IllegalArgumentException("There are no pawns to promote");
+        } 
+
+        if (!checkForSameCoordinates(pawnPromotionCoordinates, inputCoordinates)) {
+            throw new IllegalArgumentException("There are no pawn to promote at these coordinates!");    
+        }
+
+        String pieceName = color + " " + pieceType;
+        Tile tile = boardTiles[row][col];
+
+        switch (pieceType) {
+            case 'B':
+                tile.setPiece(new Bishop(pieceName, color));
+                promotionPawn = false;
+                break;
+            case 'K':
+                tile.setPiece(new Knight(pieceName, color));
+                promotionPawn = false;
+                break;
+            case 'Q':
+                tile.setPiece(new Queen(pieceName, color));
+                promotionPawn = false;
+                break;
+            case 'R':
+                tile.setPiece(new Rook(pieceName, color));
+                promotionPawn = false;
+                break;
+            default:
+                throw new IllegalArgumentException("Illegal piece Type!");
+        }
+
+
+    } 
+         
+    private void changePieceOnTile(int row, int col, char pieceType, char color, boolean pawnPromotion, int... pawnRookKingInfo) {
 
         if (this.gameIsOver) {
             throw new IllegalStateException("The game is over!");
         } 
 
-        validationOfCoordinates(row, col);
+        if (!(validationOfCoordinates(row, col))) {
+            throw new IllegalArgumentException("The given coordinates are Illegal! Valid values: 0-7");
+        }
         
         if (!(color == 'b' || color == 'w')) {
             throw new IllegalArgumentException("Only black (b) and white (w) color is allowed!");
@@ -589,23 +680,25 @@ public class Game implements Serializable, Iterable<String[]> {
                 throw new IllegalArgumentException("Illegal piece Type!");
         }
 
-        if (!loadingGame) {
-            validationOfGameState();
-        }
-
     } 
 
-    private void validationOfCoordinates(int row, int col) {
+    private boolean validationOfCoordinates(int row, int col) {
 
         if (row > 7 || row < 0) {
-            throw new IllegalArgumentException("The given row is outside the board!");
+            return false;
         }
         if (col > 7 || col < 0) {
-            throw new IllegalArgumentException("The given col is outside the board!");
+            return false;        
         }
+
+        return true;
     }
 
     public boolean allLegalPieces(int moveToPieceRow, int moveToPieceCol) {
+        
+        if (!(validationOfCoordinates(moveToPieceRow, moveToPieceCol))) {
+            throw new IllegalArgumentException("The given coordinates are Illegal! Valid values: 0-7");
+        }
         
         Set<int[]> allPiecesThatCanMove = allLegalMovesAfterControl.keySet();
         int[] moveToPiece = boardTiles[moveToPieceRow][moveToPieceCol].getCoordinates();
@@ -624,7 +717,6 @@ public class Game implements Serializable, Iterable<String[]> {
 
         Tile[][] currentGamePosition = this.getBoardDeepCopyUsingSerialization();
         int currentMoveNumber = checkLegalMoves.getMoveNumber();
-        this.loadingGame = true;
 
         //TODO: Burde nok endre dette så den sjekker strengen
         try { 
@@ -704,18 +796,10 @@ public class Game implements Serializable, Iterable<String[]> {
             checkLegalMoves.setMoveNumber(currentMoveNumber);
             throw new IllegalArgumentException("The String has wrong formatting, no change is made!");
         }
-        catch(Exception e) {
-            this.boardTiles = currentGamePosition;
-            checkLegalMoves.setMoveNumber(currentMoveNumber);
-            throw new IllegalArgumentException("The String has wrong formatting, no change is made!");
-        }
-        finally {
-            this.loadingGame = false;
-        }
 
         //TODO: Spørre om dette er en ok måte.
         try {
-            validationOfGameState();
+            validationOfGameState(boardTiles);
         }
         catch (IllegalArgumentException e) {
             this.boardTiles = currentGamePosition;
@@ -723,16 +807,22 @@ public class Game implements Serializable, Iterable<String[]> {
             throw new IllegalArgumentException("This is not a legal chess position, no change was made!");
         }
     
-        //This is needed to update allLegalMovesAfterControl attribute
+        //Reset attribues after the game is loaded
+        this.gameIsOver = false;
+        updatedGameCastlingEnpassent = true;
+        pieceReadyToMove = true;
+        promotionPawn = false;
         this.allLegalMovesAfterControl = checkLegalMoves.checkforCheckMateAndPat(this.getBoardDeepCopyUsingSerialization());
 
         printBoard();
     }
 
-    //This method validates that the loaded game position/move is valid according to chess rules, e.g, 
-    //there are no pawns on row 1 and 8, there are no pawns, rooks or kings that is not placed on their orginal position and that has moved etc.
-    //From this you can write your own chess positions as strings
-    private void validationOfGameState() {
+    // Skrive teksten bedre her!
+    // This method validates that the loaded game position/move is valid according to the logic used to play the game.
+    // This method for example checks that there are no pawns on row 1 and 8, there are no pawns, rooks or kings that is not placed on their orginal position and that has moved etc.
+    // From this you can write your own chess positions as strings
+    // This method will allow illegal chess positions, if they dont break the logic used.  
+    private void validationOfGameState(Tile[][] currentGamePosition) {
 
         int[] whiteKingLocation = new int[]{};
         int[] blackKingLocation = new int[]{};
@@ -742,7 +832,7 @@ public class Game implements Serializable, Iterable<String[]> {
         ArrayList<Integer> pawnMoveNumbers = new ArrayList<Integer>();
         
 
-        for (Tile[] row : this.boardTiles) {
+        for (Tile[] row : currentGamePosition) {
             rowCount++;
             for (Tile tile : row) {
 
@@ -767,7 +857,7 @@ public class Game implements Serializable, Iterable<String[]> {
                     }
                 }
 
-                else if (chosenPiece instanceof Rook) {// Checks if Rook has moved 
+                else if (chosenPiece instanceof Rook) {// Checks if Rook has moved, but input says something else
                     if (chosenPiece.getColor() == 'w') {
                         if (!(checkForSameCoordinates(chosenPieceCoordinates, this.whiteRookLeftStartTile) || checkForSameCoordinates(chosenPieceCoordinates, this.whiteRookRightStartTile))) {
                             if (chosenPiece.getHasMoved() == false) {
@@ -856,7 +946,7 @@ public class Game implements Serializable, Iterable<String[]> {
 
         boolean playerNotToMoveInCheck = false;
 
-        // If setPlayerMove returns true - white is moving
+        //If setPlayerMove returns true - white is moving
         if (setPlayerToMove()) {
             HashMap<int[], ArrayList<int[]>> allMovesWhite = checkLegalMoves.populateAllMoves(whiteMovement, this.getBoardDeepCopyUsingSerialization());
             Collection<ArrayList<int[]>> onlyValuesAllMovesWhite = allMovesWhite.values();
@@ -905,58 +995,6 @@ public class Game implements Serializable, Iterable<String[]> {
         }
         return false;
     }
-
-
-
-    /*  SAVE INFO STRING STRUCTURE
-                                 (w/b)Char       (1 or 0)         (1 or 0)               Positive int
-        Pawn(P):            color and piece type=has moved+moved two spaces last turn=en passen move number-
-        King or rook(X/R):  color and piece type=has moved-
-        Other piece(Q/K/B): color and piece type-
-        Empty tile:         00-
-    */
-
-    // public void saveGame(String saveName) {
-    //     SaveGames saveGameWriter = new SaveGames();
-    //     String saveGameData = new String();
-
-    //     for (Tile[] row : boardTiles) {
-    //         for (Tile tile : row) {
-    //             if (tile.isOccupied()) {
-                    
-    //                 Piece piece = tile.getPiece();
-                    
-    //                 if (piece instanceof Pawn) {
-    //                     Pawn pawn = (Pawn)piece;                
-
-    //                     saveGameData += pawn.getSpriteId() + "=";
-    //                     saveGameData += ((pawn.getHasMoved()) ? "1" : "0") + "=";
-    //                     saveGameData += ((pawn.getMovedTwoLastTurn()) ? "1" : "0") + "=";
-    //                     saveGameData += pawn.getMoveNumberEnPassant();
-    //                 }
-    //                 else if (piece instanceof Rook || piece instanceof King) {
-
-    //                     saveGameData += piece.getSpriteId() + "=";
-    //                     saveGameData += ((piece.getHasMoved()) ? "1" : "0");
-    //                 }
-    //                 else {
-    //                     saveGameData += piece.getSpriteId();
-    //                 }
-
-    //                 saveGameData += "-";
-    //             }
-    //             else {
-    //                 saveGameData += "00-";
-    //             }
-    //         }
-    //     }
-
-    //     saveGameData += checkLegalMoves.getMoveNumber();
-        
-    //     saveGameWriter.saveGame(saveName, saveGameData);
-
-    //     System.out.println(saveGameData);
-    // }
 
     @Override
     public BoardTileIterator iterator() {
