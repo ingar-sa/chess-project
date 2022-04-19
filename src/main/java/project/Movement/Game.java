@@ -70,15 +70,6 @@ public class Game implements Serializable, Iterable<String[]> {
         return checkLegalMoves.getGameStatus();
     }
 
-    //TODO: Rememerb to remove these! make private!
-    private Tile[][] getBoardTiles() {
-        return boardTiles;
-    }
-
-    public Tile getTile(int row, int col) {
-        return boardTiles[row][col]; 
-    }
-
     public int getMoveNumber() {
         return checkLegalMoves.getMoveNumber();
     }
@@ -638,6 +629,7 @@ public class Game implements Serializable, Iterable<String[]> {
                 Rook rook = new Rook(pieceName, color);                
                 boolean hasRookMoved = false;
                 rook.setHasMoved(hasRookMoved);
+
                 tile.setPiece(rook);
                 break;
             case 'Q':
@@ -647,6 +639,7 @@ public class Game implements Serializable, Iterable<String[]> {
                 King king = new King(pieceName, color);
                 boolean hasKingMoved = (pawnRookKingInfo[0] == 1) ? true : false; 
                 king.setHasMoved(hasKingMoved);
+
                 tile.setPiece(king);
                 break;
         }
@@ -654,77 +647,6 @@ public class Game implements Serializable, Iterable<String[]> {
 
     } 
          
-    // private void changePieceOnTile(int row, int col, char pieceType, char color, boolean pawnPromotion, int... pawnRookKingInfo) {
-
-    //     if (this.gameIsOver) {
-    //         throw new IllegalStateException("The game is over!");
-    //     } 
-
-    //     if (!(validationOfCoordinates(row, col))) {
-    //         throw new IllegalArgumentException("The given coordinates are Illegal! Valid values: 0-7");
-    //     }
-        
-    //     if (!(color == 'b' || color == 'w')) {
-    //         throw new IllegalArgumentException("Only black (b) and white (w) color is allowed!");
-    //     }
-
-    //     String pieceName = color + " " + pieceType;
-    //     Tile tile = boardTiles[row][col];
-
-    //     switch (pieceType) {
-    //         case 'B':
-    //             tile.setPiece(new Bishop(pieceName, color));
-    //             break;
-    //         case 'K':
-    //             tile.setPiece(new Knight(pieceName, color));
-    //             break;
-    //         case 'P':
-    //             Pawn pawn = new Pawn(pieceName, color);
-    //             boolean hasPawnMoved        = (pawnRookKingInfo[0] == 1) ? true : false;
-    //             boolean movedTwoLastTurn    = (pawnRookKingInfo[1] == 1) ? true : false;
-    //             int     enPassentMoveNumber = pawnRookKingInfo[2];
-
-    //             if (!(enPassentMoveNumber >= 0)) {
-    //                 throw new IllegalArgumentException("The Pawn cant have a negative move number!");
-    //             }
-
-    //             pawn.setHasMoved(hasPawnMoved);
-    //             pawn.setMovedTwoLastTurn(movedTwoLastTurn);
-    //             pawn.setMoveNumberEnPassant(enPassentMoveNumber);
-
-    //             tile.setPiece(pawn);
-    //             break;
-    //         case 'R':
-    //             Rook rook = new Rook(pieceName, color);                
-    //             boolean hasRookMoved = false;
-
-    //             if (pawnPromotion) {
-    //                 hasRookMoved = true;  
-    //             }
-    //             else {
-    //             hasRookMoved = (pawnRookKingInfo[0] == 1) ? true : false;
-    //             } 
-                
-    //             rook.setHasMoved(hasRookMoved);
-    //             tile.setPiece(rook);
-    //             break;
-    //         case 'Q':
-    //             tile.setPiece(new Queen(pieceName, color));
-    //             break;
-    //         case 'X':
-    //             King king = new King(pieceName, color);
-    //             boolean hasKingMoved = (pawnRookKingInfo[0] == 1) ? true : false; 
-    //             king.setHasMoved(hasKingMoved);
-                
-    //             tile.setPiece(king);
-
-    //             break;
-    //         default:
-    //             throw new IllegalArgumentException("Illegal piece Type!");
-    //     }
-
-    // } 
-
     private boolean validationOfCoordinates(int row, int col) {
 
         if (row > 7 || row < 0) {
@@ -790,7 +712,7 @@ public class Game implements Serializable, Iterable<String[]> {
                     return false;
                 }
             }
-            else if (string.length() == 8) {
+            else if (string.length() >= 8) {
                 if (!(string.matches("[wb][P][=][01][=][01][=][0-9]+$"))) {
                     return false;
                 }
@@ -860,6 +782,7 @@ public class Game implements Serializable, Iterable<String[]> {
             validationOfGameState(boardTiles);
         }
         catch (IllegalArgumentException e) {
+            //resets the game if something about the game state was wrong
             this.boardTiles = currentGamePosition;
             checkLegalMoves.setMoveNumber(currentMoveNumber);
             throw new IllegalArgumentException("This is not a legal chess position, no change was made!");
@@ -874,115 +797,6 @@ public class Game implements Serializable, Iterable<String[]> {
 
         printBoard();
     }
-
-    //wR=0-wK-wB-wQ-wX=0-wB-wK-wR=0-wP=0=0=0-wP=0=0=0-00-wP=0=0=0-00-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-00-00-00-00-00-00-00-00-00-00-00-wP=1=1=0-bP=1=0=3-00-00-00-00-wP=1=0=4-bP=1=1=5-00-00-00-00-00-00-00-00-00-00-00-00-bP=0=0=0-bP=0=0=0-bP=0=0=0-00-bP=0=0=0-00-bP=0=0=0-bP=0=0=0-bR=0-bK-bB-bQ-bX=0-bB-bK-bR=0-6
-    // public void loadedGamePiecesPosition(String saveGameString) {
-
-    //     Tile[][] currentGamePosition = this.getBoardDeepCopyUsingSerialization();
-    //     int currentMoveNumber = checkLegalMoves.getMoveNumber();
-
-    //     //TODO: Burde nok endre dette så den sjekker strengen
-    //     try { 
-
-    //         if (validationOfString(saveGameString)) {
-    //             System.out.println("yoyo");
-    //         }
-
-    //         String[] tileData = saveGameString.split("-");
-    //         int turnNumber = Integer.parseInt(tileData[64]);
-    //         checkLegalMoves.setMoveNumber(turnNumber);
-            
-    //         this.makeBoard(); //Create an empty board
-            
-    //         int tileDataIndex = 0;
-    //         for (Tile[] row : boardTiles) {
-    //             for (Tile tile : row) {
-    //                 String[] pieceWithAttributes = tileData[tileDataIndex].split("=");
-
-    //                 switch (pieceWithAttributes.length) {
-    //                 case 1: //Other piece or empty
-    //                     String pieceOrNothing = pieceWithAttributes[0];
-    //                     if (!pieceOrNothing.equals("00")) {
-    //                         char color     = pieceOrNothing.charAt(0);
-    //                         char pieceType = pieceOrNothing.charAt(1);
-
-    //                         changePieceOnTile(tile.getRow(), tile.getCol(), pieceType, color, false);
-    //                     }
-    //                     break;
-    //                 case 2: //Rook and King
-    //                     String rookOrKing    = pieceWithAttributes[0];
-    //                     char rookOrKingColor = rookOrKing.charAt(0);
-    //                     char pieceType       = rookOrKing.charAt(1);
-    //                     int hasMoved         = Integer.parseInt(pieceWithAttributes[1]);
-
-    //                     changePieceOnTile(tile.getRow(), tile.getCol(), pieceType, rookOrKingColor, false, hasMoved);
-    //                     break;
-    //                 case 4: //Pawn
-    //                     String pawn             = pieceWithAttributes[0];
-    //                     char pawnColor          = pawn.charAt(0);
-    //                     char pawnType           = pawn.charAt(1);
-    //                     int pawnHasMoved        = Integer.parseInt(pieceWithAttributes[1]);
-    //                     int movedTwoLastTurn    = Integer.parseInt(pieceWithAttributes[2]);
-    //                     int enPassentMoveNumber = Integer.parseInt(pieceWithAttributes[3]);
-
-    //                     changePieceOnTile(tile.getRow(), tile.getCol(), pawnType, pawnColor, false,
-    //                                         pawnHasMoved, movedTwoLastTurn, enPassentMoveNumber);
-    //                     break;
-    //                 default:
-    //                     throw new IllegalArgumentException("The String has wrong formatting or wrong information!");
-    //                 }
-
-    //                 ++tileDataIndex;
-    //             }
-    //         }
-    //     }
-
-        //TODO: Dette blir kanskje for generelt 
-    //     catch (NullPointerException e ) {
-    //         this.boardTiles = currentGamePosition;
-    //         checkLegalMoves.setMoveNumber(currentMoveNumber);
-    //         throw new IllegalArgumentException("The String has wrong formatting, no change is made!");
-    //     }
-    //     catch (ArrayIndexOutOfBoundsException e) {
-    //         this.boardTiles = currentGamePosition;
-    //         checkLegalMoves.setMoveNumber(currentMoveNumber);
-    //         throw new IllegalArgumentException("The String has wrong formatting, no change is made!");
-    //     }
-    //     catch (StringIndexOutOfBoundsException e) {
-    //         this.boardTiles = currentGamePosition;
-    //         checkLegalMoves.setMoveNumber(currentMoveNumber);
-    //         throw new IllegalArgumentException("The String has wrong formatting, no change is made!");
-    //     }
-    //     catch (IllegalArgumentException e) {
-    //         this.boardTiles = currentGamePosition;
-    //         checkLegalMoves.setMoveNumber(currentMoveNumber);
-    //         throw new IllegalArgumentException("The String has wrong formatting, no change is made!");
-    //     }
-    //     catch (IllegalStateException e) {
-    //         this.boardTiles = currentGamePosition;
-    //         checkLegalMoves.setMoveNumber(currentMoveNumber);
-    //         throw new IllegalArgumentException("The String has wrong formatting, no change is made!");
-    //     }
-
-    //     //TODO: Spørre om dette er en ok måte.
-    //     try {
-    //         validationOfGameState(boardTiles);
-    //     }
-    //     catch (IllegalArgumentException e) {
-    //         this.boardTiles = currentGamePosition;
-    //         checkLegalMoves.setMoveNumber(currentMoveNumber);
-    //         throw new IllegalArgumentException("This is not a legal chess position, no change was made!");
-    //     }
-    
-    //     //Reset attribues after the game is loaded
-    //     this.gameIsOver = false;
-    //     updatedGameCastlingEnpassent = true;
-    //     pieceReadyToMove = true;
-    //     promotionPawn = false;
-    //     this.allLegalMovesAfterControl = checkLegalMoves.checkforCheckMateAndPat(this.getBoardDeepCopyUsingSerialization());
-
-    //     printBoard();
-    // }
 
     // Skrive teksten bedre her!
     // This method validates that the loaded game position is valid according to the logic used to play the game.
