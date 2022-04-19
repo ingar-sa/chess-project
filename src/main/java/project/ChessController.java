@@ -312,6 +312,12 @@ public class ChessController implements Serializable {
 
         messageDisplay.setText("");
 
+        if (this.gameIsOver) {
+            messageDisplay.setText("The game is over, there are no pawns to promote!");
+            promotionName.setText("");
+            return;
+        }
+
         if (pawnPromotion.equals("")) {
             messageDisplay.setText("You have no pawns to promote!");
             promotionName.setText("");
