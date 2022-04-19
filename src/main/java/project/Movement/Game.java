@@ -692,41 +692,14 @@ public class Game implements Serializable, Iterable<String[]> {
         List<String> listWithoutTurnNumber = new ArrayList<String>(Arrays.asList(tileData));
         listWithoutTurnNumber.remove(64);
 
-        
-
         for (String string : listWithoutTurnNumber) {
 
-            //TODO: Kan eventuelt bytte ut alt under med dette!
-            // if (!(   string.matches("00") 
-            //       || string.matches("[wb][KQB]")
-            //       || string.matches("[wb][RX][=][01]"))
-            //       || string.matches("[wb][P][=][01][=][01][=][0-9]+$"))
-            // {
-            //     return false;
-            // }
-            if (   string.length() == 0 
-                || string.length() == 1   
-                || string.length() == 3 
-                || string.length() == 5 
-                || string.length() == 6 
-                || string.length() == 7 ) 
+            if (!(   string.matches("00") 
+                  || string.matches("[wb][KQB]")
+                  || string.matches("[wb][RX][=][01]")
+                  || string.matches("[wb][P][=][01][=][01][=][0-9]+$")))
             {
-                return false;    
-            }
-            else if (string.length() == 2) {
-                if (!(string.matches("00") || string.matches("[wb][KQB]"))) {
-                    return false;
-                }
-            }
-            else if (string.length() == 4) {
-                if (!(string.matches("[wb][RX][=][01]"))) {
-                    return false;
-                }
-            }
-            else if (string.length() >= 8) {
-                if (!(string.matches("[wb][P][=][01][=][01][=][0-9]+$"))) {
-                    return false;
-                }
+                return false;
             }
         }
 
