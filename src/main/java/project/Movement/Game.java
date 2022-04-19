@@ -774,9 +774,9 @@ public class Game implements Serializable, Iterable<String[]> {
     
         //Reset attributes after the game is loaded
         this.gameIsOver = false;
-        updatedGameCastlingEnpassent = true;
-        pieceReadyToMove = true;
-        promotionPawn = false;
+        this.updatedGameCastlingEnpassent = true;
+        this.pieceReadyToMove = true;
+        this.promotionPawn = false;
         this.allLegalMovesAfterControl = checkLegalMoves.checkforCheckMateAndPat(this.getBoardDeepCopyUsingSerialization());
 
         printBoard();
