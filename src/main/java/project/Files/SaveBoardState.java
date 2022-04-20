@@ -20,6 +20,14 @@ import project.Pieces.Rook;
 
 public class SaveBoardState implements ISaveHandler {
 
+	 /*  SAVE INFO STRING STRUCTURE
+                                 (w/b)Char       (1 or 0)         (1 or 0)               Positive int
+        Pawn(P):            color and piece type=has moved=moved two spaces last turn=en passen move number-
+        King or rook(X/R):  color and piece type=has moved-
+        Other piece(Q/K/B): color and piece type-
+        Empty tile:         00-
+    */
+
 	@Override
 	public void saveGame(String saveName, Tile[][] chessboard, int moveNumber) throws IOException {
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/java/project/Files/savegames/" + saveName + ".txt"))) {
