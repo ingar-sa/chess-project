@@ -22,22 +22,24 @@ public class CheckLegalMoves {
 
     private MovementPatterns whiteMovement;
     private MovementPatterns blackMovement;
-    private MovementPatterns colorToMove;
+    private MovementPatterns ourMovementPattern;
     private MovementPatterns colorNotMoving;
 
-    //private int[] kingLocationPlayerToMove;
+    //private int[] kingLocationplayerThatMoves;
 
-    //Important tiles for when white is Castling  
-    private final int[] whiteKingMoveCastlingRigth = new int[]{0, 6};
-    private final int[] whiteKingMoveCastlingLeft = new int[]{0, 2};
+    //Important tiles for when white is Castling
+    private final int[] whiteKingStartPos             = new int[]{0, 4};
+    private final int[] whiteKingMoveCastlingRigth    = new int[]{0, 6};
+    private final int[] whiteKingMoveCastlingLeft     = new int[]{0, 2};
     private final int[] whiteCastlingSkippedTileRigth = new int[]{0, 5};
-    private final int[] whiteCastlingSkippedTileLeft = new int[]{0, 3};
+    private final int[] whiteCastlingSkippedTileLeft  = new int[]{0, 3};
 
     //Important tiles for when black is Castling  
-    private final int[] blackKingMoveCastlingRigth = new int[]{7, 6};
-    private final int[] blackKingMoveCastlingLeft = new int[]{7, 2};
+    private final int[] blackKingStartPos             = new int[]{7, 4};
+    private final int[] blackKingMoveCastlingRigth    = new int[]{7, 6};
+    private final int[] blackKingMoveCastlingLeft     = new int[]{7, 2};
     private final int[] blackCastlingSkippedTileRigth = new int[]{7, 5};
-    private final int[] blackCastlingSkippedTileLeft = new int[]{7, 3};
+    private final int[] blackCastlingSkippedTileLeft  = new int[]{7, 3};
 
     //TODO: legge til at man ikke kan kalle på metodene hvis spillet er over.
 
@@ -50,9 +52,10 @@ public class CheckLegalMoves {
           
     }
 
-    //Generates all the possible moves for black or white when check is not considered 
-    public HashMap<int[], ArrayList<int[]>> populateAllMoves(MovementPatterns movementPattern, Tile[][] boardTiles) {
-
+    //Finds all the possible moves for black or white when check is not considered
+    public HashMap<int[], ArrayList<int[]>> findAllMoves(MovementPatterns movementPattern, Tile[][] boardTiles) {
+        //The key is the coordinates [row, col] of the tile a piece is standing on. 
+        //The value is an ArrayList of the coordinates [row, col] of the tiles the piece can move to
         HashMap<int[], ArrayList<int[]>> legalMoves = new HashMap<int[], ArrayList<int[]>>();
         
         for (Tile[] row : boardTiles) {
@@ -74,99 +77,107 @@ public class CheckLegalMoves {
 
     private HashMap<int[], ArrayList<int[]>> eliminateChecks(Tile[][] currentGamePositionTiles) {
 
-        int[] whiteKing = new int[]{};
-        int[] blackKing = new int[]{};
+        /*  EXPLANATION OF THE ALGORITHM
+            The position of a piece is represented by an int array of the coordinates of the tile 
+            the piece is standing on, in the form [row, col]. Likewise, a move is represented by
+            an int array of the coordinates of the tile the piece can move to, in the same form.
 
-        for (Tile[] tileRow : currentGamePositionTiles) {
-            for (Tile tile: tileRow) {
+            The algorithm first finds all of the possible moves for the current player's pieces. 
+            This method then looks for moves that are illegal due to putting the current player's 
+            king in check.
+            
+            It does this by iterating through all of the current player's moves, and for each move, 
+            it updates currentGamePositionTiles to the new board position. For every new position,
+            it iterates through all of the opposite player's moves for that position. 
+            
+            If any of the opponent's moves can put the current player's king in check, the current 
+            player's move that was performed is flagged as illegal, and will be removed from the 
+            current player's possible moves
+            
+            When all of the opponent's moves have been checked on the given position,
+            currentGamePositionTiles is reset to the starting position for this turn, and the
+            process is repeated for the next of the current player's move.
+        */
+
+        int[] whiteKingPos = new int[]{};
+        int[] blackKingPos = new int[]{};
+
+        //Finds the position of both kings
+        for (Tile[] row : currentGamePositionTiles) {
+            for (Tile tile: row) {
                 if (tile.getPiece() instanceof King && ((King)tile.getPiece()).getColor() == 'w') {
-                    whiteKing = new int[]{tile.getRow(), tile.getCol()};
+                    whiteKingPos = new int[]{tile.getRow(), tile.getCol()};
                 }
                 else if (tile.getPiece() instanceof King && ((King)tile.getPiece()).getColor() == 'b') {
-                    blackKing = new int[]{tile.getRow(), tile.getCol()};
+                    blackKingPos = new int[]{tile.getRow(), tile.getCol()};
                 }
             }
         }
 
-        setPlayerToMove();
+        setPlayerThatMoves();
 
-        int[] originalKingLocationPlayerToMove;
+        //Us is the player who is moving this turn
+        //Opponent is the other player
+        int[] ourKingStartPos;
+        ourKingStartPos = (ourMovementPattern.getColor() == 'w') ? whiteKingStartPos : blackKingStartPos;
 
-        if (colorToMove.getColor() == 'w') {
-            originalKingLocationPlayerToMove = new int[]{0, 4};
-        }
-        else {
-            originalKingLocationPlayerToMove = new int[]{7, 4};
-        }
+        int[] ourKingCurrentPos;
+        ourKingCurrentPos = (ourMovementPattern.getColor() == 'w') ? whiteKingPos : blackKingPos;
 
-        int[] kingLocationPlayerToMove;
 
-        if (colorToMove.getColor() == 'w') {
-            kingLocationPlayerToMove = whiteKing;
-        }
-        else {
-            kingLocationPlayerToMove = blackKing;
-        }
-
-        HashMap<int[], ArrayList<int[]>> legalMoves = populateAllMoves(colorToMove, currentGamePositionTiles);
+        HashMap<int[], ArrayList<int[]>> movesForAllOurPieces = findAllMoves(ourMovementPattern, currentGamePositionTiles);
         
-        for (int[] chosenPiecePlayerToMove : legalMoves.keySet()) {
+        for (int[] piece : movesForAllOurPieces.keySet()) {
 
-            ArrayList<int[]> allMovesForAPiece = legalMoves.get(chosenPiecePlayerToMove);
-            ArrayList<int[]> movesToBeRemoved = new ArrayList<int[]>();
+            ArrayList<int[]> allMovesForPiece = movesForAllOurPieces.get(piece);
+            ArrayList<int[]> movesToRemove = new ArrayList<int[]>();
 
             //Count for what move that should be removed from piece moves, move that is illegal because of CHECK
-            int indexForMoveToRemove = 0;
+            int deleteMoveAtIndex = 0;
 
-            for (int[] pieceWillMoveTo : allMovesForAPiece) {
+            for (int[] move : allMovesForPiece) {
  
-                int piecePositionNowRow = chosenPiecePlayerToMove[0];
-                int piecePositionNowCol = chosenPiecePlayerToMove[1];
+                int pieceCurrentRow = piece[0];
+                int pieceCurrentCol = piece[1];
 
-                int movePieceToRow = pieceWillMoveTo[0];
-                int movePieceToCol = pieceWillMoveTo[1];
+                int moveToRow = move[0];
+                int moveToCol = move[1];
                 
-                Piece pieceToMove = currentGamePositionTiles[piecePositionNowRow][piecePositionNowCol].getPiece();
-                Piece pieceAtThespotWeAreMovingTo = currentGamePositionTiles[movePieceToRow][movePieceToCol].getPiece();
+                Piece pieceToMove   = currentGamePositionTiles[pieceCurrentRow][pieceCurrentCol].getPiece();
+                Piece pieceAtMoveTo = currentGamePositionTiles[moveToRow][moveToCol].getPiece();
 
                 //Checks if king moves, if yes, fields have to be updated
-                boolean kingMovedWhite = false;
-                boolean kingMovedBlacked = false;
+                boolean whiteKingMoves = false;
+                boolean blackKingMoves = false;
 
                 if (pieceToMove instanceof King && pieceToMove.getColor() == 'w') {
-                    whiteKing = new int[]{movePieceToRow, movePieceToCol};
-                    kingMovedWhite = true;
+                    whiteKingPos = new int[]{moveToRow, moveToCol};
+                    whiteKingMoves = true;
                 }
                 
                 if (pieceToMove instanceof King && pieceToMove.getColor() == 'b') {
-                    blackKing = new int[]{movePieceToRow, movePieceToCol};
-                    kingMovedBlacked = true;
+                    blackKingPos = new int[]{moveToRow, moveToCol};
+                    blackKingMoves = true;
                 }
 
                 //Moves the piece 
-                currentGamePositionTiles[piecePositionNowRow][piecePositionNowCol].removePiece();
-                currentGamePositionTiles[movePieceToRow][movePieceToCol].setPiece(pieceToMove);
+                currentGamePositionTiles[pieceCurrentRow][pieceCurrentCol].removePiece();
+                currentGamePositionTiles[moveToRow][moveToCol].setPiece(pieceToMove);
                 
                 //Updates the king position
-                if (colorToMove.getColor() == 'w') {
-                    kingLocationPlayerToMove = whiteKing;
-                }
-                 else {
-                    kingLocationPlayerToMove = blackKing;
-                }
+                ourKingCurrentPos = (ourMovementPattern.getColor() == 'w') ? whiteKingPos : blackKingPos;
+                
+                HashMap<int[], ArrayList<int[]>> allOpponentMoves           = findAllMoves(colorNotMoving, currentGamePositionTiles);
+                Collection<ArrayList<int[]>>     allOpponentMoveCoordinates = allOpponentMoves.values();
 
-                HashMap<int[], ArrayList<int[]>> legalMovesOppositeColor = populateAllMoves(colorNotMoving, currentGamePositionTiles);
-
-                Collection<ArrayList<int[]>> allOppositeMoves = legalMovesOppositeColor.values();
-
-                for (ArrayList<int[]> oppositeColorPieceMoves: allOppositeMoves) {
+                for (ArrayList<int[]> oppositeColorPieceMoves: allOpponentMoveCoordinates) {
                     for (int[] oneMoveForOppositePiece : oppositeColorPieceMoves) {
                         
-                        if (checkForSameCoordinates(kingLocationPlayerToMove, oneMoveForOppositePiece)) {
+                        if (checkForSameCoordinates(ourKingCurrentPos, oneMoveForOppositePiece)) {
 
-                            for (int[] oneOfAllMoves : allMovesForAPiece) {
-                                if (checkForSameCoordinates(oneOfAllMoves, pieceWillMoveTo)) {
-                                    movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
+                            for (int[] oneOfAllMoves : allMovesForPiece) {
+                                if (checkForSameCoordinates(oneOfAllMoves, move)) {
+                                    movesToRemove.add(allMovesForPiece.get(deleteMoveAtIndex));
                                 }
 
                             }
@@ -175,66 +186,66 @@ public class CheckLegalMoves {
                         
                         //Handling of legal castling 
                         else if (pieceToMove instanceof King && !pieceToMove.getHasMoved()) {
-                            if (colorToMove.getColor() == 'w') {
+                            if (ourMovementPattern.getColor() == 'w') {
 
                                 //Checks if rigth castling for white is legal 
-                                if (checkForSameCoordinates(pieceWillMoveTo, this.whiteKingMoveCastlingRigth)) {
-                                    if (checkForSameCoordinates(oneMoveForOppositePiece, originalKingLocationPlayerToMove)) { //examines if the king is already in check
-                                        movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
+                                if (checkForSameCoordinates(move, this.whiteKingMoveCastlingRigth)) {
+                                    if (checkForSameCoordinates(oneMoveForOppositePiece, ourKingStartPos)) { //examines if the king is already in check
+                                        movesToRemove.add(allMovesForPiece.get(deleteMoveAtIndex));
                                     }
                                     else if (checkForSameCoordinates(oneMoveForOppositePiece, this.whiteCastlingSkippedTileRigth)) { //examines if the tile that the king skips/moves over is check
-                                        movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
+                                        movesToRemove.add(allMovesForPiece.get(deleteMoveAtIndex));
                                     }
                                     else if (currentGamePositionTiles[1][6].isOccupied()) { //examines if there is a pawn that attacks the skipped tile
                                         if (currentGamePositionTiles[1][6].getPiece().getColor() == 'b' && currentGamePositionTiles[1][6].getPiece() instanceof Pawn) {
-                                            movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
+                                            movesToRemove.add(allMovesForPiece.get(deleteMoveAtIndex));
                                         }
                                     }
 
                                 }
                                 //Checks if left castling for white is legal 
-                                else if (checkForSameCoordinates(pieceWillMoveTo, this.whiteKingMoveCastlingLeft)) {         
-                                    if (checkForSameCoordinates(oneMoveForOppositePiece, originalKingLocationPlayerToMove)) {
-                                        movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
+                                else if (checkForSameCoordinates(move, this.whiteKingMoveCastlingLeft)) {         
+                                    if (checkForSameCoordinates(oneMoveForOppositePiece, ourKingStartPos)) {
+                                        movesToRemove.add(allMovesForPiece.get(deleteMoveAtIndex));
                                     }
                                     else if (checkForSameCoordinates(oneMoveForOppositePiece, this.whiteCastlingSkippedTileLeft)) {
-                                        movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
+                                        movesToRemove.add(allMovesForPiece.get(deleteMoveAtIndex));
                                     }
                                     else if (currentGamePositionTiles[1][2].isOccupied()) { 
                                         if (currentGamePositionTiles[1][2].getPiece().getColor() == 'b' && currentGamePositionTiles[1][2].getPiece() instanceof Pawn) {
-                                            movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
+                                            movesToRemove.add(allMovesForPiece.get(deleteMoveAtIndex));
                                         }
                                     }
                                 }
                             }
-                            else if (colorToMove.getColor() == 'b') {
+                            else if (ourMovementPattern.getColor() == 'b') {
                                 
                                 //Checks if rigth castling for black is legal 
-                                if (checkForSameCoordinates(pieceWillMoveTo, this.blackKingMoveCastlingRigth)) {
-                                    if (checkForSameCoordinates(oneMoveForOppositePiece, originalKingLocationPlayerToMove)) {
-                                        movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
+                                if (checkForSameCoordinates(move, this.blackKingMoveCastlingRigth)) {
+                                    if (checkForSameCoordinates(oneMoveForOppositePiece, ourKingStartPos)) {
+                                        movesToRemove.add(allMovesForPiece.get(deleteMoveAtIndex));
                                     }
                                     else if (checkForSameCoordinates(oneMoveForOppositePiece, this.blackCastlingSkippedTileRigth)) {
-                                        movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
+                                        movesToRemove.add(allMovesForPiece.get(deleteMoveAtIndex));
                                     }
                                     else if (currentGamePositionTiles[6][6].isOccupied()) { 
                                         if (currentGamePositionTiles[6][6].getPiece().getColor() == 'w' && currentGamePositionTiles[6][6].getPiece() instanceof Pawn) {
-                                            movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
+                                            movesToRemove.add(allMovesForPiece.get(deleteMoveAtIndex));
                                         }
                                     }
 
                                 }
                                 //Checks if left castling for black is legal 
-                                else if (checkForSameCoordinates(pieceWillMoveTo, this.blackKingMoveCastlingLeft)) {
-                                    if (checkForSameCoordinates(oneMoveForOppositePiece, originalKingLocationPlayerToMove)) {
-                                        movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
+                                else if (checkForSameCoordinates(move, this.blackKingMoveCastlingLeft)) {
+                                    if (checkForSameCoordinates(oneMoveForOppositePiece, ourKingStartPos)) {
+                                        movesToRemove.add(allMovesForPiece.get(deleteMoveAtIndex));
                                     }
                                     else if (checkForSameCoordinates(oneMoveForOppositePiece, this.blackCastlingSkippedTileLeft)) {
-                                        movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
+                                        movesToRemove.add(allMovesForPiece.get(deleteMoveAtIndex));
                                     }
                                     else if (currentGamePositionTiles[6][2].isOccupied()) { 
                                         if (currentGamePositionTiles[6][2].getPiece().getColor() == 'w' && currentGamePositionTiles[6][2].getPiece() instanceof Pawn) {
-                                            movesToBeRemoved.add(allMovesForAPiece.get(indexForMoveToRemove));
+                                            movesToRemove.add(allMovesForPiece.get(deleteMoveAtIndex));
                                         }
                                     }
                                 }
@@ -248,35 +259,35 @@ public class CheckLegalMoves {
                 
 
                 //Moves the piece we moved back 
-                Piece pieceToMoveBack = currentGamePositionTiles[movePieceToRow][movePieceToCol].getPiece();
-                currentGamePositionTiles[piecePositionNowRow][piecePositionNowCol].setPiece(pieceToMoveBack);
+                Piece pieceToMoveBack = currentGamePositionTiles[moveToRow][moveToCol].getPiece();
+                currentGamePositionTiles[pieceCurrentRow][pieceCurrentCol].setPiece(pieceToMoveBack);
 
                 //Replaces the piece that was at the spot we moved to 
-                currentGamePositionTiles[movePieceToRow][movePieceToCol].removePiece();
-                currentGamePositionTiles[movePieceToRow][movePieceToCol].setPiece(pieceAtThespotWeAreMovingTo);
+                currentGamePositionTiles[moveToRow][moveToCol].removePiece();
+                currentGamePositionTiles[moveToRow][moveToCol].setPiece(pieceAtMoveTo);
 
                 //Since setPiece also makes Occupied = True, this has to handeled
-                if (currentGamePositionTiles[movePieceToRow][movePieceToCol].getPiece() == null) {
-                    currentGamePositionTiles[movePieceToRow][movePieceToCol].setOccupied(false);
+                if (currentGamePositionTiles[moveToRow][moveToCol].getPiece() == null) {
+                    currentGamePositionTiles[moveToRow][moveToCol].setOccupied(false);
                 }
                 
-                currentGamePositionTiles[piecePositionNowRow][piecePositionNowCol].setPiece(pieceToMoveBack);
+                currentGamePositionTiles[pieceCurrentRow][pieceCurrentCol].setPiece(pieceToMoveBack);
 
                 //Reset King field if king moved 
-                if (kingMovedWhite) {
-                    whiteKing = new int[]{piecePositionNowRow, piecePositionNowCol};
+                if (whiteKingMoves) {
+                    whiteKingPos = new int[]{pieceCurrentRow, pieceCurrentCol};
                 }
-                if (kingMovedBlacked) {
-                    blackKing = new int[]{piecePositionNowRow, piecePositionNowCol};
+                if (blackKingMoves) {
+                    blackKingPos = new int[]{pieceCurrentRow, pieceCurrentCol};
                 }
                 
-                indexForMoveToRemove ++;
+                deleteMoveAtIndex ++;
             }
             //Removes all the illegal moves for a piece that breaks check
-            allMovesForAPiece.removeAll(movesToBeRemoved);
+            allMovesForPiece.removeAll(movesToRemove);
         }
 
-        return legalMoves;
+        return movesForAllOurPieces;
     }
 
     private boolean checkForSameCoordinates(int[] coordinateOne, int[] coordinateTwo) {
@@ -328,7 +339,7 @@ public class CheckLegalMoves {
         // }
     }
 
-    public HashMap<int[], ArrayList<int[]>> checkforCheckMateAndPat (Tile[][] currentGamePositionTiles) {
+    public HashMap<int[], ArrayList<int[]>> checkforCheckMateAndPat(Tile[][] currentGamePositionTiles) {
 
         //TODO: se mer på dette, kongene kan ikke være inntill hverandre kanskje, sjekke at max en spiller er i sjakk, sjekke at pawns ikke står feil, hvis kongen ikke står på start feltet må den ha flyttet på seg, samme med bonde og tårn!?
         // validationOfKings(currentGamePositionTiles);
@@ -352,28 +363,28 @@ public class CheckLegalMoves {
             }
         }
 
-        int[] kingLocationPlayerToMove;
+        int[] kingLocationplayerThatMoves;
 
-        if (colorToMove.getColor() == 'w') {
-            kingLocationPlayerToMove = whiteKing;
+        if (ourMovementPattern.getColor() == 'w') {
+            kingLocationplayerThatMoves = whiteKing;
         }
         else {
-            kingLocationPlayerToMove = blackKing;
+            kingLocationplayerThatMoves = blackKing;
         }
 
-        for (int[] piecePlayerToMove : legalMoves.keySet()) {
+        for (int[] pieceplayerThatMoves : legalMoves.keySet()) {
             if (notGameOver) {
                 break;
             }
 
-            if (legalMoves.get(piecePlayerToMove).size() != 0) {
+            if (legalMoves.get(pieceplayerThatMoves).size() != 0) {
                 notGameOver = true;
             }
         }
 
         if (!notGameOver) {
 
-            HashMap<int[], ArrayList<int[]>> allPiecesAndMovesOppositeColor = populateAllMoves(colorNotMoving, currentGamePositionTiles);
+            HashMap<int[], ArrayList<int[]>> allPiecesAndMovesOppositeColor = findAllMoves(colorNotMoving, currentGamePositionTiles);
             Collection<ArrayList<int[]>> allPossibleMovesThatCouldTakeTheKing = allPiecesAndMovesOppositeColor.values();
 
             for (ArrayList<int[]> movesOppositePiece: allPossibleMovesThatCouldTakeTheKing) {
@@ -383,7 +394,7 @@ public class CheckLegalMoves {
                 }
 
                 for (int[] oneOppositeMove : movesOppositePiece) {
-                    if (checkForSameCoordinates(oneOppositeMove, kingLocationPlayerToMove)) {
+                    if (checkForSameCoordinates(oneOppositeMove, kingLocationplayerThatMoves)) {
 
                         kingCanBetaken = true;
                         break;
@@ -424,32 +435,32 @@ public class CheckLegalMoves {
         }
     }
 
-    private void setPlayerToMove () {
+    private void setPlayerThatMoves () {
         if (moveNumber % 2 == 0) {
-            this.colorToMove = whiteMovement;
+            this.ourMovementPattern = whiteMovement;
             this.colorNotMoving = blackMovement;
         } 
         else {
-            this.colorToMove = blackMovement;
+            this.ourMovementPattern = blackMovement;
             this.colorNotMoving = whiteMovement;
         }
     }
 
-    // private void setOriginalKingLocationForPlayerToMove () {
+    // private void setOriginalKingLocationForplayerThatMoves () {
     //     if (colorToMove.getColor() == 'w') {
-    //         this.originalKingLocationPlayerToMove = new int[]{0, 4};
+    //         this.originalKingLocationplayerThatMoves = new int[]{0, 4};
     //     }
     //     else {
-    //         this.originalKingLocationPlayerToMove = new int[]{7, 4};
+    //         this.originalKingLocationplayerThatMoves = new int[]{7, 4};
     //     }
     // }
 
-    // private void setKingPositionForPlayerToMove() {
+    // private void setKingPositionForplayerThatMoves() {
     //     if (colorToMove.getColor() == 'w') {
-    //         this.kingLocationPlayerToMove = this.whiteKing;
+    //         this.kingLocationplayerThatMoves = this.whiteKing;
     //     }
     //     else {
-    //         this.kingLocationPlayerToMove = this.blackKing;
+    //         this.kingLocationplayerThatMoves = this.blackKing;
     //     }
     // }
 
