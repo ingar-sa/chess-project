@@ -1,6 +1,7 @@
 package project;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import project.Board.Tile;
 import project.Movement.Game;
@@ -20,8 +21,11 @@ public class BoardTileIterator implements Iterator<String[]> {
     }
 
     @Override
-    public String[] next() { //TODO: Change from tile to give pieceinfo array directly from game
+    public String[] next() {  //TODO: Change from tile to give pieceinfo array directly from game
 
+        if (!hasNext())
+            throw new NoSuchElementException("The iterator is empty.");
+        
         if (col == 8) {
             col = 0;
             ++row;
