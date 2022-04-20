@@ -917,7 +917,7 @@ public class Game implements Serializable, Iterable<String[]> {
 
         //If setPlayerMove returns true - white is moving
         if (setPlayerToMove()) {
-            HashMap<int[], ArrayList<int[]>> allMovesWhite = checkLegalMoves.populateAllMoves(whiteMovement, this.getBoardDeepCopyUsingSerialization());
+            HashMap<int[], ArrayList<int[]>> allMovesWhite = checkLegalMoves.findAllMoves(whiteMovement, this.getBoardDeepCopyUsingSerialization());
             Collection<ArrayList<int[]>> onlyValuesAllMovesWhite = allMovesWhite.values();
             
             for (ArrayList<int[]> allMovesForAPiece: onlyValuesAllMovesWhite) {
@@ -930,7 +930,7 @@ public class Game implements Serializable, Iterable<String[]> {
 
         }
         else {
-            HashMap<int[], ArrayList<int[]>> allMovesBlack = checkLegalMoves.populateAllMoves(blackMovement, this.getBoardDeepCopyUsingSerialization());
+            HashMap<int[], ArrayList<int[]>> allMovesBlack = checkLegalMoves.findAllMoves(blackMovement, this.getBoardDeepCopyUsingSerialization());
             Collection<ArrayList<int[]>> onlyValuesAllMovesBlack = allMovesBlack.values();
 
             for (ArrayList<int[]> allMovesForAPiece: onlyValuesAllMovesBlack) {
