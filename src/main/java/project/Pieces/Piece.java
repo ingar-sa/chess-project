@@ -12,7 +12,7 @@ public abstract class Piece implements Serializable {
     protected Piece (String name,  char color, char spriteType) {
         this.name = name;
         if (color == 'w' || color == 'b') 
-            this.color = color; //Add verification for correct type
+            this.color = color;
         else
             throw new IllegalArgumentException("Color must be w or b");
         

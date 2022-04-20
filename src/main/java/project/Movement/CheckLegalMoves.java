@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import project.Consts;
-import project.Board.Chessboard;
+//import project.Board.Chessboard; TODO: Delete, right?
 import project.Board.Tile;
 import project.Pieces.Bishop;
 import project.Pieces.King;
@@ -479,6 +479,7 @@ public class CheckLegalMoves {
 
 
     public static void main(String[] args) {
+        /*
         long startTime = System.nanoTime();
         Chessboard chessboard = new Chessboard();
         Tile[][] tiles = chessboard.getBoardTiles();
@@ -602,6 +603,7 @@ public class CheckLegalMoves {
         long endTime   = System.nanoTime();
         long totalTime = endTime - startTime;
         System.out.println(totalTime);
+        */
     }
 }
 

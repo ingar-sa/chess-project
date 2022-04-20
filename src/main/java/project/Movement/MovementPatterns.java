@@ -251,6 +251,7 @@ public class MovementPatterns {
         return removeFriendlyTiles(allMoves, boardTiles);
     }
 
+    
     private ArrayList<int[]> removeFriendlyTiles(ArrayList<int[]> allMoves, Tile[][] boardTiles) {
 
          ArrayList<int[]> legalMoves = new ArrayList<int[]>();
@@ -351,6 +352,8 @@ public class MovementPatterns {
         int row = tile.getRow();
         int col = tile.getCol();
 
+        //Create an arraylist with coordinates for all possible 
+        //moves for the knight, even if they are out of bounds
         Collections.addAll(moveCoordinates, 
                            new int[]{row + 1, col - 2},
                            new int[]{row + 2, col - 1},
@@ -361,6 +364,8 @@ public class MovementPatterns {
                            new int[]{row - 1, col + 2},
                            new int[]{row - 2, col + 1});
 
+        //Only add coordinates that are inbound the chessboard, and is 
+        //either unoccupied or occupied by a piece of the opposite color 
         for (int[] coordinate : moveCoordinates) {
             if (coordinate[0] < 8 && coordinate[0] >= 0 && coordinate[1] < 8 && coordinate[1] >= 0) {
                 Tile checkedTile = boardTiles[coordinate[0]][coordinate[1]];

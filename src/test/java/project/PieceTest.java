@@ -18,6 +18,7 @@ public class PieceTest {
     @DisplayName("Test color validation in the constructor.")
     public void testColorValidation() {
         //Tests the entire char value range [0, 65535]
+        //TODO: Is this even necessary? It seems a bit overkill. 
         assertThrows(IllegalArgumentException.class, () -> {
                 for (char c = 0; c < 65536; ++c) {
                     if (c != 'w' || c != 'b')
