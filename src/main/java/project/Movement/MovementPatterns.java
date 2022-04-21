@@ -4,6 +4,7 @@ package project.Movement;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import javafx.scene.input.MouseEvent;
 import project.Board.Tile;
 import project.Pieces.Bishop;
 import project.Pieces.King;
@@ -39,10 +40,12 @@ public class MovementPatterns {
         return allMoves;
     }
 
+   
+
     private ArrayList<int[]> pawnMoves(Tile tile, Tile[][] boardTiles, int moveNumber) {     
-        Pawn pawn                       = (Pawn)tile.getPiece(); 
-        int row                         = tile.getRow();
-        int col                         = tile.getCol();
+        Pawn             pawn           = (Pawn)tile.getPiece(); 
+        int              row            = tile.getRow();
+        int              col            = tile.getCol();
         ArrayList<int[]> legalPawnMoves = new ArrayList<int[]>();
         
         int moveDirection = 1; 
@@ -383,161 +386,70 @@ public class MovementPatterns {
         return this.color;
     }
 
+     //TODO: Slett!
+     public static String arraylistStringForm(ArrayList<int[]> allMoves) {
+
+        String stringOfAllMoves = new String();
+        for (int[] move : allMoves) {
+            stringOfAllMoves += "new " + "int[]" + "{" + move[0] + ", " + move[1] + "}" + ", ";
+        }
+    
+        return stringOfAllMoves;
+        }
+    
+    public static void makeBoard(Tile[][] boardTiles) {
+        for (int row = 0; row < 8; ++row) {
+            for (int col = 0; col < 8; ++col) {
+
+                Tile tile = new Tile(row, col);
+                boardTiles[row][col] = tile;
+            }
+        }
+    }
+
     
     public static void main(String[] args) {
 
-        // Piece p = new Pawn("yo", 'w');
-        // System.out.println(p instanceof Pawn);
-        // Pawn p1 = new Pawn("tt", 'b');
-        // System.out.println(p instanceof Piece);
-        // p = new Knight("tt", 'b');
-        // p1 = new Knight("tt", 'w')
-        // Chessboard chessboard = new Chessboard();
-        
-        // Tile[][] tiles = chessboard.getBoardTiles();
-        
-        // Rook rook = new Rook("bR1",'b');
-        // Rook rook2 = new Rook("bR2",'b');
-        // Rook rook3 = new Rook("bR3", 'b');
-        // Rook rook4 = new Rook("bR4", 'b');
-        // Bishop bishop = new Bishop("bB1", 'b');
-        // Bishop bishop2 = new Bishop("wB1", 'w');
+        MovementPatterns wPattern = new MovementPatterns('w');
+        MovementPatterns bPattern = new MovementPatterns('b');
+        /*
+        Game game = new Game(); 
+        //Tile[][] boardTiles = game.getBoardDeepCopyUsingSerialization();
+        System.out.println("White");
+        for (int col = 0; col < 8; ++col) {
+            ArrayList<int[]> cheatSheet = wPattern.moveHandler(boardTiles[0][col], boardTiles, 0);
+            System.out.println(wPattern.arraylistStringForm(cheatSheet));
+        }
 
-        // Pawn enpawn = new Pawn("bP1", 'b');
-        // Pawn enpawn2 = new Pawn("wP2", 'w');
-        // Pawn pawn3 = new Pawn("bP3", 'b');
-        // Pawn wpawn1 = new Pawn("wP2", 'w');
-        // Pawn wpawn3 = new Pawn("wP3", 'w');
-
-        // King testKing = new King("wX2", 'w');
-
-        // Queen queen = new Queen("bQ1", 'b');
-
-        // Knight kn1 = new Knight("wK1", 'b');
-        // Knight kn2 = new Knight("wK2", 'w');
-        // Knight kn3 = new Knight("bK1", 'b');
-
-        // // tiles[0][2].setPiece(rook);
-        // //tiles[2][6].setPiece(bishop);
-        // //tiles[1][4].setPiece(bishop);
-        // tiles[1][0].removePiece();
-        // tiles[1][1].removePiece();
-        // tiles[1][2].removePiece();
-        // tiles[1][3].removePiece();
-        // tiles[1][4].removePiece();
-        // tiles[1][5].removePiece();
-        // tiles[1][6].removePiece();
-        // tiles[1][7].removePiece();
-        // //tiles[6][8].removePiece();
-
-        // tiles[0][1].removePiece();
-        // tiles[0][2].removePiece();
-        // tiles[0][3].removePiece();
-        // tiles[0][0].removePiece();
-        // tiles[0][5].removePiece();
-        // tiles[0][6].removePiece();
-        // tiles[0][7].removePiece();
-        // tiles[0][4].removePiece();
-        // // tiles[0][3].removePiece();
-        // // tiles[1][1].removePiece();
-        // // tiles[1][2].removePiece();
-        // // tiles[1][3].removePiece();
-        // // tiles[1][4].removePiece();
-        // // tiles[1][7].removePiece();
-        // // tiles[0][7].removePiece();
-        // // tiles[0][7].setPiece(rook);
-        // // tiles[7][5].setPiece(rook2);
-        // // tiles[1][7].setPiece(rook);
-        // // tiles[7][3].setPiece(rook3);
-
-        // // //tiles[4][4].setOccupied(true);
-        // // tiles[7][1].removePiece();
-        // // tiles[7][2].removePiece();
-        // // //tiles[7][3].removePiece();
-        // // //tiles[7][5].removePiece();
-        // // tiles[7][6].removePiece();
-        // // tiles[7][4].removePiece();
-        // // tiles[1][0].removePiece();
-        // // tiles[7][0].removePiece();
-
-        // //tiles[4][4].setPiece(rook2);
-        // // tiles[0][5].setPiece(enpawn);
-        // //tiles[2][2].setPiece(bishop);
-        // //tiles[2][5].setPiece(testKing);
-        // //tiles[1][7].setPiece(rook);
-        // //tiles[1][0].setPiece(enpawn);
-        // // tiles[1][5].removePiece();
-        // // tiles[2][5].removePiece();
-        // // tiles[7][2].setPiece(testKing);
-        // //tiles[3][5].setPiece(rook2);
-        // //tiles[3][7].setPiece(bishop);
-        // //tiles[2][5].getPiece().setHasMoved();
-        // //((Pawn)tiles[4][5].getPiece()).setMovedTwoLastTurn(true);
-        // // ((Pawn)tiles[4][5].getPiece()).setMovedTwo();
-
-        // //tiles[4][4].setPiece(enpawn2);
-
-        
+        System.out.println("\nBlack");
+        for (int col = 0; col < 8; ++col) {
+            ArrayList<int[]> cheatSheet = bPattern.moveHandler(boardTiles[7][col], boardTiles, 1);
+            System.out.println(bPattern.arraylistStringForm(cheatSheet));
+        }
         
 
-
-                
-        // // tiles[0][6].removePiece();
-        // tiles[0][5].removePiece();
-        // tiles[0][6].removePiece();
-        // tiles[0][1].removePiece();
-        // tiles[1][3].removePiece();
-
-        // tiles[7][0].removePiece();
-        // tiles[7][5].removePiece();
-        // tiles[7][6].removePiece();
-        // tiles[6][0].removePiece();
-        // tiles[6][2].removePiece();
-        // tiles[6][5].removePiece();
+        System.out.println("\nPawns");
+        Tile[][] boardTiles = new Tile[8][8];
         
+        makeBoard(boardTiles);
         
-        // // tiles[1][4].setPiece(kn1);
-        // // tiles[3][0].setPiece(kn2);
-        // // tiles[5][5].setPiece(kn3);
-
-        // // tiles[0][5].setPiece(rook);
-
-    
-        // // tiles[3][1].setPiece(bishop);
-        // // tiles[3][2].setPiece(bishop2);
+        Pawn whitePawn2 = new Pawn("wP2", 'w');
+        Pawn blackPawn2 = new Pawn("bP2", 'b');
+        Pawn blackPawn3 = new Pawn("bP3", 'b');
+        Pawn blackPawn4 = new Pawn("bP4", 'b');
         
-        // // tiles[2][3].setPiece(wpawn1);
-        // // tiles[4][4].setPiece(wpawn3);
+        boardTiles[3][3].setPiece(whitePawn2);
+        boardTiles[4][2].setPiece(blackPawn2);
+        boardTiles[4][3].setPiece(blackPawn3);
+        boardTiles[4][4].setPiece(blackPawn4);
 
-        // tiles[1][4].setPiece(testKing);
-        // tiles[0][6].setPiece(queen);
-        // tiles[2][4].setPiece(kn1);
-        // tiles[3][1].setPiece(bishop);
-        // tiles[4][3].setPiece(rook);
-        // tiles[3][6].setPiece(pawn3);
-
-        // tiles[2][2].setPiece(enpawn2);
-        // tiles[3][6].setPiece(pawn3);
-        // //tiles[0][3].setPiece(queen);
-        // tiles[3][4].setPiece(rook3);
-    
-        // tiles[3][5].setPiece(enpawn2);
-        // enpawn2.setMovedTwoLastTurn(true);
-        
-
-
-                
-        // tiles[0][6].removePiece();
-        // chessboard.printBoard();
-
-
-        // MovementPatterns white = new MovementPatterns('w');
-        // MovementPatterns black = new MovementPatterns('b');
-        // white.setBoardTiles(tiles);
-        // black.setBoardTiles(tiles);
-        // black.moveHandler(tiles[3][6]);
+        System.out.println(arraylistStringForm(wPattern.moveHandler(boardTiles[3][3], boardTiles, 0)));
+        */
 
         
     }
+
+        
+       
     
 }
