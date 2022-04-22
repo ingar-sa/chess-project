@@ -411,18 +411,37 @@ public class MovementPatterns {
     
     public static void main(String[] args) {
 
+        
         MovementPatterns wPattern = new MovementPatterns('w');
         MovementPatterns bPattern = new MovementPatterns('b');
         Game game = new Game(); 
-        Tile[][] boardTiles = game.getBoardTilesDeepCopy();
+        //Tile[][] boardTiles = game.getBoardTilesDeepCopy();
+        Tile[][] boardTiles = new Tile[8][8];
+        makeBoard(boardTiles);
 
+        King whiteKing1 = new King("wK1", 'w');
+        Rook whiteRook1 = new Rook("wR1", 'w');
+        Rook whiteRook2 = new Rook("wR2", 'w');
+        
+        boardTiles[0][4].setPiece(whiteKing1);
+        boardTiles[0][0].setPiece(whiteRook1);
+        boardTiles[0][7].setPiece(whiteRook2);
+        
+        //arraylistStringForm(wPattern.moveHandler(boardTiles[0][4], boardTiles, 0));
+
+        boardTiles = game.getBoardTilesDeepCopy();
+        boardTiles[5][3].setPiece(whiteKing1);
+
+        arraylistStringForm(wPattern.moveHandler(boardTiles[5][3], boardTiles, 0));
+
+        /*
         Bishop blackBishop1 = new Bishop("bB1", 'b');
         
         boardTiles[4][5].setPiece(blackBishop1);
         arraylistStringForm(bPattern.moveHandler(boardTiles[4][5], boardTiles, 1));
         
         
-        /*
+        
         Tile[][] boardTiles = new Tile[8][8];
         makeBoard(boardTiles);
         

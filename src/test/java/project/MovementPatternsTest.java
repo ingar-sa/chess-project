@@ -13,6 +13,7 @@ import project.Board.Tile;
 import project.Movement.Game;
 import project.Movement.MovementPatterns;
 import project.Pieces.Bishop;
+import project.Pieces.King;
 import project.Pieces.Pawn;
 import project.Pieces.Rook;
 
@@ -216,7 +217,38 @@ public class MovementPatternsTest {
     @Test
     @DisplayName("King test")
     public void kingTest() {
+
+        King whiteKing1 = new King("wK1", 'w');
+        Rook whiteRook1 = new Rook("wR1", 'w');
+        Rook whiteRook2 = new Rook("wR2", 'w');
         
+        boardTiles[0][4].setPiece(whiteKing1);
+        boardTiles[0][0].setPiece(whiteRook1);
+        boardTiles[0][7].setPiece(whiteRook2);
+
+        //Tests castling, board bounds checking, and general movement
+        ArrayList<int[]> expectedKingMoves = new ArrayList<>(Arrays.asList(new int[]{0, 2}, new int[]{0, 6}, new int[]{1, 3}, new int[]{1, 4}, new int[]{1, 5}, new int[]{0, 3}, new int[]{0, 5}));
+        ArrayList<int[]> actualKingMoves = whiteMovement.moveHandler(boardTiles[0][4], boardTiles, 0);
+        
+        assertEquals(expectedKingMoves.size(), actualKingMoves.size());
+        for (int index = 0; index < expectedKingMoves.size(); index++) {
+            assertEquals(compareCoordinates(expectedKingMoves.get(index), actualKingMoves.get(index)), true);
+        }
+
+
+        //Tests that king can move and take all squares around it, and that it ignores being in check
+        //or that a move will put it in check, since this is handled in checkLegalMoves
+        game = new Game();
+        boardTiles = game.getBoardTilesDeepCopy();
+        boardTiles[5][3].setPiece(whiteKing1);
+        
+        expectedKingMoves = new ArrayList<>(Arrays.asList(new int[]{6, 2}, new int[]{6, 3}, new int[]{6, 4}, new int[]{5, 2}, new int[]{5, 4}, new int[]{4, 2}, new int[]{4, 3}, new int[]{4, 4}));
+        actualKingMoves = whiteMovement.moveHandler(boardTiles[5][3], boardTiles, 0);
+       
+        assertEquals(expectedKingMoves.size(), actualKingMoves.size());
+        for (int index = 0; index < expectedKingMoves.size(); index++) {
+            assertEquals(compareCoordinates(expectedKingMoves.get(index), actualKingMoves.get(index)), true);
+        }
     }
 
     @Test
