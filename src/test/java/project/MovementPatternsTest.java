@@ -14,6 +14,7 @@ import project.Movement.Game;
 import project.Movement.MovementPatterns;
 import project.Pieces.Bishop;
 import project.Pieces.King;
+import project.Pieces.Knight;
 import project.Pieces.Pawn;
 import project.Pieces.Rook;
 
@@ -254,7 +255,35 @@ public class MovementPatternsTest {
     @Test
     @DisplayName("Knight test")
     public void knightTest() {
-        
+        //Out-of-bounds checking was already performed in startPosTest.
+        Knight blackKnight1 = new Knight("bK1", 'b');
+
+        //Tests that Knight can't take pieces in own color and moves correctly
+        game = new Game();
+        boardTiles = game.getBoardTilesDeepCopy();
+
+        boardTiles[5][3].setPiece(blackKnight1);
+
+        ArrayList<int[]> expectedKnightMoves = new ArrayList<>(Arrays.asList(new int[]{4, 1}, new int[]{3, 2}, new int[]{4, 5}, new int[]{3, 4}));
+        ArrayList<int[]> actualKnightMoves = blackMovement.moveHandler(boardTiles[5][3], boardTiles, 0);
+       
+        assertEquals(expectedKnightMoves.size(), actualKnightMoves.size());
+        for (int index = 0; index < expectedKnightMoves.size(); index++) {
+            assertEquals(compareCoordinates(expectedKnightMoves.get(index), actualKnightMoves.get(index)), true);
+        }
+
+        //Tests that the knight moves correctly and takes enemies 
+        boardTiles = game.getBoardTilesDeepCopy();
+
+        boardTiles[2][3].setPiece(blackKnight1);
+
+        expectedKnightMoves = new ArrayList<>(Arrays.asList(new int[]{3, 1}, new int[]{4, 2}, new int[]{3, 5}, new int[]{4, 4}, new int[]{1, 1}, new int[]{0, 2}, new int[]{1, 5}, new int[]{0, 4}));
+        actualKnightMoves = blackMovement.moveHandler(boardTiles[2][3], boardTiles, 0);
+       
+        assertEquals(expectedKnightMoves.size(), actualKnightMoves.size());
+        for (int index = 0; index < expectedKnightMoves.size(); index++) {
+            assertEquals(compareCoordinates(expectedKnightMoves.get(index), actualKnightMoves.get(index)), true);
+        }
     }
 
     @Test
@@ -316,5 +345,4 @@ public class MovementPatternsTest {
             }
         }
     }
-
 }
