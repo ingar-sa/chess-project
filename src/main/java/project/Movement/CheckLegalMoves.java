@@ -136,13 +136,13 @@ public class CheckLegalMoves {
 
             for (int[] ourMove : ourPieceMoves) {
  
-                int ourPieceRow = ourPiece[0];
-                int ourPieceCol = ourPiece[1];
+                int ourMoveFromRow = ourPiece[0];
+                int ourMoveFromCol = ourPiece[1];
 
                 int ourMoveToRow = ourMove[0];
                 int ourMoveToCol = ourMove[1];
                 
-                Piece pieceToMove   = currentPositionTiles[ourPieceRow][ourPieceCol].getPiece();
+                Piece pieceToMove   = currentPositionTiles[ourMoveFromRow][ourMoveFromCol].getPiece();
                 Piece pieceAtMoveTo = currentPositionTiles[ourMoveToRow][ourMoveToCol].getPiece();
 
                 //Checks if king moves, if yes, fields have to be updated
@@ -160,7 +160,7 @@ public class CheckLegalMoves {
                 }
 
                 //Moves the piece 
-                currentPositionTiles[ourPieceRow][ourPieceCol].removePiece();
+                currentPositionTiles[ourMoveFromRow][ourMoveFromCol].removePiece();
                 currentPositionTiles[ourMoveToRow][ourMoveToCol].setPiece(pieceToMove);
                 
                 //Updates the king position
@@ -254,28 +254,30 @@ public class CheckLegalMoves {
 
                 //Moves the piece we moved back 
                 Piece pieceToMoveBack = currentPositionTiles[ourMoveToRow][ourMoveToCol].getPiece();
-                currentPositionTiles[ourPieceRow][ourPieceCol].setPiece(pieceToMoveBack);
+                currentPositionTiles[ourMoveFromRow][ourMoveFromCol].setPiece(pieceToMoveBack);
 
                 //Replaces the piece that was at the spot we moved to 
                 currentPositionTiles[ourMoveToRow][ourMoveToCol].removePiece();
                 currentPositionTiles[ourMoveToRow][ourMoveToCol].setPiece(pieceAtMoveTo);
 
+                //TODO: CHANGED: setPiece now checks if the argument piece is null, and sets occupied appropriately
                 //Since setPiece also makes Occupied = True, this has to handeled
-                if (currentPositionTiles[ourMoveToRow][ourMoveToCol].getPiece() == null) {
-                    currentPositionTiles[ourMoveToRow][ourMoveToCol].setOccupied(false);
-                }
+                // if (currentPositionTiles[ourMoveToRow][ourMoveToCol].getPiece() == null) {
+                //     currentPositionTiles[ourMoveToRow][ourMoveToCol].setOccupied(false);
+                // }
                 
-                currentPositionTiles[ourPieceRow][ourPieceCol].setPiece(pieceToMoveBack);
+                //REDUNDANT, this was performed above
+                //currentPositionTiles[ourMoveFromRow][ourMoveFromCol].setPiece(pieceToMoveBack);
 
                 //Reset King field if king moved 
                 if (whiteKingMoves) {
-                    whiteKingPos = new int[]{ourPieceRow, ourPieceCol};
+                    whiteKingPos = new int[]{ourMoveFromRow, ourMoveFromCol};
                 }
                 if (blackKingMoves) {
-                    blackKingPos = new int[]{ourPieceRow, ourPieceCol};
+                    blackKingPos = new int[]{ourMoveFromRow, ourMoveFromCol};
                 }
                 
-                deleteMoveAtIndex ++;
+                ++deleteMoveAtIndex;
             }
             //Removes all the illegal moves for a piece that breaks check
             ourPieceMoves.removeAll(movesToRemove);
