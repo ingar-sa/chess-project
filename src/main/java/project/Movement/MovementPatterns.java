@@ -413,8 +413,33 @@ public class MovementPatterns {
 
         MovementPatterns wPattern = new MovementPatterns('w');
         MovementPatterns bPattern = new MovementPatterns('b');
-        /*
         Game game = new Game(); 
+        Tile[][] boardTiles = game.getBoardTilesDeepCopy();
+
+        Bishop blackBishop1 = new Bishop("bB1", 'b');
+        
+        boardTiles[4][5].setPiece(blackBishop1);
+        arraylistStringForm(bPattern.moveHandler(boardTiles[4][5], boardTiles, 1));
+        
+        
+        /*
+        Tile[][] boardTiles = new Tile[8][8];
+        makeBoard(boardTiles);
+        
+        Pawn whitePawn3 = new Pawn("wP3", 'w');
+        Pawn whitePawn4 = new Pawn("wP4", 'w');
+        Pawn whitePawn5 = new Pawn("wP5", 'w');
+        Pawn blackPawn5 = new Pawn("bP5:", 'b');
+        
+        boardTiles[6][3].setPiece(blackPawn5);
+        boardTiles[5][2].setPiece(whitePawn3);
+        boardTiles[5][4].setPiece(whitePawn4);
+        boardTiles[5][3].setPiece(whitePawn5);
+        
+        arraylistStringForm(bPattern.moveHandler(boardTiles[6][3], boardTiles, 1));
+    
+
+        
         //Tile[][] boardTiles = game.getBoardDeepCopyUsingSerialization();
         System.out.println("White");
         for (int col = 0; col < 8; ++col) {
@@ -445,7 +470,7 @@ public class MovementPatterns {
         boardTiles[4][4].setPiece(blackPawn4);
 
         System.out.println();
-        */
+        
 
         System.out.println("\nBishop");
         Tile[][] boardTiles = new Tile[8][8];
@@ -454,7 +479,15 @@ public class MovementPatterns {
         Bishop blackBishop1 = new Bishop("bB1", 'b');
         boardTiles[3][4].setPiece(blackBishop1);
         arraylistStringForm(bPattern.moveHandler(boardTiles[3][4], boardTiles, 0));
+        
 
+        Rook whiteRook1 = new Rook("wR1", 'w');
+        Game game = new Game();
+        Tile[][] boardTiles = game.getBoardDeepCopyUsingSerialization();
+        boardTiles[3][3].setPiece(whiteRook1);
+
+        arraylistStringForm(wPattern.moveHandler(boardTiles[3][3], boardTiles, 0));
+        */
         
     }
 

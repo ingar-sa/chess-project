@@ -388,7 +388,7 @@ public class ChessController implements Serializable {
         }
 
         try {   
-            saveBoardState.saveGame(saveName, game.getBoardDeepCopyUsingSerialization(), game.getMoveNumber());
+            saveBoardState.saveGame(saveName, game.getBoardTilesDeepCopy(), game.getMoveNumber());
         } 
         catch (IOException e) {
             messageDisplay.setText("Illegal character(s) in file name!");

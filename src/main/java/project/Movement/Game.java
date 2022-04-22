@@ -60,7 +60,7 @@ public class Game implements Serializable, Iterable<String[]> {
         makeBoard();
         placePieces();
         this.checkLegalMoves = new CheckLegalMoves(); 
-        this.allLegalMovesAfterControl = checkLegalMoves.checkforCheckMateAndPat(this.getBoardDeepCopyUsingSerialization()); //allLegalMovesAfterControl is initialized with whites available moves
+        this.allLegalMovesAfterControl = checkLegalMoves.checkforCheckMateAndPat(this.getBoardTilesDeepCopy()); //allLegalMovesAfterControl is initialized with whites available moves
         this.whiteMovement = new MovementPatterns('w');
         this.blackMovement = new MovementPatterns('b');
     }
@@ -206,7 +206,7 @@ public class Game implements Serializable, Iterable<String[]> {
     //https://www.studytonight.com/java-examples/how-to-make-a-deep-copy-of-an-object-in-java
 
     //Fjerne try catch? - kommer til å krasje uansett, eller legge til sikkerhet der den brukes
-    public Tile[][] getBoardDeepCopyUsingSerialization()
+    public Tile[][] getBoardTilesDeepCopy()
 	{
 		try
 		{
@@ -502,7 +502,7 @@ public class Game implements Serializable, Iterable<String[]> {
 
         //allLegalMovesAfterControl is updated with the opposite player's moves here, as opposed to updating it 
         //during the next call of getLegalMoves. This allows us to use getGameStatus() to check for a mate or pat
-        this.allLegalMovesAfterControl = checkLegalMoves.checkforCheckMateAndPat(this.getBoardDeepCopyUsingSerialization());  
+        this.allLegalMovesAfterControl = checkLegalMoves.checkforCheckMateAndPat(this.getBoardTilesDeepCopy());  
         this.updatedGameCastlingEnpassent = true;
         this.pieceReadyToMove = true;
 
@@ -708,7 +708,7 @@ public class Game implements Serializable, Iterable<String[]> {
     public void loadedGamePiecesPosition(String saveGameString) {
 
         //Saves the orginal game state if something is wrong
-        Tile[][] currentGamePosition = this.getBoardDeepCopyUsingSerialization();
+        Tile[][] currentGamePosition = this.getBoardTilesDeepCopy();
         int currentMoveNumber = checkLegalMoves.getMoveNumber();
 
         if (!validationOfString(saveGameString)) {
@@ -777,7 +777,7 @@ public class Game implements Serializable, Iterable<String[]> {
         this.updatedGameCastlingEnpassent = true;
         this.pieceReadyToMove = true;
         this.promotionPawn = false;
-        this.allLegalMovesAfterControl = checkLegalMoves.checkforCheckMateAndPat(this.getBoardDeepCopyUsingSerialization());
+        this.allLegalMovesAfterControl = checkLegalMoves.checkforCheckMateAndPat(this.getBoardTilesDeepCopy());
 
         printBoard();
     }
@@ -917,7 +917,7 @@ public class Game implements Serializable, Iterable<String[]> {
 
         //If setPlayerMove returns true - white is moving
         if (setPlayerToMove()) {
-            HashMap<int[], ArrayList<int[]>> allMovesWhite = checkLegalMoves.findAllMoves(whiteMovement, this.getBoardDeepCopyUsingSerialization());
+            HashMap<int[], ArrayList<int[]>> allMovesWhite = checkLegalMoves.findAllMoves(whiteMovement, this.getBoardTilesDeepCopy());
             Collection<ArrayList<int[]>> onlyValuesAllMovesWhite = allMovesWhite.values();
             
             for (ArrayList<int[]> allMovesForAPiece: onlyValuesAllMovesWhite) {
@@ -930,7 +930,7 @@ public class Game implements Serializable, Iterable<String[]> {
 
         }
         else {
-            HashMap<int[], ArrayList<int[]>> allMovesBlack = checkLegalMoves.findAllMoves(blackMovement, this.getBoardDeepCopyUsingSerialization());
+            HashMap<int[], ArrayList<int[]>> allMovesBlack = checkLegalMoves.findAllMoves(blackMovement, this.getBoardTilesDeepCopy());
             Collection<ArrayList<int[]>> onlyValuesAllMovesBlack = allMovesBlack.values();
 
             for (ArrayList<int[]> allMovesForAPiece: onlyValuesAllMovesBlack) {
