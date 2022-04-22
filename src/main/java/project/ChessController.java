@@ -1,5 +1,6 @@
 package project;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -373,17 +374,17 @@ public class ChessController implements Serializable {
         this.saveNameField.setText("");
 
         if (saveName.equals("") || (saveName.contains("\\")) || (saveName.contains("/"))) {
-            messageDisplay.setText("Illegal character(s) in file name!");
+            messageDisplay.setText("Illegal character(s) in file name");
             return;
         }
 
         if (!(this.pawnPromotion.equals(""))) {
-            messageDisplay.setText("Promote pawn before saving!");
+            messageDisplay.setText("Promote pawn before saving");
             return;
         }
 
         if (this.gameIsOver) {
-            messageDisplay.setText("Cant save a game that is over!");
+            messageDisplay.setText("Can't save a game that is over");
             return;
         }
 
@@ -391,8 +392,9 @@ public class ChessController implements Serializable {
             saveBoardState.saveGame(saveName, game.getBoardTilesDeepCopy(), game.getMoveNumber());
         } 
         catch (IOException e) {
-            messageDisplay.setText("Illegal character(s) in file name!");
-            System.err.println(e.getStackTrace());
+            messageDisplay.setText("An IOException occurred");
+            System.err.println(e.toString());
+            e.printStackTrace();
         }
 
     }
@@ -405,34 +407,40 @@ public class ChessController implements Serializable {
         this.loadNameField.setText("");
 
         if (!(this.pawnPromotion.equals(""))) {
-            messageDisplay.setText("Promote pawn before loading game!");
+            messageDisplay.setText("Promote pawn before loading game");
             return;
         }
 
         try {
             saveGameString = saveBoardState.loadGame(fileName);
+
+            try {
+                game.loadedGamePiecesPosition(saveGameString);
+            }
+            catch(IllegalArgumentException e) {
+                this.pieceHasBeenChosen = false;
+                messageDisplay.setText("The formatting for the file is wrong or the game is over (press reset)");
+                return;
+            }
+
+            saveNameField.setText("");
+            messageDisplay.setText("");
+            
+            //If there is a selected piece, it needs to be reset  
+            this.pieceHasBeenChosen = false;
+            removeCirclesForLegalMoves();
+            placeSprites();
+        }
+        catch (FileNotFoundException e) {
+            messageDisplay.setText("No such file exists");
+            e.printStackTrace();
+            // System.err.println(e.getStackTrace());
         }
         catch (IOException e) {
-            messageDisplay.setText("There is no file with that name or the file is corrupted");
-            System.err.println(e.getStackTrace());
+            messageDisplay.setText("An IOException occurred");
+            e.printStackTrace();
+            // System.err.println(e.getStackTrace());
         }
-
-        try {
-            game.loadedGamePiecesPosition(saveGameString);
-        }
-        catch(IllegalArgumentException e) {
-            this.pieceHasBeenChosen = false;
-            messageDisplay.setText("The formatting for the file is wrong or the game is over (press reset)");
-            return;
-        }
-
-        saveNameField.setText("");
-        messageDisplay.setText("");
-        
-        //If there is a selected piece, it needs to be reset  
-        this.pieceHasBeenChosen = false;
-        removeCirclesForLegalMoves();
-        placeSprites();
     }
 
     @FXML
