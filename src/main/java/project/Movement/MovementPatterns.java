@@ -27,6 +27,7 @@ public class MovementPatterns {
     }
 
     public ArrayList<int[]> moveHandler(Tile tile, Tile[][] boardTiles, int moveNumber) {
+
         Piece piece               = tile.getPiece();
         ArrayList<int[]> allMoves = new ArrayList<int[]>();
         
@@ -387,14 +388,14 @@ public class MovementPatterns {
     }
 
      //TODO: Slett!
-     public static String arraylistStringForm(ArrayList<int[]> allMoves) {
+     public static void arraylistStringForm(ArrayList<int[]> allMoves) {
 
         String stringOfAllMoves = new String();
         for (int[] move : allMoves) {
             stringOfAllMoves += "new " + "int[]" + "{" + move[0] + ", " + move[1] + "}" + ", ";
         }
     
-        return stringOfAllMoves;
+        System.out.println(stringOfAllMoves);
         }
     
     public static void makeBoard(Tile[][] boardTiles) {
@@ -443,8 +444,16 @@ public class MovementPatterns {
         boardTiles[4][3].setPiece(blackPawn3);
         boardTiles[4][4].setPiece(blackPawn4);
 
-        System.out.println(arraylistStringForm(wPattern.moveHandler(boardTiles[3][3], boardTiles, 0)));
+        System.out.println();
         */
+
+        System.out.println("\nBishop");
+        Tile[][] boardTiles = new Tile[8][8];
+        makeBoard(boardTiles);
+
+        Bishop blackBishop1 = new Bishop("bB1", 'b');
+        boardTiles[3][4].setPiece(blackBishop1);
+        arraylistStringForm(bPattern.moveHandler(boardTiles[3][4], boardTiles, 0));
 
         
     }

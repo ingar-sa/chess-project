@@ -2,15 +2,10 @@ package project.Files;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Serializable;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Scanner;
+
 
 import project.Board.Tile;
 import project.Pieces.King;
@@ -28,9 +23,13 @@ public class SaveBoardState implements ISaveHandler {
         Empty tile:         00-
     */
 
+
+	//Add except
 	@Override
 	public void saveGame(String saveName, Tile[][] chessboard, int moveNumber) throws IOException {
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/java/project/Files/savegames/" + saveName + ".txt"))) {
+
+
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(getFile(saveName)))) { //(new FileWriter("src/main/java/project/Files/savegames/" + saveName + ".txt"))) {
 
 		String saveGameData = new String();
 
@@ -58,16 +57,16 @@ public class SaveBoardState implements ISaveHandler {
                     }
 
                     saveGameData += "-";
-                }
-                else {
-                    saveGameData += "00-";
-                }
-            }
-        }
+					}
+					else {
+						saveGameData += "00-";
+					}
+				}
+        	}
 
-		saveGameData += moveNumber;
+			saveGameData += moveNumber;
 
-		writer.write(saveGameData);
+			writer.write(saveGameData);
 		}
 	}
 
@@ -76,17 +75,23 @@ public class SaveBoardState implements ISaveHandler {
 
 		String saveData = new String();
 
-		try (BufferedReader reader = new BufferedReader(new FileReader("src/main/java/project/Files/savegames/" + saveName + ".txt"))) {
+		try (BufferedReader reader = new BufferedReader(new FileReader(getFile(saveName)))) {
 			saveData = reader.readLine();
 		}
 		
 		return saveData;
 	}
 		
-		
-		
-
+	private String getFile(String fileName) {
+		String separator = System.getProperty("file.separator"); //Gets correct filepath separator for the OS
+		String folderPath = String.format("src%1$smain%1$sjava%1$sproject%1$sFiles%1$ssavegames%1$s", separator);
+		String filePath = folderPath + fileName + ".txt";
+		return filePath;
+	}
+	
 }
+
+
 
     
 	// public void saveGame(String saveName, String saveDataString) {

@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import project.Board.Tile;
 import project.Movement.Game;
 import project.Movement.MovementPatterns;
+import project.Pieces.Bishop;
 import project.Pieces.Pawn;
 
 public class MovementPatternsTest {
@@ -68,6 +69,7 @@ public class MovementPatternsTest {
         }
 
         //Test for all other white start pieces
+        //This tests edge-of-board bound checking and friendly collision for all pieces except pawns. 
         for (int col = 0; col < 8; ++col) {
             if (col == 1) {
                 ArrayList<int[]> expectedWhiteKnightMoves = new ArrayList<>(Arrays.asList(new int[]{2, 0}, new int[]{2, 2}));
@@ -92,7 +94,8 @@ public class MovementPatternsTest {
             assertEquals(whiteMovement.moveHandler(boardTiles[0][col], boardTiles, 0).size(), 0);
         }
 
-        //Test for all other black pieces 
+        //Test for all other black pieces
+        //Like white, this tests edge-of-board bound checking and friendly collision
         for (int col = 0; col < 8; ++col) {
             
             if (col == 1) {
@@ -124,7 +127,7 @@ public class MovementPatternsTest {
     @DisplayName("Pawn test")
     public void pawnTest() {
 
-        //Tests that en passent move and normal moves are returned if en passent is allowed
+        //Tests that en passent move and other legal moves are returned if en passent is allowed
         Pawn whitePawn1 = new Pawn("wP1", 'w');
         Pawn blackPawn1 = new Pawn("bP1", 'b');
         
@@ -151,7 +154,7 @@ public class MovementPatternsTest {
         assertEquals(expectedPawnMoves.size(), actualPawnMoves.size());
         assertEquals(compareCoordinates(expectedPawnMoves.get(0),  actualPawnMoves.get(0)), true);
 
-        //Tests if en passent (for white) is not allowed given that the player did not move his pawn two tiles last turn (black)
+        //Tests if en passent is not allowed given that the opponent did not move his pawn two tiles last turn
         blackPawn1.setMoveNumberEnPassant(10);
         blackPawn1.setMovedTwoLastTurn(false);
 
@@ -195,7 +198,34 @@ public class MovementPatternsTest {
     @Test
     @DisplayName("Bishop test")
     public void bishopTest() {
-        // Bishop blackBishop1
+
+        Bishop blackBishop1 = new Bishop("bB1", 'b');
+        
+        boardTiles[3][4].setPiece(blackBishop1);
+
+        ArrayList<int[]> expectedBishopMoves = new ArrayList<>(Arrays.asList(new int[]{4, 5}, new int[]{5, 6}, new int[]{6, 7}, new int[]{4, 3}, new int[]{5, 2}, new int[]{6, 1}, new int[]{7, 0}, new int[]{2, 5}, new int[]{1, 6}, new int[]{0, 7}, new int[]{2, 3}, new int[]{1, 2}, new int[]{0, 1}));
+        ArrayList<int[]> actualBishopMoves = blackMovement.moveHandler(boardTiles[3][4], boardTiles, 0);
+
+        assertEquals(expectedBishopMoves.size(), actualBishopMoves.size());
+
+        for (int index = 0; index < expectedBishopMoves.size(); index++) {
+             assertEquals(compareCoordinates(expectedBishopMoves.get(index), actualBishopMoves.get(index)), true);
+        }
+
+        Pawn whitePawn1 = new Pawn("wP2", 'w');
+        Pawn blackPawn1 = new Pawn("bP2", 'b');
+        
+        boardTiles[5][6].setPiece(whitePawn1);
+        boardTiles[6][7].setPiece(blackPawn1);
+
+        expectedBishopMoves = new ArrayList<>(Arrays.asList(new int[]{4, 5}, new int[]{5, 6}, new int[]{4, 3}, new int[]{5, 2}, new int[]{6, 1}, new int[]{7, 0}, new int[]{2, 5}, new int[]{1, 6}, new int[]{0, 7}, new int[]{2, 3}, new int[]{1, 2}, new int[]{0, 1}));
+        actualBishopMoves = blackMovement.moveHandler(boardTiles[3][4], boardTiles, 0);
+
+        assertEquals(expectedBishopMoves.size(), actualBishopMoves.size());
+        
+        for (int index = 0; index < expectedBishopMoves.size(); index++) {
+             assertEquals(compareCoordinates(expectedBishopMoves.get(index), actualBishopMoves.get(index)), true);
+        }
         
     }
 
