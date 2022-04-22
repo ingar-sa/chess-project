@@ -14,6 +14,7 @@ import project.Movement.Game;
 import project.Movement.MovementPatterns;
 import project.Pieces.Bishop;
 import project.Pieces.Pawn;
+import project.Pieces.Rook;
 
 public class MovementPatternsTest {
     
@@ -28,23 +29,24 @@ public class MovementPatternsTest {
         this.whiteMovement = new MovementPatterns('w');
         this.blackMovement = new MovementPatterns('b');
         this.boardTiles = new Tile[8][8];
+        makeEmptyBoard();
 
-        for (int row = 0; row < 8; ++row) {
-            for (int col = 0; col < 8; ++col) {
-
-                Tile tile = new Tile(row, col);
-                this.boardTiles[row][col] = tile;
-            }
-        }
     }
     
-    
-    //TODO: Add comment 
+    /*
+        With the exception of pawns, the two colors use the same
+        algorithm for movement, so which color is used in those tests
+        is arbitrary.
+
+        The queen combines the rook and the bishops movement algorithms
+        to get her moves. It is therefore unnecessary to test her method.
+    */
+
     @Test
     @DisplayName("Start position test")
     public void startPosTest() {
         game = new Game();
-        boardTiles = game.getBoardDeepCopyUsingSerialization();
+        boardTiles = game.getBoardTilesDeepCopy();
         
         //Test white pawns start position moves
         for (int col = 0; col < 8; col++) {
@@ -145,6 +147,7 @@ public class MovementPatternsTest {
         assertEquals(compareCoordinates(actualWhiteEnPassentPawnMoves.get(0),  expectedEnPassentPawnMoves.get(0)), true);
         assertEquals(compareCoordinates(actualWhiteEnPassentPawnMoves.get(1), expectedEnPassentPawnMoves.get(1)), true);
 
+
         //Tests if the pawn that could be taken by en passent moved last turn
         blackPawn1.setMoveNumberEnPassant(9);
 
@@ -164,7 +167,10 @@ public class MovementPatternsTest {
         assertEquals(expectedPawnMoves.size(), actualPawnMoves.size());
         assertEquals(compareCoordinates(expectedPawnMoves.get(0),  actualPawnMoves.get(0)), true);
 
-        //Tests that pawn attacks on diagonal, and is blocked by a piece directly in front of it
+        //Tests that a white pawn attacks on diagonal, and is blocked by a piece directly in front of it
+
+        makeEmptyBoard(); //Reset the board
+
         Pawn whitePawn2 = new Pawn("wP2", 'w');
         Pawn blackPawn2 = new Pawn("bP2", 'b');
         Pawn blackPawn3 = new Pawn("bP3", 'b');
@@ -179,8 +185,32 @@ public class MovementPatternsTest {
         actualPawnMoves = whiteMovement.moveHandler(boardTiles[3][3], boardTiles, 1);
         
         assertEquals(expectedPawnMoves.size(), actualPawnMoves.size());
-        assertEquals(compareCoordinates(expectedPawnMoves.get(0),  actualPawnMoves.get(0)), true);
-        assertEquals(compareCoordinates(expectedPawnMoves.get(1), actualPawnMoves.get(1)), true);
+        for (int index = 0; index < expectedPawnMoves.size(); index++) {
+            assertEquals(compareCoordinates(expectedPawnMoves.get(index), actualPawnMoves.get(index)), true);
+       }
+
+        //Tests that a black pawn attacks on diagonal, and is blocked by a piece directly in front of it
+
+        makeEmptyBoard(); //Reset the board
+
+        Pawn whitePawn3 = new Pawn("wP3", 'w');
+        Pawn whitePawn4 = new Pawn("wP4", 'w');
+        Pawn whitePawn5 = new Pawn("wP5", 'w');
+        Pawn blackPawn5 = new Pawn("bP45:", 'b');
+        
+        boardTiles[6][3].setPiece(blackPawn5);
+        boardTiles[5][2].setPiece(whitePawn3);
+        boardTiles[5][4].setPiece(whitePawn4);
+        boardTiles[5][3].setPiece(whitePawn5);
+
+        expectedPawnMoves = new ArrayList<>(Arrays.asList(new int[]{5, 2}, new int[]{5, 4}));
+        actualPawnMoves = blackMovement.moveHandler(boardTiles[6][3], boardTiles, 1);
+        
+        assertEquals(expectedPawnMoves.size(), actualPawnMoves.size());
+        for (int index = 0; index < expectedPawnMoves.size(); index++) {
+            assertEquals(compareCoordinates(expectedPawnMoves.get(index), actualPawnMoves.get(index)), true);
+       }
+        
     }
 
     @Test
@@ -199,50 +229,60 @@ public class MovementPatternsTest {
     @DisplayName("Bishop test")
     public void bishopTest() {
 
+        game = new Game();
+        boardTiles = game.getBoardTilesDeepCopy();
+
         Bishop blackBishop1 = new Bishop("bB1", 'b');
-        
-        boardTiles[3][4].setPiece(blackBishop1);
+        boardTiles[4][5].setPiece(blackBishop1);
 
-        ArrayList<int[]> expectedBishopMoves = new ArrayList<>(Arrays.asList(new int[]{4, 5}, new int[]{5, 6}, new int[]{6, 7}, new int[]{4, 3}, new int[]{5, 2}, new int[]{6, 1}, new int[]{7, 0}, new int[]{2, 5}, new int[]{1, 6}, new int[]{0, 7}, new int[]{2, 3}, new int[]{1, 2}, new int[]{0, 1}));
-        ArrayList<int[]> actualBishopMoves = blackMovement.moveHandler(boardTiles[3][4], boardTiles, 0);
-
-        assertEquals(expectedBishopMoves.size(), actualBishopMoves.size());
-
-        for (int index = 0; index < expectedBishopMoves.size(); index++) {
-             assertEquals(compareCoordinates(expectedBishopMoves.get(index), actualBishopMoves.get(index)), true);
-        }
-
-        Pawn whitePawn1 = new Pawn("wP2", 'w');
-        Pawn blackPawn1 = new Pawn("bP2", 'b');
-        
-        boardTiles[5][6].setPiece(whitePawn1);
-        boardTiles[6][7].setPiece(blackPawn1);
-
-        expectedBishopMoves = new ArrayList<>(Arrays.asList(new int[]{4, 5}, new int[]{5, 6}, new int[]{4, 3}, new int[]{5, 2}, new int[]{6, 1}, new int[]{7, 0}, new int[]{2, 5}, new int[]{1, 6}, new int[]{0, 7}, new int[]{2, 3}, new int[]{1, 2}, new int[]{0, 1}));
-        actualBishopMoves = blackMovement.moveHandler(boardTiles[3][4], boardTiles, 0);
+        //Tests that a bishop can move across the board as expected, that it cannot take
+        //a piece of its own color, that it is bounded by the board and that it cannot
+        //take one of the opponents pieces that is behind another of their pieces
+        ArrayList<int[]> expectedBishopMoves = new ArrayList<>(Arrays.asList(new int[]{5, 6}, new int[]{5, 4}, new int[]{3, 6}, new int[]{2, 7}, new int[]{3, 4}, new int[]{2, 3}, new int[]{1, 2}));
+        ArrayList<int[]> actualBishopMoves = blackMovement.moveHandler(boardTiles[4][5], boardTiles, 0);
 
         assertEquals(expectedBishopMoves.size(), actualBishopMoves.size());
-        
         for (int index = 0; index < expectedBishopMoves.size(); index++) {
-             assertEquals(compareCoordinates(expectedBishopMoves.get(index), actualBishopMoves.get(index)), true);
-        }
-        
+            assertEquals(compareCoordinates(expectedBishopMoves.get(index), actualBishopMoves.get(index)), true);
+       }
     }
 
     @Test
     @DisplayName("Rook test")
     public void rookTest() {
-        
-    }
 
-    @Test
-    @DisplayName("Queen test")
-    public void queenTest() {
+        game = new Game();
+        boardTiles = game.getBoardTilesDeepCopy();
+
+        Rook whiteRook1 = new Rook("wR1", 'w');
+        boardTiles[3][3].setPiece(whiteRook1);
         
+        //Tests that a rook can move across the board as expected, that it cannot take
+        //a piece of its own color, that it is bounded by the board and that it cannot
+        //take one of the opponents pieces that is behind another of the opponents pieces
+        ArrayList<int[]> expectedRookMoves = new ArrayList<>(Arrays.asList( new int[]{4, 3}, new int[]{5, 3}, new int[]{6, 3}, new int[]{2, 3}, new int[]{3, 2}, new int[]{3, 1}, new int[]{3, 0}, new int[]{3, 4}, new int[]{3, 5}, new int[]{3, 6}, new int[]{3, 7}));
+        ArrayList<int[]> actualRookMoves   = whiteMovement.moveHandler(boardTiles[3][3], boardTiles, 0);
+
+        assertEquals(expectedRookMoves.size(), actualRookMoves.size());
+        for (int index = 0; index < expectedRookMoves.size(); index++) {
+            assertEquals(compareCoordinates(expectedRookMoves.get(index), actualRookMoves.get(index)), true);
+       }
+       
+       
     }
 
     private boolean compareCoordinates(int[] actual, int[] expected) {
         return (actual[0] == expected[0] && actual[1] == expected[1]) ? true : false;
+    }
+
+    private void makeEmptyBoard() {
+        for (int row = 0; row < 8; ++row) {
+            for (int col = 0; col < 8; ++col) {
+
+                Tile tile = new Tile(row, col);
+                this.boardTiles[row][col] = tile;
+            }
+        }
     }
 
 }
