@@ -27,98 +27,63 @@ public class SaveBoardState implements ISaveHandler {
 	//Add except
 	@Override
 	public void saveGame(String saveName, Tile[][] chessboard, int moveNumber) throws IOException {
-
-
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(getFile(saveName)))) { //(new FileWriter("src/main/java/project/Files/savegames/" + saveName + ".txt"))) {
 
-		String saveGameData = new String();
+			String saveGameData = new String();
 
-        for (Tile[] row : chessboard) {
-            for (Tile tile : row) {
-                if (tile.isOccupied()) {
-                    
-                    Piece piece = tile.getPiece();
-                    
-                    if (piece instanceof Pawn) {
-                        Pawn pawn = (Pawn)piece;                
+			for (Tile[] row : chessboard) {
+				for (Tile tile : row) {
+					if (tile.isOccupied()) {
+						
+						Piece piece = tile.getPiece();
+						
+						if (piece instanceof Pawn) {
+							Pawn pawn = (Pawn)piece;                
 
-                        saveGameData += pawn.getSpriteId() + "=";
-                        saveGameData += ((pawn.getHasMoved()) ? "1" : "0") + "=";
-                        saveGameData += ((pawn.getMovedTwoLastTurn()) ? "1" : "0") + "=";
-                        saveGameData += pawn.getMoveNumberEnPassant();
-                    }
-                    else if (piece instanceof Rook || piece instanceof King) {
+							saveGameData += pawn.getSpriteId() + "=";
+							saveGameData += ((pawn.getHasMoved()) ? "1" : "0") + "=";
+							saveGameData += ((pawn.getMovedTwoLastTurn()) ? "1" : "0") + "=";
+							saveGameData += pawn.getMoveNumberEnPassant();
+						}
+						else if (piece instanceof Rook || piece instanceof King) {
 
-                        saveGameData += piece.getSpriteId() + "=";
-                        saveGameData += ((piece.getHasMoved()) ? "1" : "0");
-                    }
-                    else {
-                        saveGameData += piece.getSpriteId();
-                    }
-
-                    saveGameData += "-";
+							saveGameData += piece.getSpriteId() + "=";
+							saveGameData += ((piece.getHasMoved()) ? "1" : "0");
+						}
+						else {
+							saveGameData += piece.getSpriteId();
+						}
 					}
 					else {
-						saveGameData += "00-";
+						saveGameData += "00";
 					}
+
+					saveGameData += "-";
 				}
-        	}
+			}
+			
 
 			saveGameData += moveNumber;
-
 			writer.write(saveGameData);
 		}
 	}
 
 	@Override
 	public String loadGame(String saveName) throws IOException {
-
-		String saveData = new String();
-
 		try (BufferedReader reader = new BufferedReader(new FileReader(getFile(saveName)))) {
+			String saveData = new String();
 			saveData = reader.readLine();
+			return saveData;
 		}
-		
-		return saveData;
 	}
 		
-	private String getFile(String fileName) {
-		String separator = System.getProperty("file.separator"); //Gets correct filepath separator for the OS
-		String folderPath = String.format("src%1$smain%1$sjava%1$sproject%1$sFiles%1$ssavegames%1$s", separator);
-		String filePath = folderPath + fileName + ".txt";
-		return filePath;
+	private String getFile(String filename) {
+		// String separator = System.getProperty("file.separator"); //Gets correct filepath separator for the OS
+		// String folderPath = String.format("src%1$smain%1$sjava%1$sproject%1$sFiles%1$ssavegames%1$s", separator);
+		// String filePath = folderPath + filename + ".txt";
+		// return filePath;
+
+		return SaveBoardState.class.getResource("savegames/").getFile() + filename + ".txt";
 	}
 	
 }
-
-
-
-    
-	// public void saveGame(String saveName, String saveDataString) {
-
-	// 	try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/java/project/Files/savegames/" + saveName + ".txt"))) {
-	// 		writer.write(saveDataString);
-	// 	} catch (IOException e) {
-	// 		System.err.println("An IO-exception occurred.");
-	// 		e.printStackTrace();
-	// 	} catch (Exception e) {
-	// 		System.err.println("An unknown error has occurred.");
-	// 	}
-	// }
-    
-	// public String loadGame(String saveName) {
-		
-	// 	String saveData = new String();
-
-	// 	try (BufferedReader reader = new BufferedReader(new FileReader("src/main/java/project/Files/savegames/" + saveName + ".txt"))) {
-	// 		saveData = reader.readLine();
-	// 	} catch (IOException e) {
-	// 		System.err.println("An IOEexception has occurred.");
-	// 		e.printStackTrace();
-	// 	} catch (Exception e) {
-	// 		System.err.println("An unknown error has occurred.");
-	// 		e.printStackTrace();
-	// 	}
-
-	// 	return saveData;
-	// }
