@@ -58,7 +58,6 @@ public class CheckLegalMoves {
         //The key is the coordinates [row, col] of the tile a piece is standing on. 
         //The value is an ArrayList of the coordinates [row, col] of the tiles the piece can move to
         HashMap<int[], ArrayList<int[]>> legalMoves = new HashMap<int[], ArrayList<int[]>>();
-        
         for (Tile[] row : boardTiles) {
             for (Tile tile : row) {
                 if (tile.isOccupied() 

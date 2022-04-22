@@ -27,7 +27,10 @@
 - Kanskje skrive at man utfører ulovelige trekk? 
 - Vi må lage interface for skriving til fil!
 - Se på synlighetsmodifikatorer 
+- Legge til at vi søker etter filer i controlleren
+- Koden skal ikke utløse unntak, de skal håndteres
 
 - Hvis mulig skal hjelpemetoden returnere true/false og ikke direkte kaste unntak.
 
 - SLETTE ALLE IKKE-JAVA FILER FØR INNLEVERING!!!
+
