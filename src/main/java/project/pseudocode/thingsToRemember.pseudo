@@ -1,6 +1,8 @@
 - se over implementasjon av serialilzable - trengs vell kun i game 
 - se over felter
-- se over setPiece of RemovePiece - skal vi fjerne at de også håndterer occupied. 
+- se over setPiece of RemovePiece - skal vi fjerne at de også håndterer occupied. //Stemmer nei for dette, fordi det forsikrer at isoccupied aldri blir feil hvis det er en brikke der. Det kan dog være lurt å gjøre motsatt, at occupied sjekker at det er en brikke der
+- gjøre at setOccupied 
+
 - se at fargene på tiles er riktig 
 - se etter overkill laging av brett 
 - se over felter/metoder som ikke blir brukt
