@@ -65,6 +65,17 @@ public class Game implements Serializable, Iterable<String[]> {
         this.blackMovement = new MovementPatterns('b');
     }
 
+    public Game(boolean pieces) {
+        makeBoard();
+        if (pieces) {
+            placePieces();
+        }
+        this.checkLegalMoves = new CheckLegalMoves(); 
+        this.allLegalMovesAfterControl = checkLegalMoves.checkforCheckMateAndPat(this.getBoardDeepCopyUsingSerialization()); //allLegalMovesAfterControl is initialized with whites available moves
+        this.whiteMovement = new MovementPatterns('w');
+        this.blackMovement = new MovementPatterns('b');
+    }
+
     public int isGameOver() {
         return checkLegalMoves.getGameStatus();
     }
