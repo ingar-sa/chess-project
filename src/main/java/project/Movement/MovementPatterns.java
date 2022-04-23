@@ -28,6 +28,9 @@ public class MovementPatterns {
 
     public ArrayList<int[]> moveHandler(Tile tile, Tile[][] boardTiles, int moveNumber) {
 
+        // if (!(boardTiles.length && boardTiles[0]))
+        
+        
         Piece piece               = tile.getPiece();
         ArrayList<int[]> allMoves = new ArrayList<int[]>();
         

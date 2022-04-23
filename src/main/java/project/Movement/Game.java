@@ -71,7 +71,7 @@ public class Game implements Serializable, Iterable<String[]> {
             placePieces();
         }
         this.checkLegalMoves = new CheckLegalMoves(); 
-        this.allLegalMovesAfterControl = checkLegalMoves.checkforCheckMateAndPat(this.getBoardDeepCopyUsingSerialization()); //allLegalMovesAfterControl is initialized with whites available moves
+        this.allLegalMovesAfterControl = checkLegalMoves.checkforCheckMateAndPat(this.getBoardTilesDeepCopy()); //allLegalMovesAfterControl is initialized with whites available moves
         this.whiteMovement = new MovementPatterns('w');
         this.blackMovement = new MovementPatterns('b');
     }
@@ -312,11 +312,11 @@ public class Game implements Serializable, Iterable<String[]> {
     public String isMoveEnPassent(int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
 
         if (gameIsOver) {
-            throw new IllegalStateException("The game is over, no pieces to move!");
+            throw new IllegalStateException("The game is over, no pieces to move");
         }
 
         if (!(validationOfMove(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol))) {
-            throw new IllegalArgumentException("The move is not legal!");
+            throw new IllegalArgumentException("The move is illegal");
         }
 
         //Makes sure you can only move one Piece before you need to update the game state  
@@ -438,7 +438,7 @@ public class Game implements Serializable, Iterable<String[]> {
     public void moveChosenPiece(int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
 
         if (this.gameIsOver) {
-            throw new IllegalStateException("The game is over, cant move pieces!");
+            throw new IllegalStateException("The game is over, can;t move pieces!");
         }
         
         if (!(validationOfMove(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol))) {
