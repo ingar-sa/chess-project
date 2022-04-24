@@ -1,6 +1,8 @@
 package project;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,7 +33,7 @@ public class MovementPatternsTest {
         this.whiteMovement = new MovementPatterns('w');
         this.blackMovement = new MovementPatterns('b');
         this.boardTiles = new Tile[8][8];
-        makeEmptyBoard();
+        makeEmptyBoard(this.boardTiles);
 
     }
     
@@ -40,12 +42,58 @@ public class MovementPatternsTest {
         algorithm for movement, so which color is used in those tests
         is arbitrary.
 
-        The queen combines the rook and the bishops movement algorithms
-        to get her moves. It is therefore unnecessary to test her method.
+        The queen combines the rook and the bishops movement algorithms, 
+        and it is therefore unnecessary to test her method specifically.
     */
 
     @Test
-    @DisplayName("Start position test")
+    @DisplayName("Tests that the method throws exception when there is illegal input")
+    public void moveHandlerTest() {
+        Tile[][] wrongDimensionsTiles1 = new Tile[8][7];
+        makeEmptyBoard(wrongDimensionsTiles1);
+                                        
+        Tile[][] wrongDimensionsTiles2 = new Tile[7][8];
+        makeEmptyBoard(wrongDimensionsTiles2);
+
+        Tile[][] wrongDimensionsTiles3 = new Tile[5][1];
+        makeEmptyBoard(wrongDimensionsTiles3);
+        
+        int negativeMovenumber = -1;
+        int zeroMovenumber     =  0;
+        int positiveMovenumber =  1;
+
+        assertThrows(IllegalArgumentException.class, 
+                     () -> whiteMovement.moveHandler(wrongDimensionsTiles1[0][0], 
+                                                     wrongDimensionsTiles1, 
+                                                     positiveMovenumber));
+
+        assertThrows(IllegalArgumentException.class, 
+                     () -> whiteMovement.moveHandler(wrongDimensionsTiles2[0][0], 
+                                                     wrongDimensionsTiles2, 
+                                                     positiveMovenumber));
+                                                      
+
+        assertThrows(IllegalArgumentException.class, 
+                     () -> whiteMovement.moveHandler(wrongDimensionsTiles3[0][0], 
+                                                     wrongDimensionsTiles3, 
+                                                     positiveMovenumber));
+
+        assertThrows(IllegalArgumentException.class, 
+                     () -> whiteMovement.moveHandler(this.boardTiles[0][0], 
+                                                     this.boardTiles, 
+                                                     negativeMovenumber));
+
+        assertDoesNotThrow(() -> whiteMovement.moveHandler(this.boardTiles[0][0], 
+                                                           this.boardTiles, 
+                                                           zeroMovenumber)); 
+                     
+        assertDoesNotThrow(() -> whiteMovement.moveHandler(this.boardTiles[0][0], 
+                                                           this.boardTiles, 
+                                                           positiveMovenumber));    
+    }
+
+    @Test
+    @DisplayName("Tests movement for all pieces for both colors in the start position")
     public void startPosTest() {
         game = new Game();
         boardTiles = game.getBoardTilesDeepCopy();
@@ -128,8 +176,8 @@ public class MovementPatternsTest {
 
 
     @Test
-    @DisplayName("Pawn test")
-    public void pawnTest() {
+    @DisplayName("Tests the pawns movement algorithm")
+    public void pawnMovesTest() {
 
         //Tests that en passent move and other legal moves are returned if en passent is allowed
         Pawn whitePawn1 = new Pawn("wP1", 'w');
@@ -171,7 +219,7 @@ public class MovementPatternsTest {
 
         //Tests that a white pawn attacks on diagonal, and is blocked by a piece directly in front of it
 
-        makeEmptyBoard(); //Reset the board
+        makeEmptyBoard(this.boardTiles); //Reset the board
 
         Pawn whitePawn2 = new Pawn("wP2", 'w');
         Pawn blackPawn2 = new Pawn("bP2", 'b');
@@ -193,7 +241,7 @@ public class MovementPatternsTest {
 
         //Tests that a black pawn attacks on diagonal, and is blocked by a piece directly in front of it
 
-        makeEmptyBoard(); //Reset the board
+        makeEmptyBoard(this.boardTiles); //Reset the board
 
         Pawn whitePawn3 = new Pawn("wP3", 'w');
         Pawn whitePawn4 = new Pawn("wP4", 'w');
@@ -216,8 +264,8 @@ public class MovementPatternsTest {
     }
 
     @Test
-    @DisplayName("King test")
-    public void kingTest() {
+    @DisplayName("Tests the kings movement algorithm")
+    public void kingMovesTest() {
 
         King whiteKing1 = new King("wK1", 'w');
         Rook whiteRook1 = new Rook("wR1", 'w');
@@ -253,8 +301,8 @@ public class MovementPatternsTest {
     }
 
     @Test
-    @DisplayName("Knight test")
-    public void knightTest() {
+    @DisplayName("Tests the knights movement algorithm")
+    public void knightMovesTest() {
         //Out-of-bounds checking was already performed in startPosTest.
         Knight blackKnight1 = new Knight("bK1", 'b');
 
@@ -287,8 +335,8 @@ public class MovementPatternsTest {
     }
 
     @Test
-    @DisplayName("Bishop test")
-    public void bishopTest() {
+    @DisplayName("Tests the bishops movement algorithm")
+    public void bishopMovesTest() {
 
         game = new Game();
         boardTiles = game.getBoardTilesDeepCopy();
@@ -309,8 +357,8 @@ public class MovementPatternsTest {
     }
 
     @Test
-    @DisplayName("Rook test")
-    public void rookTest() {
+    @DisplayName("Tests the rooks movement algorithm")
+    public void rookMovesTest() {
 
         game = new Game();
         boardTiles = game.getBoardTilesDeepCopy();
@@ -336,13 +384,14 @@ public class MovementPatternsTest {
         return (actual[0] == expected[0] && actual[1] == expected[1]) ? true : false;
     }
 
-    private void makeEmptyBoard() {
-        for (int row = 0; row < 8; ++row) {
-            for (int col = 0; col < 8; ++col) {
+    private void makeEmptyBoard(Tile[][] tileArray) {
+        for (int row = 0; row < tileArray.length; ++row) {
+            for (int col = 0; col < tileArray[0].length; ++col) {
 
                 Tile tile = new Tile(row, col);
-                this.boardTiles[row][col] = tile;
+                tileArray[row][col] = tile;
             }
         }
     }
+
 }

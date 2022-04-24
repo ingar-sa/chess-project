@@ -78,12 +78,12 @@ public class SaveBoardState implements ISaveHandler {
 	}
 		
 	private String getFile(String filename) {
-		// String separator = System.getProperty("file.separator"); //Gets correct filepath separator for the OS
-		// String folderPath = String.format("src%1$smain%1$sjava%1$sproject%1$sFiles%1$ssavegames%1$s", separator);
-		// String filePath = folderPath + filename + ".txt";
-		// return filePath;
+		String separator = System.getProperty("file.separator"); //Gets correct filepath separator for the OS
+		String folderPath = String.format("src%1$smain%1$sjava%1$sproject%1$sFiles%1$ssavegames%1$s", separator);
+		String filePath = folderPath + filename + ".txt";
+		return filePath;
 
-		return SaveBoardState.class.getResource("savegames/").getFile() + filename + ".txt";
+		//return SaveBoardState.class.getResource("savegames/").getFile() + filename + ".txt";
 	}
 	
 }

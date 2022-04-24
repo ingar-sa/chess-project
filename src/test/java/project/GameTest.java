@@ -31,7 +31,7 @@ public class GameTest {
     
     //TODO; can add test for all black pices as well
     @Test
-    @DisplayName("getPieceInfoFromTileTest - Tests that the returned piece info from a tile is correct")
+    @DisplayName("getPieceInfoFromTileTest")
     public void getPieceInfoFromTileTest() {
         
         //Checks that the empty board returns expected String[]
@@ -103,7 +103,6 @@ public class GameTest {
             }
         }
 
-    
         this.game = new Game();
 
         

@@ -28,8 +28,8 @@ public class MovementPatterns {
 
     public ArrayList<int[]> moveHandler(Tile tile, Tile[][] boardTiles, int moveNumber) {
 
-        // if (!(boardTiles.length && boardTiles[0]))
-        
+        if (!(boardTiles.length == 8 && boardTiles[0].length == 8 && moveNumber >= 0))
+            throw new IllegalArgumentException("Board size must be 8x8 and moveNumber must be greater than or equal to 0");
         
         Piece piece               = tile.getPiece();
         ArrayList<int[]> allMoves = new ArrayList<int[]>();

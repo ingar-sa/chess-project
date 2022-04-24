@@ -773,14 +773,14 @@ public class Game implements Serializable, Iterable<String[]> {
         }
 
         try {
-            validationOfGameState(boardTiles);
+            checkLegalMoves.validationOfGameState(this.getBoardTilesDeepCopy(), turnNumber);
         }
         catch (IllegalArgumentException e) {
 
             //resets the game if something about the game state was wrong, e.g, pawns in row 1 and 8. 
             this.boardTiles = currentGamePosition;
             checkLegalMoves.setMoveNumber(currentMoveNumber);
-            throw new IllegalArgumentException("This is not a legal chess position, no change was made!");
+            throw new IllegalArgumentException("This is not a legal chess position, no change was made");
         }
     
         //Reset attributes after the game is loaded
@@ -801,7 +801,7 @@ public class Game implements Serializable, Iterable<String[]> {
     // Pawns cant be placed at row 1 and 8.
     // And some other requirements that could/will break the game logic are checked.
     // From this you can write your own chess positions as strings and make custom starts that follow normal chess rules from that point. 
-
+    /*
     private void validationOfGameState(Tile[][] currentGamePosition) {
 
         int[] whiteKingLocation = new int[]{};
@@ -958,7 +958,7 @@ public class Game implements Serializable, Iterable<String[]> {
         }
     }
 
-
+    */
     private boolean checkForSameCoordinates(int[] coordinateOne, int[] coordinateTwo) {
 
         if (coordinateOne[0] == coordinateTwo[0] && coordinateOne[1] == coordinateTwo[1]) {
