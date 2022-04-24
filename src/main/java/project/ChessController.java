@@ -390,6 +390,7 @@ public class ChessController implements Serializable {
 
         try {   
             saveBoardState.saveGame(saveName, game.getBoardTilesDeepCopy(), game.getMoveNumber());
+            
         } 
         catch (IOException e) {
             messageDisplay.setText("An IOException occurred");
@@ -411,6 +412,10 @@ public class ChessController implements Serializable {
             return;
         }
 
+        if (gameIsOver) {
+            messageDisplay.setText("Game is over, reset the game");
+            return;
+        }
         try {
             saveGameString = saveBoardState.loadGame(fileName);
 
@@ -425,8 +430,7 @@ public class ChessController implements Serializable {
 
             saveNameField.setText("");
             messageDisplay.setText("");
-            
-            //If there is a selected piece, it needs to be reset  
+
             this.pieceHasBeenChosen = false;
             removeCirclesForLegalMoves();
             placeSprites();
@@ -440,8 +444,51 @@ public class ChessController implements Serializable {
             messageDisplay.setText("An IOException occurred");
             e.printStackTrace();
             // System.err.println(e.getStackTrace());
-        }
+        }  
     }
+
+    /*
+       @FXML
+    private void loadGame() {
+
+        String fileName = loadNameField.getText();
+        String saveGameString = new String();
+        this.loadNameField.setText("");
+
+        if (!(this.pawnPromotion.equals(""))) {
+            messageDisplay.setText("Promote pawn before loading game!");
+            return;
+        }
+
+        try {
+            saveGameString = saveBoardState.loadGame(fileName);
+        }
+        catch (IOException e) {
+            messageDisplay.setText("There is no file with that name or the file is corrupted");
+            System.err.println(e.getStackTrace());
+        }
+
+        try {
+            game.loadedGamePiecesPosition(saveGameString);
+        }
+        catch(IllegalArgumentException e) {
+            this.pieceHasBeenChosen = false;
+            messageDisplay.setText("The formatting for the file is wrong or the game is over (press reset)");
+            return;
+        }
+
+        saveNameField.setText("");
+        messageDisplay.setText("");
+        
+        //If there is a selected piece, it needs to be reset  
+        this.pieceHasBeenChosen = false;
+        removeCirclesForLegalMoves();
+        placeSprites();
+    }
+
+
+
+     */
 
     @FXML
     private void resetGame() {
