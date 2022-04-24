@@ -49,7 +49,7 @@ public class MovementPatternsTest {
     @Test
     @DisplayName("Tests that the method throws exception when there is illegal input")
     public void moveHandlerTest() {
-        Tile[][] wrongDimensionsTiles1 = new Tile[8][7];
+        Tile[][] wrongDimensionTiles = new Tile[7][];Tile[][] wrongDimensionsTiles1 = new Tile[8][7];
         makeEmptyBoard(wrongDimensionsTiles1);
                                         
         Tile[][] wrongDimensionsTiles2 = new Tile[7][8];

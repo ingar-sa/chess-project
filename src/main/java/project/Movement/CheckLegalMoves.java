@@ -408,6 +408,7 @@ public class CheckLegalMoves {
     // And some other requirements that could/will break the game logic are checked.
     // From this you can write your own chess positions as strings and make custom starts that follow normal chess rules from that point. 
 
+    //TODO: Change movenumber?
     public void validationOfGameState(Tile[][] currentGamePosition, int moveNumber) {
 
         int[] whiteKingLocation = new int[]{};
@@ -416,6 +417,7 @@ public class CheckLegalMoves {
         int blackKingCount = 0;
         int rowCount = -1;
         ArrayList<Integer> pawnMoveNumbers = new ArrayList<Integer>();
+
 
         if (!(currentGamePosition.length == 8 && currentGamePosition[0].length == 8 && moveNumber >= 0))
             throw new IllegalArgumentException("Board size must be 8x8 and moveNumber must be greater than or equal to 0");
@@ -487,7 +489,7 @@ public class CheckLegalMoves {
             throw new IllegalArgumentException("Too many or too few kings, only two are allowed!");
         }
 
-         int highestPawnMoveNumber = 0;
+        int highestPawnMoveNumber = 0;
 
         if (pawnMoveNumbers.size() != 0)
             highestPawnMoveNumber = Collections.max(pawnMoveNumbers);
@@ -516,7 +518,7 @@ public class CheckLegalMoves {
         boolean playerNotToMoveInCheck = false;
 
         //If setPlayerMove returns true - white is moving
-        if (setPlayerToMove()) {
+        if (setPlayerToMove(moveNumber)) {
             HashMap<int[], ArrayList<int[]>> allMovesWhite = this.findAllMoves(this.whiteMovement, currentGamePosition);
             Collection<ArrayList<int[]>> onlyValuesAllMovesWhite = allMovesWhite.values();
             
@@ -547,9 +549,10 @@ public class CheckLegalMoves {
         }
     }
 
-    
-    private boolean setPlayerToMove() { //Returns true if white is moving and false if black is moving.
-        return (this.moveNumber % 2 == 0) ? true : false;
+     //Returns true if white is moving and false if black is moving.
+    private boolean setPlayerToMove(int moveNumber) {
+
+        return (moveNumber % 2 == 0) ? true : false;
     }
 
 

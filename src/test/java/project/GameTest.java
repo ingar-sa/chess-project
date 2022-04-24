@@ -39,9 +39,7 @@ public class GameTest {
             for (int col = 0; col < 8; col++) {
                 
                 assertTrue(compareStringArrays(new String[]{row + "" + col, ""}, game.getPieceInfoFromTile(row, col)));
-    
             }
-            
         }
         
         this.game = new Game();
@@ -153,6 +151,8 @@ public class GameTest {
         }
         return false;
     }
+
+    
 
 
 
