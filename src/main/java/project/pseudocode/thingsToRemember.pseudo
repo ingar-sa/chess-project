@@ -35,6 +35,7 @@
 - Hvis mulig skal hjelpemetoden returnere true/false og ikke direkte kaste unntak.
 
 - Slette at det er mulig å lagre etter at et spill er over før release
+- Sannsynligvis overkill å teste piece
 
 - SLETTE ALLE IKKE-JAVA FILER FØR INNLEVERING!!!
 

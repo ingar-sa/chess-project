@@ -118,6 +118,8 @@ public class CheckLegalMovesTest {
 
     }   
 
+
+    //Muligens splitte opp i flere tester. Det er gjort i eksempelprosjektene
     @Test
     @DisplayName("Tests that the validation of a position happens correctly")
     public void validationOfGameStateTest() {

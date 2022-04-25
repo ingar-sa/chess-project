@@ -23,8 +23,22 @@ public class SaveBoardState implements ISaveHandler {
         Empty tile:         00-
     */
 
+	private String folderPath;
 
-	//Add except
+	public SaveBoardState() {
+		String separator = System.getProperty("file.separator"); //Gets correct filepath separator for the OS
+		folderPath = String.format("src%1$smain%1$sjava%1$sproject%1$sFiles%1$ssavegames%1$s", separator);
+	}
+
+	//Made this to avoid having to rewrite existing code
+	public SaveBoardState(boolean useForTest) {
+		if (!useForTest) 
+			throw new IllegalArgumentException("Use constructor with no parameter");
+
+		String separator = System.getProperty("file.separator"); //Gets correct filepath separator for the OS
+		folderPath = String.format("src%1$smain%1$sjava%1$sproject%1$sFiles%1$stestsaves%1$s", separator);
+	}
+
 	@Override
 	public void saveGame(String saveName, Tile[][] chessboard, int moveNumber) throws IOException {
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(getFile(saveName)))) { //(new FileWriter("src/main/java/project/Files/savegames/" + saveName + ".txt"))) {
@@ -78,12 +92,9 @@ public class SaveBoardState implements ISaveHandler {
 	}
 		
 	private String getFile(String filename) {
-		String separator = System.getProperty("file.separator"); //Gets correct filepath separator for the OS
-		String folderPath = String.format("src%1$smain%1$sjava%1$sproject%1$sFiles%1$ssavegames%1$s", separator);
 		String filePath = folderPath + filename + ".txt";
 		return filePath;
-
-		//return SaveBoardState.class.getResource("savegames/").getFile() + filename + ".txt";
+		// return SaveBoardState.class.getResource("saves/").getFile() + filename + ".txt";
 	}
 	
 }
