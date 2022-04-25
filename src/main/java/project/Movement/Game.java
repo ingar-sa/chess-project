@@ -71,6 +71,7 @@ public class Game implements Serializable, Iterable<String[]> {
             placePieces();
         }
         this.checkLegalMoves = new CheckLegalMoves(); 
+        //Crashes here when it runs validation of game state on an empty board
         this.allLegalMovesAfterControl = checkLegalMoves.checkforCheckMateAndPat(this.getBoardTilesDeepCopy()); //allLegalMovesAfterControl is initialized with whites available moves
         this.whiteMovement = new MovementPatterns('w');
         this.blackMovement = new MovementPatterns('b');
