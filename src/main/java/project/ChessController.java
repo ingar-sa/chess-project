@@ -261,7 +261,7 @@ public class ChessController implements Serializable {
             this.pawnPromotion = game.pawnPromotion();
 
             if (!(this.pawnPromotion.equals(""))) {
-                messageDisplay.setText("Pawn promotion. Input must be: bishop, knight, rook or queen.");
+                messageDisplay.setText("Write name of piece in right field: bishop, knight, rook or queen.");
                 return;
             }
 
