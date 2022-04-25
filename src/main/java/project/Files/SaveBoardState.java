@@ -91,7 +91,7 @@ public class SaveBoardState implements ISaveHandler {
 		}
 	}
 		
-	private String getFile(String filename) {
+	public String getFile(String filename) {
 		String filePath = folderPath + filename + ".txt";
 		return filePath;
 		// return SaveBoardState.class.getResource("saves/").getFile() + filename + ".txt";

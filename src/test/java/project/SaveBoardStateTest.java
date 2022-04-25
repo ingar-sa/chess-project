@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +29,7 @@ import project.Files.SaveBoardState;
 public class SaveBoardStateTest {
     
 	private Game game = new Game();
-	private SaveBoardState saveBoard = new SaveBoardState(true);
+	private static SaveBoardState saveBoard = new SaveBoardState(true);
 	private CheckLegalMoves checkLegalMoves = new CheckLegalMoves();
 
 	@BeforeEach
@@ -127,13 +128,16 @@ public class SaveBoardStateTest {
 	}
 
 	
-/*
 	@AfterAll
 	static void teardown() {
-		File newTestSaveFile = new File(SaveHandler.getFilePath("test-save-new"));
-		newTestSaveFile.delete();
+		String properGeneationPath = saveBoard.getFile("proper-generation");
+		String illegalPositionPath = saveBoard.getFile("illegal-position");
+		File properGeneration = new File(properGeneationPath);
+		File illegalPosition= new File(illegalPositionPath);
+		properGeneration.delete();
+		illegalPosition.delete();
 	}
-*/
+
 	
 
 }
