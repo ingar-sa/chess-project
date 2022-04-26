@@ -16,6 +16,8 @@ import org.junit.jupiter.api.Test;
 import project.Board.Tile;
 import project.Movement.Game;
 import project.Movement.MovementPatterns;
+import project.Pieces.King;
+import project.Pieces.Pawn;
 import project.Pieces.Rook;
 
 public class GameTest {
@@ -26,16 +28,17 @@ public class GameTest {
     @BeforeEach
     public void setup() {
         //Makes a empty board 
-        this.game = new Game(false);
+        this.game = new Game();
     }
     
+    //TODO: Add explenations 
     //TODO; can add test for all black pices as well
     @Test
     @DisplayName("getPieceInfoFromTileTest")
     public void getPieceInfoFromTileTest() {
         
-        //Checks that the empty board returns expected String[]
-        for (int row = 0; row < 8; row++) {
+        //Checks that the empty tiles on the board from start position returns expected String[]
+        for (int row = 2; row < 6; row++) {
             for (int col = 0; col < 8; col++) {
                 
                 assertTrue(compareStringArrays(new String[]{row + "" + col, ""}, game.getPieceInfoFromTile(row, col)));
@@ -82,7 +85,7 @@ public class GameTest {
     }
 
     @Test
-    @DisplayName("getLegalMovesTest")
+    @DisplayName("Tests that a string[] of legeal moves is returned for a chosen piece")
     public void getLegalMovesTest() {
         
         //Tests that coordinates outside the board are illegal - this tests the private method validationOfCoordinates
@@ -100,12 +103,9 @@ public class GameTest {
                 }
             }
         }
-
-        this.game = new Game();
-
-        
-        //Checks that the tiles without a piece returns a empty ArrayList
-        for (int row = 2; row < 7; row++) {
+   
+        //Checks that the tiles without a piece and the pieces that are not moving (black in this case) returns a empty ArrayList
+        for (int row = 2; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
                 assertEquals(true, game.getLegalMoves(row, col).isEmpty());
             }
@@ -127,22 +127,152 @@ public class GameTest {
     }
 
     @Test
-    @DisplayName("isMoveEnPassentTest")
-    public void isMoveEnPassentTest() {
-        
-        //Start position
-        this.game = new Game();
+    @DisplayName("Test that moving pieces works as expected, this include en passent and castling")
+    public void moveChosenPieceTest() {
+
+        //Test of en passent 
 
         //Loads position where en passent can be preformed for white
         this.game.loadedGamePiecesPosition("wR=0-wK-wB-wQ-wX=0-wB-wK-wR=0-00-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-wP=1=0=2-bP=1=1=3-00-00-00-00-00-bP=1=1=1-00-00-00-00-00-00-00-00-bP=0=0=0-00-bP=0=0=0-bP=0=0=0-bP=0=0=0-bP=0=0=0-bP=0=0=0-00-bR=0-bK-bB-bQ-bX=0-bB-bK-bR=0-4");
 
         String ExpectedStringEnPassent1 = "41"; 
-        assertEquals(ExpectedStringEnPassent1, this.game.isMoveEnPassent(4, 0, 5, 1));
 
+        //Tests that a white pawn has en passent move, which it should have 
+        assertEquals(ExpectedStringEnPassent1, this.game.moveChosenPiece(4, 0, 5, 1));
+
+        Tile[][] enPassentPreformed = this.game.getBoardTilesDeepCopy();
+
+        //Checks that the en passent was correctly preformed and that the board state is correct 
+        assertTrue(enPassentPreformed[4][0].getPiece() == null);
+        assertTrue(enPassentPreformed[5][1].getPiece() instanceof Pawn);
+        assertTrue(enPassentPreformed[4][1].getPiece() == null);
+
+        //Test that you cant perform a new move before the board is updated
+        assertThrows(IllegalStateException.class,
+        () -> this.game.moveChosenPiece(1, 1, 2, 1));
+
+        //Test of castling 
+
+        //Loads position where black can perform castling to the right, none of the castling tiles are under threat
+        this.game.loadedGamePiecesPosition("wR=0-wK-wB-wQ-wX=0-wB-wK-wR=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-00-wP=0=0=0-00-wP=0=0=0-00-00-00-00-00-00-00-00-00-00-00-wP=1=1=6-00-00-wP=1=1=4-00-00-00-00-00-00-bP=1=1=1-00-00-00-00-00-00-00-wP=1=0=8-bP=1=0=5-bB-bP=0=0=0-bP=0=0=0-bP=0=0=0-bP=0=0=0-bP=0=0=0-00-00-bP=0=0=0-bR=0-bK-bB-bQ-bX=0-00-00-bR=0-9");
+
+        String expectedCastlingString = "75";
+
+        //Tests that the king and rook can perform the move as expected 
+        assertEquals(expectedCastlingString, this.game.moveChosenPiece(7, 4, 7, 6));
+
+        Tile[][] castlingPerformed = this.game.getBoardTilesDeepCopy();
+
+        //Tests that the board is updaeted correctly 
+        assertTrue(castlingPerformed[7][4].getPiece() == null);
+        assertTrue(castlingPerformed[7][5].getPiece() instanceof Rook);
+        assertTrue(castlingPerformed[7][6].getPiece() instanceof King);
+
+        //Loads position where white can perform castling to the right, none of the castling tiles are under threat
+        this.game.loadedGamePiecesPosition("wR=0-wK-wB-wQ-wX=0-00-00-wR=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-00-wP=0=0=0-wP=0=0=0-00-00-00-00-00-00-00-00-00-00-wB-wK-bP=1=0=5-00-00-00-00-00-00-00-00-wP=1=0=6-bP=1=1=3-00-00-00-00-bP=1=0=11-bP=1=0=7-bQ-00-00-bP=0=0=0-bP=0=0=0-bP=0=0=0-00-00-00-00-bP=0=0=0-bR=0-bK-bB-00-bX=0-bB-bK-bR=0-12");
         
+        expectedCastlingString = "05";
 
+        //Tests that the king and rook can perform the move as expected 
+        assertEquals(expectedCastlingString, this.game.moveChosenPiece(0, 4, 0, 6));
+        
+        castlingPerformed = this.game.getBoardTilesDeepCopy();
+
+        //Tests that the board is updated correctly 
+        assertTrue(castlingPerformed[0][4].getPiece() == null);
+        assertTrue(castlingPerformed[0][5].getPiece() instanceof Rook);
+        assertTrue(castlingPerformed[0][6].getPiece() instanceof King);
+        
+        //Loads similar position as the one above, but now one of the castling tiles can be taken by the black queen
+        this.game.loadedGamePiecesPosition("wR=0-wK-wB-wQ-wX=0-00-00-wR=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-00-wP=0=0=0-wP=0=0=0-00-wK-00-00-00-00-00-00-00-00-00-00-bP=1=0=5-00-00-00-00-wB-00-00-00-bQ-bP=1=1=3-00-00-00-bP=1=0=13-bP=1=0=11-bP=1=0=7-00-00-00-bP=0=0=0-bP=0=0=0-00-00-00-00-00-bP=0=0=0-bR=0-bK-bB-00-bX=0-bB-bK-bR=0-16");
+
+        //Test that the castling move is not allowed 
+        assertThrows(IllegalArgumentException.class,
+        () -> this.game.moveChosenPiece(0, 4, 0, 6));
+
+        //Test of "normal" moves
+
+        //reset to start position
+        this.game = new Game();
+
+        //Test of pawn move from start position 
+
+        //Moves white pawn two steps forward
+        this.game.moveChosenPiece(1, 3, 3, 3);
+
+        Tile[][] pawnMovedTwoSteps = this.game.getBoardTilesDeepCopy();
+
+        //Tests that the board is updated correctly 
+        assertTrue(pawnMovedTwoSteps[1][3].getPiece() == null);
+        assertTrue(pawnMovedTwoSteps[3][3].getPiece() instanceof Pawn);
+
+        //Tests that the attributes are updated correctly 
+        Pawn pawn1 = ((Pawn)pawnMovedTwoSteps[3][3].getPiece());
+        assertTrue(pawn1.getHasMoved());
+        assertTrue(pawn1.getMovedTwoLastTurn());
+        assertTrue(pawn1.getMoveNumberEnPassant() == 0);
+    }
+    
+    @Test
+    @DisplayName("Test that the returned string is as expected. The string contains information about what pawn that should be promoted")
+    public void pawnPromotionStringCoordinatesTest() {
+        
+        String expectedStartPositionString = "";
+
+        //Tests that there are no pawns that can be promoted
+        assertEquals(expectedStartPositionString, game.pawnPromotionStringCoordinates());
+
+        //Load position where white pawn is located at the top row
+        game.loadedGamePiecesPosition("wR=0-wK-wB-00-wX=0-00-wK-wR=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-00-wP=0=0=0-wP=0=0=0-00-00-00-00-00-00-00-00-00-bP=1=0=15-wB-00-wP=1=1=0-00-00-00-bP=1=0=5-00-00-00-wQ-00-00-00-00-00-00-00-00-00-00-00-00-00-bP=0=0=0-bP=0=0=0-bQ-bP=0=0=0-00-wP=1=0=14-bR=0-bK-bB-00-bX=0-bB-bK-bR=0-16");
+
+        //Moves the white pawn to the 8th row 
+        game.moveChosenPiece(6, 7, 7, 6);
+
+        String expectedWhitePromotionPawn = "76";
+
+        //Tests that the game returns the expected "promotion String"
+        assertEquals(expectedWhitePromotionPawn, game.pawnPromotionStringCoordinates());
+    }
+
+    @Test
+    @DisplayName("")
+    public void checkForGameOverTest() {
+        
+        //Tests that you need to move a piece before you can call checkForGameOver
+        assertThrows(IllegalStateException.class,
+        () -> this.game.checkForGameOver());
+
+        //Load position where white pawn is located at the top row
+        game.loadedGamePiecesPosition("wR=0-wK-wB-00-wX=0-00-wK-wR=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-00-wP=0=0=0-wP=0=0=0-00-00-00-00-00-00-00-00-00-bP=1=0=15-wB-00-wP=1=1=0-00-00-00-bP=1=0=5-00-00-00-wQ-00-00-00-00-00-00-00-00-00-00-00-00-00-bP=0=0=0-bP=0=0=0-bQ-bP=0=0=0-00-wP=1=0=14-bR=0-bK-bB-00-bX=0-bB-bK-bR=0-16");
+
+        //Moves the white pawn to the 8th row 
+        game.moveChosenPiece(6, 7, 7, 6);
+
+        //Test that you need to promote pawn before using checkForGameOver
+        assertThrows(IllegalStateException.class,
+        () -> this.game.checkForGameOver());
+
+        //Load position one move away from checkmate
+        game.loadedGamePiecesPosition("wR=0-wK-wB-00-wX=0-00-wK-wR=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-00-00-00-00-00-00-00-00-00-wB-00-wP=1=1=0-00-00-00-bP=1=0=5-00-00-00-bP=1=1=1-00-00-wQ-00-00-00-00-00-00-00-00-00-bP=0=0=0-bP=0=0=0-bP=0=0=0-00-bP=0=0=0-bP=0=0=0-bP=0=0=0-bR=0-bK-bB-bQ-bX=0-bB-bK-bR=0-6");
+        
+        //Moves the Queen, and white wins by checkmate 
+        game.moveChosenPiece(4, 7, 6, 5);
+
+        //Test that the game is over bu checkmate for white 
+        assertEquals(game.checkForGameOver(), Consts.CHECKMATE_FOR_WHITE);
+
+        //Test that you can not call checkForGameOver, when the game is over
+        assertThrows(IllegalStateException.class,
+        () -> this.game.checkForGameOver());
 
     }
+
+
+
+
+    
+    
+
 
     private boolean compareStringArrays(String[] expected, String[] actual) {
         

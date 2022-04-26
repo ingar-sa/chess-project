@@ -170,12 +170,18 @@ public class ChessController implements Serializable {
     @FXML
     private void clickedOnPiece (MouseEvent event) {
 
+        if (this.gameIsOver) {
+            return;
+        }
+
         if (isPawnPromoted) {
             messageDisplay.setText("");
             this.isPawnPromoted = false;
         }
 
-        if (!(this.pawnPromotion.equals(""))) return; 
+        if (!(this.pawnPromotion.equals(""))) return;
+        
+        messageDisplay.setText("");
         
         if (!pieceHasBeenChosen){
             ImageView pieceImageView = (ImageView)event.getSource();
@@ -239,26 +245,24 @@ public class ChessController implements Serializable {
                 return;
             }
 
-            String enPassentMove = game.isMoveEnPassent(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol);
-            
-            //Check if the move was en passent
-            if (enPassentMove.length() != 0) {
-                ImageView pieceTakenByEnPassent = (ImageView)sprites.lookup("#" + enPassentMove);
-                pieceTakenByEnPassent.setImage(null);
+            String pieceMoveInfo = game.moveChosenPiece(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol);
+
+            if (pieceMoveInfo.length() != 0) {
+                if (pieceMoveInfo.startsWith("0") || pieceMoveInfo.startsWith("7")) {
+                    castling(pieceMoveInfo);
+                }
+                else {
+                    ImageView pieceTakenByEnPassent = (ImageView)sprites.lookup("#" + pieceMoveInfo);
+                    pieceTakenByEnPassent.setImage(null);
+                }
             }
 
-            String castlingMove = game.isMoveCastling(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol);
-            //Updates the GUI if the move was castling 
-            castling(castlingMove);
-            
-            //Retrieves the game state. 0 represents pat, 1 check mate for black and 2 is check mate for white 
-            game.moveChosenPiece(chosenPieceRow, chosenPieceCol, moveToPieceRow, moveToPieceCol);
             chosenPieceImageView.setImage(null);
             moveToImageView.setImage(new Image(chosenPieceSpriteUrl));
             
             removeCirclesForLegalMoves();
 
-            this.pawnPromotion = game.pawnPromotion();
+            this.pawnPromotion = game.pawnPromotionStringCoordinates();
 
             if (!(this.pawnPromotion.equals(""))) {
                 messageDisplay.setText("Write name of piece in right field: bishop, knight, rook or queen.");
@@ -285,11 +289,6 @@ public class ChessController implements Serializable {
     private void isGameOver() {
 
         int gameOver = game.checkForGameOver();
-
-        /*
-        chosenPieceImageView.setImage(null);
-        moveToImageView.setImage(new Image(chosenPieceSpriteUrl));
-        */
         
         if (gameOver == Consts.PAT) {
             messageDisplay.setText("Pat");
@@ -299,12 +298,12 @@ public class ChessController implements Serializable {
         else if (gameOver == Consts.CHECKMATE_FOR_BLACK) { 
             messageDisplay.setText("Check Mate for Black!");
             gameIsOver = true;
-            System.out.println("Check Mate for Black!");
+            System.out.println("Checkmate for Black!");
         }
         else if (gameOver == Consts.CHECKMATE_FOR_WHITE) {
             messageDisplay.setText("Check Mate for White!");
             gameIsOver = true;
-            System.out.println("Check Mate for White!");
+            System.out.println("Checkmate for White!");
         }
     }
 
@@ -352,7 +351,6 @@ public class ChessController implements Serializable {
         int tileRow = 7 - GridPane.getRowIndex(pawnImageView);
         int tileCol = GridPane.getColumnIndex(pawnImageView);
         game.promotePawn(tileRow, tileCol, pieceType, color);
-        // game.changePieceOnTile(tileRow, tileCol, pieceType, color, true);
 
         pawnImageView.setImage(new Image(spritesFilePath + color + pieceType + ".png"));
         promotionName.setText("");
@@ -361,7 +359,6 @@ public class ChessController implements Serializable {
 
         this.pawnPromotion = "";
 
-        //this.sprites.getChildren().remove(promotionText);
         isGameOver();
     }
     @FXML
@@ -446,49 +443,6 @@ public class ChessController implements Serializable {
             // System.err.println(e.getStackTrace());
         }  
     }
-
-    /*
-       @FXML
-    private void loadGame() {
-
-        String fileName = loadNameField.getText();
-        String saveGameString = new String();
-        this.loadNameField.setText("");
-
-        if (!(this.pawnPromotion.equals(""))) {
-            messageDisplay.setText("Promote pawn before loading game!");
-            return;
-        }
-
-        try {
-            saveGameString = saveBoardState.loadGame(fileName);
-        }
-        catch (IOException e) {
-            messageDisplay.setText("There is no file with that name or the file is corrupted");
-            System.err.println(e.getStackTrace());
-        }
-
-        try {
-            game.loadedGamePiecesPosition(saveGameString);
-        }
-        catch(IllegalArgumentException e) {
-            this.pieceHasBeenChosen = false;
-            messageDisplay.setText("The formatting for the file is wrong or the game is over (press reset)");
-            return;
-        }
-
-        saveNameField.setText("");
-        messageDisplay.setText("");
-        
-        //If there is a selected piece, it needs to be reset  
-        this.pieceHasBeenChosen = false;
-        removeCirclesForLegalMoves();
-        placeSprites();
-    }
-
-
-
-     */
 
     @FXML
     private void resetGame() {
