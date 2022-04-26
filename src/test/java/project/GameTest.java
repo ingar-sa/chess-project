@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -16,9 +15,11 @@ import org.junit.jupiter.api.Test;
 
 import project.Board.Tile;
 import project.Movement.Game;
-import project.Movement.MovementPatterns;
+import project.Pieces.Bishop;
 import project.Pieces.King;
+import project.Pieces.Knight;
 import project.Pieces.Pawn;
+import project.Pieces.Queen;
 import project.Pieces.Rook;
 
 public class GameTest {
@@ -37,7 +38,80 @@ public class GameTest {
     @Test
     @DisplayName("")
     public void gameTest() {
+        
+        Tile[][] startBoard = game.getBoardTilesDeepCopy();
 
+        //White
+        
+        for (Tile tile : startBoard[1]) {
+
+            assertTrue(tile.getPiece() instanceof Pawn);
+            assertFalse(tile.getPiece().getHasMoved());
+            assertFalse(((Pawn)tile.getPiece()).getMovedTwoLastTurn());
+            assertEquals(0, ((Pawn)tile.getPiece()).getMoveNumberEnPassant());
+
+        }
+        
+        for (Tile tile : startBoard[0]) {
+
+            if (tile.getCol() == 0 || tile.getCol() == 7) {
+                assertTrue(tile.getPiece() instanceof Rook);
+                assertFalse(tile.getPiece().getHasMoved());
+            }
+
+            if (tile.getCol() == 1 || tile.getCol() == 6) {
+                assertTrue(tile.getPiece() instanceof Knight);
+            }
+
+            if (tile.getCol() == 2 || tile.getCol() == 5) {
+                assertTrue(tile.getPiece() instanceof Bishop);
+            }
+            
+            if (tile.getCol() == 3) {
+                assertTrue(tile.getPiece() instanceof Queen);
+            }
+            
+            if (tile.getCol() == 4) {
+                assertTrue(tile.getPiece() instanceof King);
+                assertFalse(tile.getPiece().getHasMoved());
+            }
+        }
+
+        //Black
+
+        for (Tile tile : startBoard[6]) {
+
+            assertTrue(tile.getPiece() instanceof Pawn);
+            assertFalse(tile.getPiece().getHasMoved());
+            assertFalse(((Pawn)tile.getPiece()).getMovedTwoLastTurn());
+            assertEquals(0, ((Pawn)tile.getPiece()).getMoveNumberEnPassant());
+
+        }
+
+        for (Tile tile : startBoard[7]) {
+
+            if (tile.getCol() == 0 || tile.getCol() == 7) {
+                assertTrue(tile.getPiece() instanceof Rook);
+                assertFalse(tile.getPiece().getHasMoved());
+            }
+
+            if (tile.getCol() == 1 || tile.getCol() == 6) {
+                assertTrue(tile.getPiece() instanceof Knight);
+            }
+
+            if (tile.getCol() == 2 || tile.getCol() == 5) {
+                assertTrue(tile.getPiece() instanceof Bishop);
+            }
+            
+            if (tile.getCol() == 3) {
+                assertTrue(tile.getPiece() instanceof Queen);
+            }
+            
+            if (tile.getCol() == 4) {
+                assertTrue(tile.getPiece() instanceof King);
+                assertFalse(tile.getPiece().getHasMoved());
+            }
+        }
     }
 
 

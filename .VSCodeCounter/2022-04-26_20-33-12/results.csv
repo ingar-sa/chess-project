@@ -1,0 +1,40 @@
+"filename", "language", "XML", "Java", "Generic Pseudocode", "comment", "blank", "total"
+"c:\School\oop_project\TDT4100_prosjekt_ingara\pom.xml", "XML", 47, 0, 0, 1, 10, 58
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\exampleproject\Calculator.java", "Java", 0, 10, 0, 22, 4, 36
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\exampleproject\ExampleProjectApp.java", "Java", 0, 17, 0, 0, 7, 24
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\exampleproject\ExampleProjectController.java", "Java", 0, 26, 0, 0, 8, 34
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\module-info.java", "Java", 0, 6, 0, 0, 1, 7
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\BoardTileIterator.java", "Java", 0, 30, 0, 4, 14, 48
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Board\Tile.java", "Java", 0, 48, 0, 3, 17, 68
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\ChessApp.java", "Java", 0, 18, 0, 1, 8, 27
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\ChessController.java", "Java", 0, 371, 0, 4, 96, 471
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Consts.java", "Java", 0, 11, 0, 1, 4, 16
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Files\ISaveHandler.java", "Java", 0, 7, 0, 0, 7, 14
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Files\SaveBoardState.java", "Java", 0, 69, 0, 9, 22, 100
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Movement\CheckLegalMoves.java", "Java", 0, 394, 0, 196, 125, 715
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Movement\Game.java", "Java", 0, 548, 0, 19, 146, 713
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Movement\MovementPatterns.java", "Java", 0, 299, 0, 106, 123, 528
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Pieces\Bishop.java", "Java", 0, 6, 0, 0, 5, 11
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Pieces\King.java", "Java", 0, 7, 0, 0, 4, 11
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Pieces\Knight.java", "Java", 0, 6, 0, 0, 2, 8
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Pieces\Pawn.java", "Java", 0, 23, 0, 0, 10, 33
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Pieces\Piece.java", "Java", 0, 31, 0, 2, 14, 47
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Pieces\Queen.java", "Java", 0, 7, 0, 0, 4, 11
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\Pieces\Rook.java", "Java", 0, 6, 0, 0, 3, 9
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\pseudocode\DELETE ALL OF THIS BEFORE SUBMISSION.pseudo", "Generic Pseudocode", 0, 0, 0, 0, 1, 1
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\pseudocode\PlayerMove.pseudo", "Generic Pseudocode", 0, 0, 92, 9, 57, 158
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\pseudocode\controller.pseudo", "Generic Pseudocode", 0, 0, 32, 61, 21, 114
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\pseudocode\dokumentasjon.pseudo", "Generic Pseudocode", 0, 0, 45, 0, 31, 76
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\pseudocode\notater.pseudo", "Generic Pseudocode", 0, 0, 11, 0, 11, 22
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\pseudocode\savegame.pseudo", "Generic Pseudocode", 0, 0, 19, 0, 12, 31
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\java\project\pseudocode\thingsToRemember.pseudo", "Generic Pseudocode", 0, 0, 34, 0, 8, 42
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\resources\exampleproject\App.fxml", "XML", 18, 0, 0, 0, 3, 21
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\main\resources\project\Chessboard.fxml", "XML", 476, 0, 0, 0, 3, 479
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\test\java\exampleproject\CalculatorTest.java", "Java", 0, 25, 0, 0, 9, 34
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\test\java\project\BoardTileIteratorTest.java", "Java", 0, 41, 0, 17, 13, 71
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\test\java\project\CheckLegalMovesTest.java", "Java", 0, 183, 0, 43, 83, 309
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\test\java\project\GameTest.java", "Java", 0, 278, 0, 74, 92, 444
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\test\java\project\MovementPatternsTest.java", "Java", 0, 266, 0, 31, 101, 398
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\test\java\project\PieceTest.java", "Java", 0, 25, 0, 5, 9, 39
+"c:\School\oop_project\TDT4100_prosjekt_ingara\src\test\java\project\SaveBoardStateTest.java", "Java", 0, 143, 0, 0, 35, 178
+"Total", "-", 541, 2901, 233, 608, 1123, 5406
