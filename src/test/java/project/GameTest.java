@@ -34,6 +34,21 @@ public class GameTest {
     
     //TODO: Add explenations 
     //TODO; can add test for all black pices as well
+
+    @Test
+    @DisplayName("")
+    public void gameTest() {
+    }
+
+
+    @Test
+    @DisplayName("")
+    public void loadedGamePiecesPositionTest() {
+
+
+
+    }
+
     @Test
     @DisplayName("getPieceInfoFromTileTest")
     public void getPieceInfoFromTileTest() {
@@ -268,7 +283,7 @@ public class GameTest {
 
     }
 
-         @Test
+    @Test
     @DisplayName("")
     public void promotePawnTest() {
 
@@ -296,14 +311,14 @@ public class GameTest {
         //promotes the pawn
         game.promotePawn(7, 7, 'R', 'w');
 
+        //Loads inn current position 
         Tile[][] promotedPawnToRook = game.getBoardTilesDeepCopy();
 
+        //Checks that the pawn is promoted and that the new piece is a rook
         assertTrue(promotedPawnToRook[7][7].getPiece() instanceof Rook);
         assertTrue(promotedPawnToRook[6][7].getPiece() == null);
 
-        Rook rook1 = ((Rook)promotedPawnToRook[7][7].getPiece());
-        assertTrue(rook1.getHasMoved());
-    
+        //Loads inn position where black can promote pawn 
         game.loadedGamePiecesPosition("wR=0-wK-wB-wQ-wX=0-wB-00-00-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-bP=1=0=7-00-00-00-00-00-00-00-00-00-00-00-wK-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-bP=0=0=0-bP=0=0=0-bP=0=0=0-bP=0=0=0-bP=0=0=0-bP=0=0=0-00-bP=0=0=0-bR=0-bK-bB-bQ-bX=0-bB-bK-bR=0-9");
         //Moves a black pawn so it can be promoted    
         game.moveChosenPiece(1, 7, 0, 7);
@@ -311,8 +326,30 @@ public class GameTest {
         assertThrows(IllegalArgumentException.class, () -> game.promotePawn(7, 7, 'Q', 'w'));
         //Tests that it can promote the black pawn
         assertDoesNotThrow(() -> game.promotePawn(0, 7, 'Q', 'b'));
-
     }
+
+    @Test
+    @DisplayName("")
+    public void allLegalPiecesTest() {
+
+        //Tests that the coordinates for white pieces returns true and all black/empty coordinates return false 
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                if (row < 2) {
+                    assertTrue(game.allLegalPieces(row, col));
+                }
+                else {
+                    assertFalse(game.allLegalPieces(row, col));
+                }
+            }
+        }
+    }
+
+
+
+
+
+
 
     
 

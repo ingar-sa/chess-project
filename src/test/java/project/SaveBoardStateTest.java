@@ -102,7 +102,7 @@ public class SaveBoardStateTest {
 		Tile[][] boardTiles = game.getBoardTilesDeepCopy();
 		boardTiles[4][4].setPiece(new King("wX1", 'w'));
 
-		assertDoesNotThrow(() ->  saveBoard.saveGame("illegal-position", boardTiles, 0));
+		assertDoesNotThrow(() -> saveBoard.saveGame("illegal-position", boardTiles, 0));
 
 		String incorrectFormatString = loadFile("illegal-position");
 		assertThrows(IllegalArgumentException.class, () -> game.loadedGamePiecesPosition(incorrectFormatString));
@@ -156,7 +156,6 @@ public class SaveBoardStateTest {
 		assertNotNull(testFile);
 		assertNotNull(newFile);
 		assertTrue(Arrays.equals(testFile, newFile));
-
 	}
 	
 	

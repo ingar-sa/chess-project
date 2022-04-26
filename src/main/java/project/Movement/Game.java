@@ -461,10 +461,6 @@ public class Game implements Serializable, Iterable<String[]> {
             throw new IllegalStateException("No pawn to promote");
         }
 
-        if (!(color == 'w' || color == 'b')) {
-            throw new IllegalArgumentException("Illegal color for Piece");
-        }  
-
         if ((row == 7 && color == 'b') || (row == 0 && color == 'w')) {
             throw new IllegalArgumentException("Wrong color for the piece to be promoted!");
         }
@@ -472,21 +468,18 @@ public class Game implements Serializable, Iterable<String[]> {
         int[] inputCoordinates = new int[]{row, col};
         int[] pawnPromotionCoordinates = new int[]{};
 
-        if (color == 'w') 
-            for (Tile tile : boardTiles[7]) {
-                if (tile.getPiece() instanceof Pawn) {
-                    pawnPromotionCoordinates = tile.getCoordinates();
-                }
-        }
-
-        else if (color == 'b') {
-            for (Tile tile : boardTiles[0]) {
-                if (tile.getPiece() instanceof Pawn) {
-                    pawnPromotionCoordinates = tile.getCoordinates();
-                }
+        for (Tile tile : boardTiles[7]) {
+             if (tile.getPiece() instanceof Pawn) {
+                pawnPromotionCoordinates = tile.getCoordinates();
             }
         }
 
+        for (Tile tile : boardTiles[0]) {
+            if (tile.getPiece() instanceof Pawn) {
+                pawnPromotionCoordinates = tile.getCoordinates();
+            }
+        }
+        
         if (!checkForSameCoordinates(pawnPromotionCoordinates, inputCoordinates)) {
             throw new IllegalArgumentException("There are no pawn to promote at these coordinates!");    
         }
@@ -514,8 +507,6 @@ public class Game implements Serializable, Iterable<String[]> {
             default:
                 throw new IllegalArgumentException("Illegal piece Type!");
         }
-
-
     } 
 
     private void changePieceOnTile(int row, int col, char pieceType, char color, int... pawnRookKingInfo) {
@@ -540,7 +531,7 @@ public class Game implements Serializable, Iterable<String[]> {
                 pawn.setMovedTwoLastTurn(movedTwoLastTurn);
                 pawn.setMoveNumberEnPassant(enPassentMoveNumber);
                 tile.setPiece(pawn);
-                
+
                 break;
             case 'R':
                 Rook rook = new Rook(pieceName, color);                
@@ -700,6 +691,8 @@ public class Game implements Serializable, Iterable<String[]> {
     }
 
     private boolean checkForSameCoordinates(int[] coordinateOne, int[] coordinateTwo) {
+        // if (coordinateOne.length == 0 || coordinateTwo.length == 0)
+        //     throw new IllegalArgumentException("Coordinates must have values. Coordinate one: " + coordinateOne.length + ", coordinate two: " + coordinateTwo.length);
 
         if (coordinateOne[0] == coordinateTwo[0] && coordinateOne[1] == coordinateTwo[1]) {
             return true;
