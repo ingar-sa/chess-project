@@ -1,5 +1,6 @@
 package project;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -267,12 +268,53 @@ public class GameTest {
 
     }
 
+         @Test
+    @DisplayName("")
+    public void promotePawnTest() {
 
+        //Tests that it throws exception if there is no pawn to promote
+        assertThrows(IllegalStateException.class, () -> game.promotePawn(7, 5, 'Q', 'w'));
+        
+        //Loads position where white pawn is one tile away from promotion on the far rigth
+        game.loadedGamePiecesPosition("wR=0-wK-wB-wQ-wX=0-wB-wK-wR=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-wP=0=0=0-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-bK-00-00-bP=0=0=0-bP=0=0=0-bP=0=0=0-bP=0=0=0-bP=0=0=0-bP=0=0=0-00-wP=1=0=6-bR=0-bK-bB-bQ-bX=0-bB-00-00-8");
+        
+        //Moves the pawn to the 7th row, ready for promotion 
+        game.moveChosenPiece(6, 7, 7, 7);
 
+        //Tests that the promotePawn do not allow illegal coordinates - validationOfCoordinates
+        assertThrows(IllegalArgumentException.class, () -> game.promotePawn(-1, 8, 'Q', 'w'));
+        
+        //Checks that the promotion piece needs to be white        
+        assertThrows(IllegalArgumentException.class, () -> game.promotePawn(7, 7, 'Q', 'b'));        
+
+        //Test that the pawn is located at the input coordinates
+        assertThrows(IllegalArgumentException.class, () -> game.promotePawn(7, 5, 'Q', 'w'));
+
+        //Tests that input must be a legal piece
+        assertThrows(IllegalArgumentException.class, () -> game.promotePawn(7, 7, 'X', 'w'));
+
+        //promotes the pawn
+        game.promotePawn(7, 7, 'R', 'w');
+
+        Tile[][] promotedPawnToRook = game.getBoardTilesDeepCopy();
+
+        assertTrue(promotedPawnToRook[7][7].getPiece() instanceof Rook);
+        assertTrue(promotedPawnToRook[6][7].getPiece() == null);
+
+        Rook rook1 = ((Rook)promotedPawnToRook[7][7].getPiece());
+        assertTrue(rook1.getHasMoved());
+    
+        game.loadedGamePiecesPosition("wR=0-wK-wB-wQ-wX=0-wB-00-00-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-bP=1=0=7-00-00-00-00-00-00-00-00-00-00-00-wK-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-bP=0=0=0-bP=0=0=0-bP=0=0=0-bP=0=0=0-bP=0=0=0-bP=0=0=0-00-bP=0=0=0-bR=0-bK-bB-bQ-bX=0-bB-bK-bR=0-9");
+        //Moves a black pawn so it can be promoted    
+        game.moveChosenPiece(1, 7, 0, 7);
+        //Tests that it throws exception if we try to promote a white pawn
+        assertThrows(IllegalArgumentException.class, () -> game.promotePawn(7, 7, 'Q', 'w'));
+        //Tests that it can promote the black pawn
+        assertDoesNotThrow(() -> game.promotePawn(0, 7, 'Q', 'b'));
+
+    }
 
     
-    
-
 
     private boolean compareStringArrays(String[] expected, String[] actual) {
         

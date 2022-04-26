@@ -531,15 +531,16 @@ public class Game implements Serializable, Iterable<String[]> {
                 tile.setPiece(new Knight(pieceName, color));
                 break;
             case 'P':
-                Pawn pawn = new Pawn(pieceName, color);
+                Pawn    pawn                = new Pawn(pieceName, color);
                 boolean hasPawnMoved        = (pawnRookKingInfo[0] == 1) ? true : false;
                 boolean movedTwoLastTurn    = (pawnRookKingInfo[1] == 1) ? true : false;
                 int     enPassentMoveNumber = pawnRookKingInfo[2];
+
                 pawn.setHasMoved(hasPawnMoved);
                 pawn.setMovedTwoLastTurn(movedTwoLastTurn);
                 pawn.setMoveNumberEnPassant(enPassentMoveNumber);
-
                 tile.setPiece(pawn);
+                
                 break;
             case 'R':
                 Rook rook = new Rook(pieceName, color);                
