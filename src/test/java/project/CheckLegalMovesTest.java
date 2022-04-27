@@ -61,7 +61,7 @@ public class CheckLegalMovesTest {
 
         assertEquals(expectedKeys.size(), actualKeys.size());
 
-        //Sorts the lists in a equal way so that they can be compared
+        //Sorts the lists in the same way so that they can be compared
         Collections.sort(expectedKeys, new Comparator<int[]>() {
             @Override
             public int compare(int[] o1, int[] o2) {
@@ -86,10 +86,17 @@ public class CheckLegalMovesTest {
             assertTrue(compareCoordinates(expectedKeys.get(index), actualKeys.get(index)));
         }
         
-        //Tests that the pawn that is pinned by the queen cant move becasue of check 
+        
+        //Look at this 
+        //Tests that the white pawn in the middle is stuck 
+        //TODO: this is wrong the player to move is black 
         for (int[] key: actualKeys) {
-            if (compareCoordinates(key, new int[]{6, 5})) {
+            if (compareCoordinates(key, new int[]{3, 4})) {
                 assertTrue(allMoves.get(key).isEmpty());
+            }
+
+            if (compareCoordinates(key, new int[]{4, 7})) {
+
             }
         }
 
@@ -305,5 +312,4 @@ public class CheckLegalMovesTest {
             }
         }
     }
-
 }
