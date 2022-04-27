@@ -32,12 +32,16 @@ public class GameTest {
         this.game = new Game();
     }
     
-    //TODO: Add explenations 
-    //TODO; can add test for all black pices as well
-
     @Test
-    @DisplayName("")
+    @DisplayName("Test that the constructer makes the start position")
     public void gameTest() {
+
+        //Test that the constructer makes the expected board (start position)
+
+        //Check that start fields are as expected 
+        assertTrue(game.getPieceReadyToMove());
+        assertFalse(game.getPromotionPawn());
+        assertFalse(game.getGameIsOver());
         
         Tile[][] startBoard = game.getBoardTilesDeepCopy();
 
@@ -159,6 +163,9 @@ public class GameTest {
         //Pawn in row 8 
         assertThrows(IllegalArgumentException.class,
         () -> game.loadedGamePiecesPosition("wR=0-wE-wB-00-wX=0-00-wK-wR=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-00-00-00-00-00-00-00-00-00-wB-00-wP=1=1=0-00-00-00-bP=1=0=5-00-00-00-bP=1=1=1-00-00-wQ-00-00-00-00-00-00-00-00-00-bP=0=0=0-bP=0=0=0-bP=0=0=0-00-bP=0=0=0-bP=0=0=0-bP=0=0=0-bR=0-bK-bB-bQ-bX=0-bB-bK-wP=1=0=3-6"));
+        //Pawn with higher en passent number than the turn number
+        assertThrows(IllegalArgumentException.class,
+        () -> game.loadedGamePiecesPosition("wR=0-wE-wB-00-wX=0-00-wK-wR=0-wP=0=0=10-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-00-00-00-00-00-00-00-00-00-wB-00-wP=1=1=0-00-00-00-bP=1=0=5-00-00-00-bP=1=1=1-00-00-wQ-00-00-00-00-00-00-00-00-00-bP=0=0=0-bP=0=0=0-bP=0=0=0-00-bP=0=0=0-bP=0=0=0-bP=0=0=0-bR=0-bK-bB-bQ-bX=0-bB-bK-bR=0-6"));
         
         //Test that the old, orginal position is the position after illegal game positions are loaded
         Tile[][] positionAfterIllegalInputs = game.getBoardTilesDeepCopy();
@@ -316,16 +323,19 @@ public class GameTest {
 
         //Test of pawn move from start position 
         //Moves white pawn two steps forward
+        assertTrue(game.getPieceReadyToMove());
         this.game.moveChosenPiece(1, 3, 3, 3);
         Tile[][] pawnMovedTwoSteps = this.game.getBoardTilesDeepCopy();
         //Tests that the board is updated correctly 
         assertTrue(pawnMovedTwoSteps[1][3].getPiece() == null);
         assertTrue(pawnMovedTwoSteps[3][3].getPiece() instanceof Pawn);
-        //Tests that the attributes are updated correctly 
+        //Tests that the attributes are updated correctly for the pawn and game 
         Pawn pawn1 = ((Pawn)pawnMovedTwoSteps[3][3].getPiece());
         assertTrue(pawn1.getHasMoved());
         assertTrue(pawn1.getMovedTwoLastTurn());
         assertTrue(pawn1.getMoveNumberEnPassant() == 0);
+        assertFalse(game.getPieceReadyToMove());
+        
     }
     
     @Test
@@ -346,7 +356,7 @@ public class GameTest {
     }
 
     @Test
-    @DisplayName("Test that chcek mate and pat works as expected, and that checkForGameOverTest only can be called under the correct condidtions")
+    @DisplayName("Test that check mate and pat works as expected, and that checkForGameOverTest only can be called under the correct conditions")
     public void checkForGameOverTest() {
         
         //Tests that you need to move a piece before you can call checkForGameOver
@@ -358,6 +368,7 @@ public class GameTest {
         //Moves the white pawn to the 8th row 
         game.moveChosenPiece(6, 7, 7, 6);
         //Test that you need to promote pawn before using checkForGameOver
+        assertTrue(game.getPromotionPawn());
         assertThrows(IllegalStateException.class,
         () -> this.game.checkForGameOver());
 
@@ -374,7 +385,7 @@ public class GameTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("Test of promotion of a pawn")
     public void promotePawnTest() {
 
         //Tests that it throws exception if there is no pawn to promote
@@ -382,8 +393,10 @@ public class GameTest {
         
         //Loads position where white pawn is one tile away from promotion on the far rigth
         game.loadedGamePiecesPosition("wR=0-wK-wB-wQ-wX=0-wB-wK-wR=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-wP=0=0=0-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-bK-00-00-bP=0=0=0-bP=0=0=0-bP=0=0=0-bP=0=0=0-bP=0=0=0-bP=0=0=0-00-wP=1=0=6-bR=0-bK-bB-bQ-bX=0-bB-00-00-8");
+        assertFalse(game.getPromotionPawn());
         //Moves the pawn to the 7th row, ready for promotion 
         game.moveChosenPiece(6, 7, 7, 7);
+        assertTrue(game.getPromotionPawn());
         //Tests that the promotePawn do not allow illegal coordinates - validationOfCoordinates
         assertThrows(IllegalArgumentException.class, () -> game.promotePawn(-1, 8, 'Q', 'w'));
         //Checks that the promotion piece needs to be white        
@@ -393,7 +406,9 @@ public class GameTest {
         //Tests that input must be a legal piece
         assertThrows(IllegalArgumentException.class, () -> game.promotePawn(7, 7, 'X', 'w'));
         //promotes the pawn
+        assertTrue(game.getPromotionPawn());
         game.promotePawn(7, 7, 'R', 'w');
+        assertFalse(game.getPromotionPawn());
         //Loads inn current position 
         Tile[][] promotedPawnToRook = game.getBoardTilesDeepCopy();
         //Checks that the pawn is promoted and that the new piece is a rook
@@ -411,7 +426,7 @@ public class GameTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("Test that the game knows what pieces are connected to each player")
     public void allLegalPiecesTest() {
 
         //Tests that the coordinates for white pieces returns true and all black/empty coordinates return false 
@@ -426,6 +441,46 @@ public class GameTest {
             }
         }
     }
+
+    @Test
+    @DisplayName("Test of illegalstateexceptions")
+    public void methodCalledAtTheRigthTime() {
+
+        //Check that start fields are as expected 
+        assertTrue(game.getPieceReadyToMove());
+        assertFalse(game.getPromotionPawn());
+        assertFalse(game.getGameIsOver());
+
+        //Test that you need to move a piece before you call this method
+        assertThrows(IllegalStateException.class, () -> game.checkForGameOver());
+        //Test of pawn promotion at the wrong time 
+        assertThrows(IllegalStateException.class, () -> game.promotePawn(7, 0, 'Q', 'w'));
+
+        //Move the left white horse from start position
+        game.moveChosenPiece(0, 1, 2, 0);
+        assertFalse(game.getPieceReadyToMove());
+
+        //Test that you cant move a new piece of the same color 
+        assertThrows(IllegalStateException.class, () -> game.moveChosenPiece(1, 5, 2, 5));
+        //Test of pawn promotion at the wrong time 
+        assertThrows(IllegalStateException.class, () -> game.promotePawn(7, 0, 'Q', 'w'));
+
+        //Update the game
+        game.checkForGameOver();
+        assertTrue(game.getPieceReadyToMove());
+
+        //Check mate position is made; Test that you cant perform further moves 
+        game.loadedGamePiecesPosition("wR=0-wK-wB-00-wX=0-00-wK-wR=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-00-00-00-00-00-00-00-00-00-wB-00-wP=1=1=0-00-00-00-bP=1=0=5-00-00-00-bP=1=1=1-00-00-wQ-00-00-00-00-00-00-00-00-00-bP=0=0=0-bP=0=0=0-bP=0=0=0-00-bP=0=0=0-bP=0=0=0-bP=0=0=0-bR=0-bK-bB-bQ-bX=0-bB-bK-bR=0-6");
+        game.moveChosenPiece(4, 7, 6, 5);
+        game.checkForGameOver();
+        assertTrue(game.getGameIsOver());
+        assertThrows(IllegalStateException.class, () -> game.moveChosenPiece(7, 1, 5, 2));
+        assertThrows(IllegalStateException.class, () -> game.checkForGameOver());
+        assertThrows(IllegalStateException.class, () -> game.promotePawn(0, 0, 'Q', 'b'));
+
+    }
+
+
 
     private boolean compareStringArrays(String[] expected, String[] actual) {
         

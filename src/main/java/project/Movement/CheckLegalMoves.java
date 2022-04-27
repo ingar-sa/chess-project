@@ -59,9 +59,6 @@ public class CheckLegalMoves {
     //Finds all the possible moves for black or white when check is not considered
     private HashMap<int[], ArrayList<int[]>> findAllMoves(MovementPatterns movementPattern, Tile[][] boardTiles) {
 
-        //validationOfGameState throws illegalArgumentException
-        //this.validationOfGameState(boardTiles, this.moveNumber);
-
         //The key is the coordinates [row, col] of the tile a piece is standing on. 
         //The value is an ArrayList of the coordinates [row, col] of the tiles the piece can move to
         HashMap<int[], ArrayList<int[]>> legalMoves = new HashMap<int[], ArrayList<int[]>>();
@@ -179,6 +176,7 @@ public class CheckLegalMoves {
                 for (ArrayList<int[]> opponentPieceMoves: allOpponentMoveCoordinates) {
                     for (int[] opponentMove : opponentPieceMoves) {
                         
+                        //TODO: ???
                         //bjn54                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
                         if (checkForSameCoordinates(ourKingPos, opponentMove)) {
                             for (int[] oneOfAllMoves : ourPieceMoves) {
@@ -399,14 +397,19 @@ public class CheckLegalMoves {
         }
     }
 
-    // This method validates that the loaded game position is valid according to the logic used to play the game.
-    // Validating the string directly is much harder, therefore this method checks that game is in a legal state according to the game logic after loading a game.
-    // This method will allow illegal chess positions, if they dont break the logic used in the program, and from the loaded position it will follow normal chess rules.
-    // Exampels of positions that are allowed:
-    // The king can start at a chosen position, but there needs to be 1 white king and 1 black king, and the player not Moving cant be in check. 
-    // Pawns cant be placed at row 1 and 8.
-    // And some other requirements that could/will break the game logic are checked.
-    // From this you can write your own chess positions as strings and make custom starts that follow normal chess rules from that point. 
+    /*
+    EXPLANATION OF THE METHOD
+    This method validates that the loaded game position is valid according to the logic used to play the game.
+    Validating the string directly is much harder, therefore this method checks that game is in a legal state according to the game logic after loading a game.
+    This method will allow illegal chess positions, if they dont break the logic used in the program, and from the loaded position it will follow normal chess rules.
+
+    Exampels of positions that are allowed:
+    - The king can start at a chosen position, but there needs to be 1 white king and 1 black king, and the player not Moving cant be in check. 
+    - Pawns cant be placed at row 1 and 8.
+    - And some other requirements that could/will break the game logic are checked.
+    
+    From this you can write your own chess positions as strings and make custom starts that follow normal chess rules from that point. 
+    */
 
     //TODO: Change movenumber?
     public void validationOfGameState(Tile[][] currentGamePosition, int moveNumber) {
@@ -549,13 +552,13 @@ public class CheckLegalMoves {
         }
     }
 
-     //Returns true if white is moving and false if black is moving.
+    //Returns true if white is moving and false if black is moving.
     private boolean setPlayerToMove(int moveNumber) {
 
         return (moveNumber % 2 == 0) ? true : false;
     }
 
-
+    //TODO: HUSK å fjerne!
     public void keyWriter(Tile[][] boardTiles) {
         
         HashMap<int[], ArrayList<int[]>> movesForAllOurPieces = eliminateChecks(boardTiles);

@@ -50,16 +50,34 @@ public class Game implements Serializable, Iterable<String[]> {
         this.allLegalMovesAfterControl = checkLegalMoves.checkforCheckMateAndPat(this.getBoardTilesDeepCopy()); //allLegalMovesAfterControl is initialized with whites available moves
     }
 
-    public int isGameOver() {
-        return checkLegalMoves.getGameStatus();
+    public boolean getGameIsOver() {
+        return this.gameIsOver;
     }
+
+    public boolean getPieceReadyToMove() {
+        return this.pieceReadyToMove;
+    }
+
+    public boolean getPromotionPawn() {
+        return this.promotionPawn;
+    }
+
+    // public int isGameOver() {
+    //     return checkLegalMoves.getGameStatus();
+    // }
 
     public int getMoveNumber() {
         return checkLegalMoves.getMoveNumber();
     }
     
     //TODO: error handling for parameters
+
     public String[] getPieceInfoFromTile(int row, int col) {
+
+        if (!(validationOfCoordinates(row, col))) {
+            throw new IllegalArgumentException("The given coordinates are Illegal! Valid values: 0-7");
+        }
+
         Tile tile = this.boardTiles[row][col];
         return (tile.isOccupied()) ? new String[] {tile.coordinatesToString(), tile.getPiece().getSpriteId()} 
                                    : new String[] {tile.coordinatesToString(), ""};
@@ -159,7 +177,6 @@ public class Game implements Serializable, Iterable<String[]> {
         }
     }
 
-    
     public void printBoard() {
     
         for (int row = 7; row >= 0; --row) {
@@ -187,10 +204,9 @@ public class Game implements Serializable, Iterable<String[]> {
         System.out.println(colLetters + "\n\n");
 
     }
-
-    //https://www.studytonight.com/java-examples/how-to-make-a-deep-copy-of-an-object-in-java
-
     //Fjerne try catch? - kommer til å krasje uansett, eller legge til sikkerhet der den brukes
+
+    //Makes a deepCopy of the Tile[][] to ensure encapsulation 
     public Tile[][] getBoardTilesDeepCopy()
 	{
 		try
@@ -212,6 +228,7 @@ public class Game implements Serializable, Iterable<String[]> {
         }
 	}
 
+    //Returns all the legal moves for a chosen piece
     public ArrayList<String> getLegalMoves(int row, int col) {
 
         if (!(validationOfCoordinates(row, col))) {
@@ -303,7 +320,7 @@ public class Game implements Serializable, Iterable<String[]> {
         return "";
     }
     
-    //TODO: Error handling for parameters, burde kanskje bytte navn?
+    //This method moves pieces on the board (Tile[][])
     public String moveChosenPiece(int chosenPieceRow, int chosenPieceCol, int moveToPieceRow, int moveToPieceCol) {
 
         if (this.gameIsOver) {
@@ -443,9 +460,7 @@ public class Game implements Serializable, Iterable<String[]> {
         }
     }
 
-
-    //TODO: This need to be checked for bugs 
-    //TODO: Move out to help methods 
+    //Promotes a pawn to a chosen piece
     public void promotePawn(int row, int col, char pieceType, char color) {
 
         if (!(validationOfCoordinates(row, col))) {
@@ -566,7 +581,13 @@ public class Game implements Serializable, Iterable<String[]> {
         return true;
     }
 
+    //This method returns true if the new input coordinates contain a piece that the player can move
+    //So if white is moving, true is returned if the input coordinates is connected to a white piece
     public boolean allLegalPieces(int moveToPieceRow, int moveToPieceCol) {
+
+        if (!(validationOfCoordinates(moveToPieceRow, moveToPieceCol))) {
+            throw new IllegalArgumentException("The given coordinates are Illegal! Valid values: 0-7");
+        }
         
         Set<int[]> allPiecesThatCanMove = allLegalMovesAfterControl.keySet();
         int[] moveToPiece = boardTiles[moveToPieceRow][moveToPieceCol].getCoordinates();
@@ -690,9 +711,6 @@ public class Game implements Serializable, Iterable<String[]> {
     }
 
     private boolean checkForSameCoordinates(int[] coordinateOne, int[] coordinateTwo) {
-        // if (coordinateOne.length == 0 || coordinateTwo.length == 0)
-        //     throw new IllegalArgumentException("Coordinates must have values. Coordinate one: " + coordinateOne.length + ", coordinate two: " + coordinateTwo.length);
-
         if (coordinateOne[0] == coordinateTwo[0] && coordinateOne[1] == coordinateTwo[1]) {
             return true;
         }
