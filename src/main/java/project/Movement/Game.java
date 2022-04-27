@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 import javafx.scene.chart.PieChart;
 import project.BoardTileIterator;
 import project.Consts;
-import project.Board.Chessboard;
 import project.Board.Tile;
 import project.Pieces.Bishop;
 import project.Pieces.King;
