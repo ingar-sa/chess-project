@@ -26,7 +26,7 @@ public class SaveBoardState implements ISaveHandler {
 
 	public SaveBoardState() {
 		String separator = System.getProperty("file.separator"); //Gets correct filepath separator for the OS
-		folderPath = String.format("src%1$smain%1$sjava%1$sproject%1$sFiles%1$ssavegames%1$s", separator);
+		folderPath = String.format("src%1$smain%1$sjava%1$sproject%1$sFiles%1$ssaves%1$s", separator);
 	}
 
 	//Made this to avoid having to rewrite existing code
