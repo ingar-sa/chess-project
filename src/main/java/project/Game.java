@@ -32,46 +32,11 @@ public class Game implements Serializable, Iterable<String[]> {
     private boolean                              pieceReadyToMove = true;
     private boolean                              promotionPawn = false;
 
-    //TODO: legge til at man ikke kan kalle på metodene hvis spillet er over.
-
     public Game() {
         makeBoard();
         placePieces();
         this.checkLegalMoves = new CheckLegalMoves(); 
         this.allLegalMovesAfterControl = checkLegalMoves.checkforCheckmateAndPat(this.getBoardTilesDeepCopy()); //allLegalMovesAfterControl is initialized with whites available moves
-    }
-
-    public boolean getGameIsOver() {
-        return this.gameIsOver;
-    }
-
-    public boolean getPieceReadyToMove() {
-        return this.pieceReadyToMove;
-    }
-
-    public boolean getPromotionPawn() {
-        return this.promotionPawn;
-    }
-
-    // public int isGameOver() {
-    //     return checkLegalMoves.getGameStatus();
-    // }
-
-    public int getMoveNumber() {
-        return checkLegalMoves.getMoveNumber();
-    }
-    
-    //TODO: error handling for parameters
-
-    public String[] getPieceInfoFromTile(int row, int col) {
-
-        if (!(validationOfCoordinates(row, col))) {
-            throw new IllegalArgumentException("The given coordinates are Illegal! Valid values: 0-7");
-        }
-
-        Tile tile = this.boardTiles[row][col];
-        return (tile.isOccupied()) ? new String[] {tile.coordinatesToString(), tile.getPiece().getSpriteId()} 
-                                   : new String[] {tile.coordinatesToString(), ""};
     }
 
     private void makeBoard() {
@@ -83,7 +48,6 @@ public class Game implements Serializable, Iterable<String[]> {
             }
         }
     }
-
 
     private void placePieces() {
         
@@ -168,6 +132,34 @@ public class Game implements Serializable, Iterable<String[]> {
         }
     }
 
+
+    public boolean getGameIsOver() {
+        return this.gameIsOver;
+    }
+
+    public boolean getPieceReadyToMove() {
+        return this.pieceReadyToMove;
+    }
+
+    public boolean getPromotionPawn() {
+        return this.promotionPawn;
+    }
+
+    public int getMoveNumber() {
+        return checkLegalMoves.getMoveNumber();
+    }
+    
+    public String[] getPieceInfoFromTile(int row, int col) {
+
+        if (!(validationOfCoordinates(row, col))) {
+            throw new IllegalArgumentException("The given coordinates are Illegal! Valid values: 0-7");
+        }
+
+        Tile tile = this.boardTiles[row][col];
+        return (tile.isOccupied()) ? new String[] {tile.coordinatesToString(), tile.getPiece().getSpriteId()} 
+                                   : new String[] {tile.coordinatesToString(), ""};
+    }
+
     public void printBoard() {
     
         for (int row = 7; row >= 0; --row) {
@@ -195,11 +187,12 @@ public class Game implements Serializable, Iterable<String[]> {
         System.out.println(colLetters + "\n\n");
 
     }
-    //Fjerne try catch? - kommer til å krasje uansett, eller legge til sikkerhet der den brukes
-
-    //Makes a deepCopy of the Tile[][] to ensure encapsulation 
+    
     public Tile[][] getBoardTilesDeepCopy()
 	{
+        //Since returning the Tile-array will just give a reference to the array in game,
+        //breaking encapsulation since the the objects that gets it can freely manipulate it,
+        //we use serialization to produce an exact copy that is stored elsewhere in memory.
 		try
 		{
 			ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
@@ -242,55 +235,17 @@ public class Game implements Serializable, Iterable<String[]> {
         ArrayList<String> coordinateString = new ArrayList<String>();
         
         if (!pieceCanMove) {
-            return coordinateString; //The controller ignores the user input if the arraylist is empty
+            return coordinateString; //The controller ignores the user input if the string is empty
         }
 
         for (int[] legalMove : legalMovesForPieceToMove) {
-            coordinateString.add(legalMove[0] + "" + legalMove[1]); //This string representing the coordinates allows us to fetch imageviews by id
+            coordinateString.add(legalMove[0] + "" + legalMove[1]); //This string represents the coordinates and allows us to fetch imageviews by id
         }
         
         return new ArrayList<String>(coordinateString);
     }
 
-    //Validates that the desired move is legal
-    private boolean validationOfMove (int fromRow, int fromCol, int ToRow, int ToCol) {
-
-        boolean legalMove = false;
-
-        if (!(validationOfCoordinates(fromRow, fromCol))) {
-            return legalMove;
-        }
-
-        if (!(validationOfCoordinates(ToRow, ToCol))) {
-            return legalMove;
-        }
-
-        int[]            desiredPiece             = new int[]{fromRow, fromCol};
-        int[]            desiredMove              = new int[]{ToRow, ToCol};          
-        ArrayList<int[]> legalMovesForPieceToMove = new ArrayList<int[]>();
-        Set<int[]>       allPiecesThatCanMove     = this.allLegalMovesAfterControl.keySet();
-        boolean          legalPiece               = false;
-
-
-
-        for (int[] Piece : allPiecesThatCanMove) {
-            if (checkForSameCoordinates(desiredPiece , Piece)) {
-                legalMovesForPieceToMove = this.allLegalMovesAfterControl.get(Piece);
-                legalPiece = true;
-            }
-        }
-
-        if (legalPiece) {
-            for (int[] moves : legalMovesForPieceToMove) {
-                if (checkForSameCoordinates(desiredMove, moves)) {
-                    legalMove = true;
-                }
-            }
-        }
-
-        return legalMove;
-    }
-
+    //Returns an empty string if no pawn can be promoted. If a pawn can be promoted, it returns a string with the coordinates for that pawn
     public String pawnPromotionStringCoordinates() {
 
         Tile[] topRow = boardTiles[7];
@@ -413,6 +368,45 @@ public class Game implements Serializable, Iterable<String[]> {
 
     }
 
+    //Validates that the desired move is legal
+    private boolean validationOfMove (int fromRow, int fromCol, int ToRow, int ToCol) {
+
+        boolean legalMove = false;
+
+        if (!(validationOfCoordinates(fromRow, fromCol))) {
+            return legalMove;
+        }
+
+        if (!(validationOfCoordinates(ToRow, ToCol))) {
+            return legalMove;
+        }
+
+        int[]            desiredPiece             = new int[]{fromRow, fromCol};
+        int[]            desiredMove              = new int[]{ToRow, ToCol};          
+        ArrayList<int[]> legalMovesForPieceToMove = new ArrayList<int[]>();
+        Set<int[]>       allPiecesThatCanMove     = this.allLegalMovesAfterControl.keySet();
+        boolean          legalPiece               = false;
+
+
+
+        for (int[] Piece : allPiecesThatCanMove) {
+            if (checkForSameCoordinates(desiredPiece , Piece)) {
+                legalMovesForPieceToMove = this.allLegalMovesAfterControl.get(Piece);
+                legalPiece = true;
+            }
+        }
+
+        if (legalPiece) {
+            for (int[] moves : legalMovesForPieceToMove) {
+                if (checkForSameCoordinates(desiredMove, moves)) {
+                    legalMove = true;
+                }
+            }
+        }
+
+        return legalMove;
+    }
+
     public int checkForGameOver() {
 
         if (gameIsOver) {
@@ -514,63 +508,6 @@ public class Game implements Serializable, Iterable<String[]> {
         }
     } 
 
-    private void changePieceOnTile(int row, int col, char pieceType, char color, int... pawnRookKingInfo) {
-
-        String pieceName = color + " " + pieceType;
-        Tile tile = boardTiles[row][col];
-
-        switch (pieceType) {
-            case 'B':
-                tile.setPiece(new Bishop(pieceName, color));
-                break;
-            case 'K':
-                tile.setPiece(new Knight(pieceName, color));
-                break;
-            case 'P':
-                Pawn    pawn                = new Pawn(pieceName, color);
-                boolean hasPawnMoved        = (pawnRookKingInfo[0] == 1) ? true : false;
-                boolean movedTwoLastTurn    = (pawnRookKingInfo[1] == 1) ? true : false;
-                int     enPassentMoveNumber = pawnRookKingInfo[2];
-
-                pawn.setHasMoved(hasPawnMoved);
-                pawn.setMovedTwoLastTurn(movedTwoLastTurn);
-                pawn.setMoveNumberEnPassant(enPassentMoveNumber);
-                tile.setPiece(pawn);
-
-                break;
-            case 'R':
-                Rook rook = new Rook(pieceName, color);                
-                boolean hasRookMoved = false;
-                rook.setHasMoved(hasRookMoved);
-
-                tile.setPiece(rook);
-                break;
-            case 'Q':
-                tile.setPiece(new Queen(pieceName, color));
-                break;
-            case 'X':
-                King king = new King(pieceName, color);
-                boolean hasKingMoved = (pawnRookKingInfo[0] == 1) ? true : false; 
-                king.setHasMoved(hasKingMoved);
-
-                tile.setPiece(king);
-                break;
-        }
-
-
-    } 
-         
-    private boolean validationOfCoordinates(int row, int col) {
-
-        if (row > 7 || row < 0) {
-            return false;
-        }
-        if (col > 7 || col < 0) {
-            return false;        
-        }
-
-        return true;
-    }
 
     //This method returns true if the new input coordinates contain a piece that the player can move
     //So if white is moving, true is returned if the input coordinates is connected to a white piece
@@ -592,38 +529,6 @@ public class Game implements Serializable, Iterable<String[]> {
         return false; 
     }
 
-    private boolean validationOfString (String saveGameString) {
-
-        if (saveGameString == null) {
-            return false;
-        }
-
-        String[] tileData = saveGameString.split("-");
-
-        if (tileData.length != 65) {
-            return false;
-        }
-
-        if (!(tileData[64].matches("^[0-9]+$"))) {
-            return false;
-        }
-
-        List<String> listWithoutTurnNumber = new ArrayList<String>(Arrays.asList(tileData));
-        listWithoutTurnNumber.remove(64);
-
-        for (String string : listWithoutTurnNumber) {
-
-            if (!(   string.matches("00") 
-                  || string.matches("[wb][KQB]")
-                  || string.matches("[wb][RX][=][01]")
-                  || string.matches("[wb][P][=][01][=][01][=][0-9]+$")))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
 
     public void loadedGamePiecesPosition(String saveGameString) {
 
@@ -701,6 +606,96 @@ public class Game implements Serializable, Iterable<String[]> {
         printBoard();
     }
 
+    private boolean validationOfString (String saveGameString) {
+
+        if (saveGameString == null) {
+            return false;
+        }
+
+        String[] tileData = saveGameString.split("-");
+
+        if (tileData.length != 65) {
+            return false;
+        }
+
+        if (!(tileData[64].matches("^[0-9]+$"))) {
+            return false;
+        }
+
+        List<String> listWithoutTurnNumber = new ArrayList<String>(Arrays.asList(tileData));
+        listWithoutTurnNumber.remove(64);
+
+        for (String string : listWithoutTurnNumber) {
+
+            if (!(   string.matches("00") 
+                  || string.matches("[wb][KQB]")
+                  || string.matches("[wb][RX][=][01]")
+                  || string.matches("[wb][P][=][01][=][01][=][0-9]+$")))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    
+    private void changePieceOnTile(int row, int col, char pieceType, char color, int... pawnRookKingInfo) {
+
+        String pieceName = color + " " + pieceType;
+        Tile tile = boardTiles[row][col];
+
+        switch (pieceType) {
+            case 'B':
+                tile.setPiece(new Bishop(pieceName, color));
+                break;
+            case 'K':
+                tile.setPiece(new Knight(pieceName, color));
+                break;
+            case 'P':
+                Pawn    pawn                = new Pawn(pieceName, color);
+                boolean hasPawnMoved        = (pawnRookKingInfo[0] == 1) ? true : false;
+                boolean movedTwoLastTurn    = (pawnRookKingInfo[1] == 1) ? true : false;
+                int     enPassentMoveNumber = pawnRookKingInfo[2];
+
+                pawn.setHasMoved(hasPawnMoved);
+                pawn.setMovedTwoLastTurn(movedTwoLastTurn);
+                pawn.setMoveNumberEnPassant(enPassentMoveNumber);
+                tile.setPiece(pawn);
+
+                break;
+            case 'R':
+                Rook rook = new Rook(pieceName, color);                
+                boolean hasRookMoved = false;
+                rook.setHasMoved(hasRookMoved);
+
+                tile.setPiece(rook);
+                break;
+            case 'Q':
+                tile.setPiece(new Queen(pieceName, color));
+                break;
+            case 'X':
+                King king = new King(pieceName, color);
+                boolean hasKingMoved = (pawnRookKingInfo[0] == 1) ? true : false; 
+                king.setHasMoved(hasKingMoved);
+
+                tile.setPiece(king);
+                break;
+        }
+    } 
+         
+    private boolean validationOfCoordinates(int row, int col) {
+
+        if (row > 7 || row < 0) {
+            return false;
+        }
+        if (col > 7 || col < 0) {
+            return false;        
+        }
+
+        return true;
+    }
+
     private boolean checkForSameCoordinates(int[] coordinateOne, int[] coordinateTwo) {
         if (coordinateOne[0] == coordinateTwo[0] && coordinateOne[1] == coordinateTwo[1]) {
             return true;
@@ -713,8 +708,4 @@ public class Game implements Serializable, Iterable<String[]> {
 
         return new BoardTileIterator(this);
     } 
-
-    public static void main(String[] args) {
-        Game game = new Game();
-    }
 }

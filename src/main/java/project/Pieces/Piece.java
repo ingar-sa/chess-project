@@ -16,8 +16,8 @@ public abstract class Piece implements Serializable {
         else
             throw new IllegalArgumentException("Color must be w or b");
         
-        //spriteType is never given by someone creating a Piece object. The specific piece class's constructor
-        //only takes in name and color, and passes it's own spriteType to the Piece constructor.
+        //spriteType is not a parameter in the subclasses, and is passed anonymously by their
+        //constructors, ensuring that it is always correct
         this.spriteId = color + "" + spriteType; 
     }
 

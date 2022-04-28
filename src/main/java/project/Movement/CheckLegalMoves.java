@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Set;
 
 import project.Consts;
-import project.Game;
 import project.Board.Tile;
 import project.Pieces.King;
 import project.Pieces.Piece;
@@ -40,33 +39,78 @@ public class CheckLegalMoves {
     private final int[] blackCastlingSkippedTileLeft  = new int[]{7, 3};
 
     //Turn number
-    int moveNumber = 0; 
+    private int moveNumber = 0; 
 
     public CheckLegalMoves() {
+        
         this.whiteMovement = new MovementPatterns('w');
         this.blackMovement = new MovementPatterns('b');
           
     }
 
-    //Finds all the possible moves for black or white when check is not considered
-    private HashMap<int[], ArrayList<int[]>> findAllMoves(MovementPatterns movementPattern, Tile[][] boardTiles) {
+    public HashMap<int[], ArrayList<int[]>> checkforCheckmateAndPat(Tile[][] currentGamePositionTiles) {
 
-        //The key is the coordinates [row, col] of the tile a piece is standing on. 
-        //The value is an ArrayList of the coordinates [row, col] of the tiles the piece can move to
-        HashMap<int[], ArrayList<int[]>> legalMoves = new HashMap<int[], ArrayList<int[]>>();
-        for (Tile[] row : boardTiles) {
-            for (Tile tile : row) {
-                if (tile.isOccupied() 
-                    && tile.getPiece().getColor() == movementPattern.getColor()) {
-                    
-                    //TODO: kanskje bytte ut navn her 
-                    int[] key = new int[] {tile.getRow(), tile.getCol()};
-                    ArrayList<int[]> allMoves = movementPattern.moveHandler(tile, boardTiles, this.moveNumber);
+        this.validationOfGameState(currentGamePositionTiles, this.moveNumber);
 
-                    legalMoves.put(key, allMoves);
+        HashMap<int[], ArrayList<int[]>> legalMoves = eliminateChecks(currentGamePositionTiles);
+        
+        boolean kingCanBetaken = false;
+        boolean gameOver = true;
+
+        int[] whiteKing = new int[]{};
+        int[] blackKing = new int[]{};
+
+        for (Tile[] tileRow : currentGamePositionTiles) {
+            for (Tile tile: tileRow) {
+                if (tile.getPiece() instanceof King && ((King)tile.getPiece()).getColor() == 'w') {
+                    whiteKing = new int[]{tile.getRow(), tile.getCol()};
+                }
+                else if (tile.getPiece() instanceof King && ((King)tile.getPiece()).getColor() == 'b') {
+                    blackKing = new int[]{tile.getRow(), tile.getCol()};
                 }
             }
         }
+
+        int[] playerThatMovesKingLocation = (ourMovementPattern.getColor() == 'w') ? whiteKing : blackKing;
+        
+        for (int[] pieceplayerThatMoves : legalMoves.keySet()) {
+            if (!gameOver) {
+                break;
+            }
+
+            if (legalMoves.get(pieceplayerThatMoves).size() != 0) {
+                gameOver = false;
+            }
+        }
+
+        if (gameOver) {
+
+            HashMap<int[], ArrayList<int[]>> allPiecesAndMovesOppositeColor = findAllMoves(this.opponentMovementPattern, currentGamePositionTiles);
+            Collection<ArrayList<int[]>> allPossibleMovesThatCouldTakeTheKing = allPiecesAndMovesOppositeColor.values();
+
+            for (ArrayList<int[]> movesOppositePiece: allPossibleMovesThatCouldTakeTheKing) {
+                
+                if (kingCanBetaken) {
+                    break;
+                }
+
+                for (int[] oneOppositeMove : movesOppositePiece) {
+                    if (checkForSameCoordinates(oneOppositeMove, playerThatMovesKingLocation)) {
+
+                        kingCanBetaken = true;
+                        break;
+                    }
+                }
+            } 
+        }
+        
+        if (kingCanBetaken && gameOver) {
+            this.gameStatus = Consts.CHECKMATE;
+        } 
+        else if (!kingCanBetaken && gameOver) {
+            this.gameStatus = Consts.PAT;
+        }
+
         return legalMoves;
     }
 
@@ -109,18 +153,18 @@ public class CheckLegalMoves {
             }
         }
 
-        setPlayerThatMoves();
+        setMovementPattern();
 
         //Us is the player who is moving this turn
         //Opponent is the other player
         int[] ourKingStartPos;
-        ourKingStartPos = (ourMovementPattern.getColor() == 'w') ? whiteKingStartPos : blackKingStartPos;
+        ourKingStartPos = (this.ourMovementPattern.getColor() == 'w') ? whiteKingStartPos : blackKingStartPos;
 
         int[] ourKingPos;
-        ourKingPos = (ourMovementPattern.getColor() == 'w') ? whiteKingPos : blackKingPos;
+        ourKingPos = (this.ourMovementPattern.getColor() == 'w') ? whiteKingPos : blackKingPos;
 
 
-        HashMap<int[], ArrayList<int[]>> movesForAllOurPieces = findAllMoves(ourMovementPattern, currentPositionTiles);
+        HashMap<int[], ArrayList<int[]>> movesForAllOurPieces = findAllMoves(this.ourMovementPattern, currentPositionTiles);
         
         for (int[] ourPiece : movesForAllOurPieces.keySet()) {
 
@@ -160,16 +204,14 @@ public class CheckLegalMoves {
                 currentPositionTiles[ourMoveToRow][ourMoveToCol].setPiece(pieceToMove);
                 
                 //Updates the king position
-                ourKingPos = (ourMovementPattern.getColor() == 'w') ? whiteKingPos : blackKingPos;
+                ourKingPos = (this.ourMovementPattern.getColor() == 'w') ? whiteKingPos : blackKingPos;
                 
-                HashMap<int[], ArrayList<int[]>> allOpponentMoves           = findAllMoves(opponentMovementPattern, currentPositionTiles);
+                HashMap<int[], ArrayList<int[]>> allOpponentMoves           = findAllMoves(this.opponentMovementPattern, currentPositionTiles);
                 Collection<ArrayList<int[]>>     allOpponentMoveCoordinates = allOpponentMoves.values();
 
                 for (ArrayList<int[]> opponentPieceMoves: allOpponentMoveCoordinates) {
-                    for (int[] opponentMove : opponentPieceMoves) {
+                    for (int[] opponentMove : opponentPieceMoves) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
                         
-                        //TODO: ???
-                        //bjn54                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
                         if (checkForSameCoordinates(ourKingPos, opponentMove)) {
                             for (int[] oneOfAllMoves : ourPieceMoves) {
                                 if (checkForSameCoordinates(oneOfAllMoves, ourMove)) {
@@ -257,15 +299,6 @@ public class CheckLegalMoves {
                 currentPositionTiles[ourMoveToRow][ourMoveToCol].removePiece();
                 currentPositionTiles[ourMoveToRow][ourMoveToCol].setPiece(pieceAtMoveTo);
 
-                //TODO: CHANGED: setPiece now checks if the argument piece is null, and sets occupied appropriately
-                //Since setPiece also makes Occupied = True, this has to handeled
-                // if (currentPositionTiles[ourMoveToRow][ourMoveToCol].getPiece() == null) {
-                //     currentPositionTiles[ourMoveToRow][ourMoveToCol].setOccupied(false);
-                // }
-                
-                //REDUNDANT, this was performed above
-                //currentPositionTiles[ourMoveFromRow][ourMoveFromCol].setPiece(pieceToMoveBack);
-
                 //Reset King field if king moved 
                 if (whiteKingMoves) {
                     whiteKingPos = new int[]{ourMoveFromRow, ourMoveFromCol};
@@ -283,84 +316,40 @@ public class CheckLegalMoves {
         return movesForAllOurPieces;
     }
 
-    private boolean checkForSameCoordinates(int[] coordinateOne, int[] coordinateTwo) {
-        if (coordinateOne[0] == coordinateTwo[0] && coordinateOne[1] == coordinateTwo[1]) {
-            return true;
-        }
-        return false;
-    }
-    
-    //DOKUMENTASJON
-    //TODO: Hva skjer hvis man sender inn et brett der hvit har vunnet men det er hvit sin tur
-    public HashMap<int[], ArrayList<int[]>> checkforCheckmateAndPat(Tile[][] currentGamePositionTiles) {
-
-        this.validationOfGameState(currentGamePositionTiles, this.moveNumber);
-
-        HashMap<int[], ArrayList<int[]>> legalMoves = eliminateChecks(currentGamePositionTiles);
-        
-        boolean kingCanBetaken = false;
-        boolean gameOver = true;
-
-        int[] whiteKing = new int[]{};
-        int[] blackKing = new int[]{};
-
-        for (Tile[] tileRow : currentGamePositionTiles) {
-            for (Tile tile: tileRow) {
-                if (tile.getPiece() instanceof King && ((King)tile.getPiece()).getColor() == 'w') {
-                    whiteKing = new int[]{tile.getRow(), tile.getCol()};
-                }
-                else if (tile.getPiece() instanceof King && ((King)tile.getPiece()).getColor() == 'b') {
-                    blackKing = new int[]{tile.getRow(), tile.getCol()};
-                }
-            }
-        }
-
-        int[] kingLocationplayerThatMoves = (ourMovementPattern.getColor() == 'w') ? whiteKing : blackKing;
-        
-        for (int[] pieceplayerThatMoves : legalMoves.keySet()) {
-            if (!gameOver) {
-                break;
-            }
-
-            if (legalMoves.get(pieceplayerThatMoves).size() != 0) {
-                gameOver = false;
-            }
-        }
-
-        if (gameOver) {
-
-            HashMap<int[], ArrayList<int[]>> allPiecesAndMovesOppositeColor = findAllMoves(opponentMovementPattern, currentGamePositionTiles);
-            Collection<ArrayList<int[]>> allPossibleMovesThatCouldTakeTheKing = allPiecesAndMovesOppositeColor.values();
-
-            for (ArrayList<int[]> movesOppositePiece: allPossibleMovesThatCouldTakeTheKing) {
-                
-                if (kingCanBetaken) {
-                    break;
-                }
-
-                for (int[] oneOppositeMove : movesOppositePiece) {
-                    if (checkForSameCoordinates(oneOppositeMove, kingLocationplayerThatMoves)) {
-
-                        kingCanBetaken = true;
-                        break;
-                    }
-                }
-            } 
-        }
-        
-        if (kingCanBetaken && gameOver) {
-            this.gameStatus = Consts.CHECKMATE;
+    private void setMovementPattern () {
+        if (this.moveNumber % 2 == 0) {
+            this.ourMovementPattern = whiteMovement;
+            this.opponentMovementPattern = blackMovement;
         } 
-        else if (!kingCanBetaken && gameOver) {
-            this.gameStatus = Consts.PAT;
+        else {
+            this.ourMovementPattern = blackMovement;
+            this.opponentMovementPattern = whiteMovement;
         }
+    }
 
+    //Finds all the possible moves for black or white when check is not considered
+    private HashMap<int[], ArrayList<int[]>> findAllMoves(MovementPatterns movementPattern, Tile[][] boardTiles) {
+
+        //The key is the coordinates [row, col] of the tile a piece is standing on. 
+        //The value is an ArrayList of the coordinates [row, col] of the tiles the piece can move to
+        HashMap<int[], ArrayList<int[]>> legalMoves = new HashMap<int[], ArrayList<int[]>>();
+        for (Tile[] row : boardTiles) {
+            for (Tile tile : row) {
+                if (tile.isOccupied() 
+                    && tile.getPiece().getColor() == movementPattern.getColor()) {
+                    
+                    int[] key = new int[] {tile.getRow(), tile.getCol()};
+                    ArrayList<int[]> allMoves = movementPattern.moveHandler(tile, boardTiles, this.moveNumber);
+
+                    legalMoves.put(key, allMoves);
+                }
+            }
+        }
         return legalMoves;
     }
 
-    //TODO: Må vi validere noe tilstand her?
     public void increaseMoveNumber () {
-        this.moveNumber ++;
+        this.moveNumber++;
     }
 
     public int getMoveNumber() {
@@ -378,33 +367,22 @@ public class CheckLegalMoves {
         this.moveNumber = moveNumber;
     }
 
-    private void setPlayerThatMoves () {
-        if (this.moveNumber % 2 == 0) {
-            this.ourMovementPattern = whiteMovement;
-            this.opponentMovementPattern = blackMovement;
-        } 
-        else {
-            this.ourMovementPattern = blackMovement;
-            this.opponentMovementPattern = whiteMovement;
-        }
-    }
+    public void validationOfGameState(Tile[][] currentGamePosition, int turnNumber) {
+        
+        /*
+        EXPLANATION OF THE METHOD
+        This method validates that the loaded game position is valid according to the logic used to play the game.
+        Validating the string directly is much harder, therefore this method checks that game is in a legal state according to the game logic after loading a game.
+        This method will allow illegal chess positions, if they dont break the logic used in the program, and from the loaded position it will follow normal chess rules.
 
-    /*
-    EXPLANATION OF THE METHOD
-    This method validates that the loaded game position is valid according to the logic used to play the game.
-    Validating the string directly is much harder, therefore this method checks that game is in a legal state according to the game logic after loading a game.
-    This method will allow illegal chess positions, if they dont break the logic used in the program, and from the loaded position it will follow normal chess rules.
+        Exampels of positions that are allowed:
+        - The king can start at a chosen position, but there needs to be 1 white king and 1 black king, and the player not Moving cant be in check. 
+        - Pawns cant be placed at row 1 and 8.
+        - And some other requirements that could/will break the game logic are checked.
+        
+        From this you can write your own chess positions as strings and make custom starts that follow normal chess rules from that point. 
+        */
 
-    Exampels of positions that are allowed:
-    - The king can start at a chosen position, but there needs to be 1 white king and 1 black king, and the player not Moving cant be in check. 
-    - Pawns cant be placed at row 1 and 8.
-    - And some other requirements that could/will break the game logic are checked.
-    
-    From this you can write your own chess positions as strings and make custom starts that follow normal chess rules from that point. 
-    */
-
-    //TODO: Change movenumber?
-    public void validationOfGameState(Tile[][] currentGamePosition, int moveNumber) {
 
         int[] whiteKingLocation = new int[]{};
         int[] blackKingLocation = new int[]{};
@@ -417,7 +395,7 @@ public class CheckLegalMoves {
            throw new IllegalArgumentException("Input cant be null"); 
         }
 
-        if (!(currentGamePosition.length == 8 && currentGamePosition[0].length == 8 && moveNumber >= 0))
+        if (!(currentGamePosition.length == 8 && currentGamePosition[0].length == 8 && turnNumber >= 0))
             throw new IllegalArgumentException("Board size must be 8x8 and moveNumber must be greater than or equal to 0");
 
         for (Tile[] row : currentGamePosition) {
@@ -492,13 +470,13 @@ public class CheckLegalMoves {
         if (pawnMoveNumbers.size() != 0)
             highestPawnMoveNumber = Collections.max(pawnMoveNumbers);
 
-        if (moveNumber == 0) {
+        if (turnNumber == 0) {
             if (highestPawnMoveNumber > 0) {
                 throw new IllegalArgumentException("The pawn has a illegal move number, it is higher than the move number for the game!");
             }
         }
         else {
-            if (highestPawnMoveNumber + 1 > moveNumber) {
+            if (highestPawnMoveNumber + 1 > turnNumber) {
                 throw new IllegalArgumentException("The pawn has a illegal move number, it is higher than the move number for the game!");
             }
         }
@@ -516,7 +494,7 @@ public class CheckLegalMoves {
         boolean playerNotToMoveInCheck = false;
 
         //If setPlayerMove returns true - white is moving
-        if (setPlayerToMove(moveNumber)) {
+        if (setPlayerToMove(turnNumber)) {
             HashMap<int[], ArrayList<int[]>> allMovesWhite = this.findAllMoves(this.whiteMovement, currentGamePosition);
             Collection<ArrayList<int[]>> onlyValuesAllMovesWhite = allMovesWhite.values();
             
@@ -547,167 +525,18 @@ public class CheckLegalMoves {
         }
     }
 
+    private boolean checkForSameCoordinates(int[] coordinateOne, int[] coordinateTwo) {
+        if (coordinateOne[0] == coordinateTwo[0] && coordinateOne[1] == coordinateTwo[1]) {
+            return true;
+        }
+        return false;
+    }
+
     //Returns true if white is moving and false if black is moving.
     private boolean setPlayerToMove(int moveNumber) {
-
         return (moveNumber % 2 == 0) ? true : false;
     }
 
-    //TODO: HUSK å fjerne!
-    public void keyWriter(Tile[][] boardTiles) {
-        
-        HashMap<int[], ArrayList<int[]>> movesForAllOurPieces = eliminateChecks(boardTiles);
-        Set<int[]> keys = movesForAllOurPieces.keySet(); 
-
-        String keyString = new String();
-        
-        for (int[] key : keys) {
-            keyString += "new " + "int[]" + "{" + key[0] + ", " + key[1] + "}" + ", ";
-        }
-
-        System.out.println(keyString);
-    }
-
-
-    public static void main(String[] args) {
-
-        Game game = new Game();
-        MovementPatterns movementPattern = new MovementPatterns('w');
-        CheckLegalMoves checklegalmoves = new CheckLegalMoves();
-
-        game.loadedGamePiecesPosition("wR=0-wK-wB-00-wX=0-00-wK-wR=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-00-00-00-00-00-00-00-00-00-wB-00-wP=1=1=0-00-00-00-bP=1=0=5-00-00-00-bP=1=1=1-00-00-wQ-00-00-00-00-00-00-00-00-00-bP=0=0=0-bP=0=0=0-bP=0=0=0-00-bP=0=0=0-bP=0=0=0-bP=0=0=0-bR=0-bK-bB-bQ-bX=0-bB-bK-bR=0-6");
-        Tile[][] board = game.getBoardTilesDeepCopy();
-        checklegalmoves.keyWriter(board);
-        checklegalmoves.validationOfGameState(null, 3);
-
-
-
-        /*
-        long startTime = System.nanoTime();
-        Chessboard chessboard = new Chessboard();
-        Tile[][] tiles = chessboard.getBoardTiles();
-
-        Rook bR1 = new Rook("bR1", 'b');
-        Rook bR2 = new Rook("bR2", 'b');
-        Rook bR3 = new Rook("bR3", 'b');
-        Rook bR4 = new Rook("bR4", 'b');
-        Rook bR5 = new Rook("bR5", 'b');
-
-        Rook wR1 = new Rook("wR1", 'w');
-        Rook wR2 = new Rook("wR2", 'w');
-        Rook wR3 = new Rook("wR3", 'w');
-        Rook wR4 = new Rook("wR4", 'w');
-        Rook wR5 = new Rook("wR5", 'w');
-
-        Bishop bB1 = new Bishop("bB1", 'b');
-        Bishop bB2 = new Bishop("bB2", 'b');
-        Bishop bB3 = new Bishop("bB3", 'b');
-        Bishop bB4 = new Bishop("bB4", 'b');
-
-        Bishop wB1 = new Bishop("wB1", 'w');
-        Bishop wB2 = new Bishop("wB2", 'w');
-        Bishop wB3 = new Bishop("wB3", 'w');
-        Bishop wB4 = new Bishop("wB4", 'w');
-
-        Pawn bP1 = new Pawn("bP1", 'b');
-        Pawn bP2 = new Pawn("bP2", 'b');
-        Pawn bP3 = new Pawn("bP3", 'b');
-        Pawn bP4 = new Pawn("bP4", 'b');
-        Pawn bP5 = new Pawn("bP5", 'b');
-
-        Pawn wP1 = new Pawn("wP1", 'w');
-        Pawn wP2 = new Pawn("wP2", 'w');
-        Pawn wP3 = new Pawn("wP3", 'w');
-        Pawn wP4 = new Pawn("wP4", 'w');
-        Pawn wP5 = new Pawn("wP5", 'w');
-
-        King wX1 = new King("wX2", 'w');
-
-        King bX1 = new King("bX2", 'b');
-
-        Queen bQ1 = new Queen("bQ1", 'b');
-
-        Queen wQ1 = new Queen("wQ1", 'w');
-
-        Knight bK1 = new Knight("bK1", 'b');
-        Knight bK2 = new Knight("bK2", 'b');
-        Knight bK3 = new Knight("bK3", 'b');
-
-        Knight wK1 = new Knight("wK1", 'w');
-        Knight wK2 = new Knight("wK2", 'w');
-        Knight wK3 = new Knight("wK3", 'w');
-
-
-        // remove pawns for white 
-        tiles[1][0].removePiece();
-        tiles[1][1].removePiece();
-        tiles[1][2].removePiece();
-        tiles[1][3].removePiece();
-        tiles[1][4].removePiece();
-        tiles[1][5].removePiece();
-        tiles[1][6].removePiece();
-        tiles[1][7].removePiece();
-        
-        // remove backrank white 
-        tiles[0][1].removePiece();
-        tiles[0][2].removePiece();
-        tiles[0][3].removePiece();
-        tiles[0][0].removePiece();
-        tiles[0][5].removePiece();
-        tiles[0][6].removePiece();
-        tiles[0][7].removePiece();
-        tiles[0][4].removePiece();
-
-        // remove pawns for black
-        tiles[6][0].removePiece();
-        tiles[6][1].removePiece();
-        tiles[6][2].removePiece();
-        tiles[6][3].removePiece();
-        tiles[6][4].removePiece();
-        tiles[6][5].removePiece();
-        tiles[6][6].removePiece();
-        tiles[6][7].removePiece();
-        
-        // remove backrank black 
-        tiles[7][1].removePiece();
-        tiles[7][2].removePiece();
-        tiles[7][3].removePiece();
-        tiles[7][0].removePiece();
-        tiles[7][5].removePiece();
-        tiles[7][6].removePiece();
-        tiles[7][7].removePiece();
-        tiles[7][4].removePiece();
-
-        tiles[0][4].setPiece(wX1);
-        tiles[7][4].setPiece(bX1);
-
-        //tiles[0][0].setPiece(wR1);
-        //tiles[0][7].setPiece(wR2);
-
-        tiles[7][0].setPiece(bR1);
-        tiles[7][7].setPiece(bR2);
-
-        //tiles[1][4].setPiece(wK1);
-
-        tiles[5][3].setPiece(wQ1);
-        //tiles[5][6].setPiece(bP1);
-        //bP1.setMovedTwoLastTurn(true);
-        
-
-
-       
-        chessboard.printBoard();
-
-        //CheckLegalMoves checklegalmoves = new CheckLegalMoves(tiles);
-
-
-        //checklegalmoves.CheckforCheckMateAndPat();
-        
-        long endTime   = System.nanoTime();
-        long totalTime = endTime - startTime;
-        System.out.println(totalTime);
-        */
-    }
 }
 
 

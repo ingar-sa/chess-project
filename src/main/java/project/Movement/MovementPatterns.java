@@ -1,10 +1,8 @@
 package project.Movement;
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 
-import project.Game;
 import project.Board.Tile;
 import project.Pieces.Bishop;
 import project.Pieces.King;
@@ -13,6 +11,7 @@ import project.Pieces.Pawn;
 import project.Pieces.Piece;
 import project.Pieces.Queen;
 import project.Pieces.Rook;
+
 
 public class MovementPatterns {
 
@@ -24,12 +23,15 @@ public class MovementPatterns {
             throw new IllegalArgumentException("Illegal color");
     }
 
+    public char getColor() {
+        return this.color;
+    }
+
     public ArrayList<int[]> moveHandler(Tile tile, Tile[][] boardTiles, int moveNumber) {
 
-        if (tile == null || boardTiles == null) {
-            throw new IllegalArgumentException("Input cant be null");
-        }
-
+        if (tile == null || boardTiles == null) 
+            throw new IllegalArgumentException("Input can't be null");
+        
         if (!(boardTiles.length == 8 && boardTiles[0].length == 8 && moveNumber >= 0))
             throw new IllegalArgumentException("Board size must be 8x8 and moveNumber must be greater than or equal to 0");
         
@@ -46,16 +48,15 @@ public class MovementPatterns {
         return allMoves;
     }
 
-   
-
-    private ArrayList<int[]> pawnMoves(Tile tile, Tile[][] boardTiles, int moveNumber) {     
+    private ArrayList<int[]> pawnMoves(Tile tile, Tile[][] boardTiles, int moveNumber) {   
+          
         Pawn             pawn           = (Pawn)tile.getPiece(); 
         int              row            = tile.getRow();
         int              col            = tile.getCol();
         ArrayList<int[]> legalPawnMoves = new ArrayList<int[]>();
         
         int moveDirection = 1; 
-        if (this.color == 'b') moveDirection = -1;
+        if (this.color == 'b') moveDirection = -1; //If the player is black, we subtract instead of adding to the coordinates, so the piece moves downwards
         
         Tile inFront  = boardTiles[row+(1*moveDirection)][col];
         Tile twoInFront = null;
@@ -73,7 +74,6 @@ public class MovementPatterns {
         if (!(col == 7)) 
             attackRight = boardTiles[row+(1*moveDirection)][col+1];
         
-
         Tile passantLeft = null; 
         Tile passantRight = null;
         
@@ -118,7 +118,7 @@ public class MovementPatterns {
             && passantLeft.getPiece() instanceof Pawn
             && passantLeft.getPiece().getColor() != this.color
             && ((Pawn)passantLeft.getPiece()).getMovedTwoLastTurn()
-            && ((Pawn)passantLeft.getPiece()).getMoveNumberEnPassant() - moveNumber == - 1) {
+            && ((Pawn)passantLeft.getPiece()).getMoveNumberEnPassant() - moveNumber == -1) { //En passent can only be performed if the opponents pawn moved last turn
         
             legalPawnMoves.add(new int[]{passantLeft.getRow() + 1 * moveDirection, passantLeft.getCol()});
         }
@@ -127,7 +127,7 @@ public class MovementPatterns {
             && passantRight.getPiece() instanceof Pawn
             && passantRight.getPiece().getColor() != this.color 
             && ((Pawn)passantRight.getPiece()).getMovedTwoLastTurn()
-            && ((Pawn)passantRight.getPiece()).getMoveNumberEnPassant() - moveNumber == - 1) {
+            && ((Pawn)passantRight.getPiece()).getMoveNumberEnPassant() - moveNumber == -1) {
 
             legalPawnMoves.add(new int[]{passantRight.getRow() + 1 * moveDirection, passantRight.getCol()});
         } 
@@ -262,7 +262,8 @@ public class MovementPatterns {
 
     
     private ArrayList<int[]> removeFriendlyTiles(ArrayList<int[]> allMoves, Tile[][] boardTiles) {
-
+        
+        //This saves having to check if a piece is of the same color in every loop in bishop and rook moves
          ArrayList<int[]> legalMoves = new ArrayList<int[]>();
 
          for (int[] move : allMoves) {
@@ -303,8 +304,8 @@ public class MovementPatterns {
             
             Tile leftCorner  = boardTiles[castleRow][0];
             Tile rightCorner = boardTiles[castleRow][7];
-
-            if (leftCorner.isOccupied() 
+        
+            if (leftCorner.isOccupied() //Castling to the left
                 && leftCorner.getPiece() instanceof Rook 
                 && !leftCorner.getPiece().getHasMoved()
                 && !boardTiles[castleRow][1].isOccupied()
@@ -315,7 +316,7 @@ public class MovementPatterns {
                 
             }
         
-            if (rightCorner.isOccupied() 
+            if (rightCorner.isOccupied() //Castling to the right
                 && rightCorner.getPiece() instanceof Rook 
                 && !rightCorner.getPiece().getHasMoved()
                 && !boardTiles[castleRow][5].isOccupied()
@@ -326,13 +327,14 @@ public class MovementPatterns {
 
         }
 
-        //TODO: Add explanatory comments
+        //Traverses all of tiles in the 3x3 area around the king, row by row, starting at the one above it
         for (int boundedRow = row + 1; boundedRow >= row - 1; boundedRow--) {
-
+            
+            //If the row is inside the board, traverse the tiles in the row
             if (boundedRow < 8 && boundedRow >= 0) {
-
                 for (int boundedCol = col - 1; boundedCol <= col + 1; boundedCol++) {
-
+                    
+                    //if the tile is inside the board, check if the king can move to it
                     if (boundedCol >= 0 && boundedCol < 8) {
 
                             Tile checkedTile = boardTiles[boundedRow][boundedCol];
@@ -345,7 +347,6 @@ public class MovementPatterns {
                             if (!checkedTile.isOccupied()) {
                                     legalMoves.add(new int[]{boundedRow, boundedCol});
                             }
-                    
                     }
                 }
             }
@@ -373,7 +374,7 @@ public class MovementPatterns {
                            new int[]{row - 1, col + 2},
                            new int[]{row - 2, col + 1});
 
-        //Only add coordinates that are inbound the chessboard, and is 
+        //Only add coordinates that are inside the chessboard, and is 
         //either unoccupied or occupied by a piece of the opposite color 
         for (int[] coordinate : moveCoordinates) {
             if (coordinate[0] < 8 && coordinate[0] >= 0 && coordinate[1] < 8 && coordinate[1] >= 0) {
@@ -381,149 +382,10 @@ public class MovementPatterns {
                 if (!checkedTile.isOccupied() || checkedTile.getPiece().getColor() != this.color) {
                     legalMoves.add(coordinate);
                 }
-                
             }
         }
 
         return legalMoves;
     }
-
-    public char getColor() {
-        return this.color;
-    }
-
-     //TODO: Slett!
-     public static void arraylistStringForm(ArrayList<int[]> allMoves) {
-
-        String stringOfAllMoves = new String();
-        for (int[] move : allMoves) {
-            stringOfAllMoves += "new " + "int[]" + "{" + move[0] + ", " + move[1] + "}" + ", ";
-        }
-    
-        System.out.println(stringOfAllMoves);
-        }
-    
-    public static void makeBoard(Tile[][] boardTiles) {
-        for (int row = 0; row < 8; ++row) {
-            for (int col = 0; col < 8; ++col) {
-
-                Tile tile = new Tile(row, col);
-                boardTiles[row][col] = tile;
-            }
-        }
-    }
-
-    
-    public static void main(String[] args) {
-
-        
-        MovementPatterns wPattern = new MovementPatterns('w');
-        MovementPatterns bPattern = new MovementPatterns('b');
-        Game game = new Game(); 
-        Tile[][] boardTiles = game.getBoardTilesDeepCopy();
-        // Tile[][] boardTiles = new Tile[8][8];
-        // makeBoard(boardTiles);
-
-        Knight blackKnight1 = new Knight("bK1", 'b');
-
-        game = new Game();
-        boardTiles = game.getBoardTilesDeepCopy();
-
-        boardTiles[2][3].setPiece(blackKnight1);
-        
-        arraylistStringForm(bPattern.moveHandler(boardTiles[2][3], boardTiles, 1));
-
-        
-        
-        /*
-        King whiteKing1 = new King("wK1", 'w');
-        Rook whiteRook1 = new Rook("wR1", 'w');
-        Rook whiteRook2 = new Rook("wR2", 'w');
-        
-        boardTiles[0][4].setPiece(whiteKing1);
-        boardTiles[0][0].setPiece(whiteRook1);
-        boardTiles[0][7].setPiece(whiteRook2);
-        
-        //arraylistStringForm(wPattern.moveHandler(boardTiles[0][4], boardTiles, 0));
-
-        boardTiles = game.getBoardTilesDeepCopy();
-        boardTiles[5][3].setPiece(whiteKing1);
-
-        arraylistStringForm(wPattern.moveHandler(boardTiles[5][3], boardTiles, 0));
-
-        
-        Bishop blackBishop1 = new Bishop("bB1", 'b');
-        
-        boardTiles[4][5].setPiece(blackBishop1);
-        arraylistStringForm(bPattern.moveHandler(boardTiles[4][5], boardTiles, 1));
-        
-        
-        
-        Tile[][] boardTiles = new Tile[8][8];
-        makeBoard(boardTiles);
-        
-        Pawn whitePawn3 = new Pawn("wP3", 'w');
-        Pawn whitePawn4 = new Pawn("wP4", 'w');
-        Pawn whitePawn5 = new Pawn("wP5", 'w');
-        Pawn blackPawn5 = new Pawn("bP5:", 'b');
-        
-        boardTiles[6][3].setPiece(blackPawn5);
-        boardTiles[5][2].setPiece(whitePawn3);
-        boardTiles[5][4].setPiece(whitePawn4);
-        boardTiles[5][3].setPiece(whitePawn5);
-        
-        arraylistStringForm(bPattern.moveHandler(boardTiles[6][3], boardTiles, 1));
-    
-
-        
-        //Tile[][] boardTiles = game.getBoardDeepCopyUsingSerialization();
-        System.out.println("White");
-        for (int col = 0; col < 8; ++col) {
-            ArrayList<int[]> cheatSheet = wPattern.moveHandler(boardTiles[0][col], boardTiles, 0);
-            System.out.println(wPattern.arraylistStringForm(cheatSheet));
-        }
-
-        System.out.println("\nBlack");
-        for (int col = 0; col < 8; ++col) {
-            ArrayList<int[]> cheatSheet = bPattern.moveHandler(boardTiles[7][col], boardTiles, 1);
-            System.out.println(bPattern.arraylistStringForm(cheatSheet));
-        }
-        
-
-        System.out.println("\nPawns");
-        Tile[][] boardTiles = new Tile[8][8];
-        
-        makeBoard(boardTiles);
-        
-        Pawn whitePawn2 = new Pawn("wP2", 'w');
-        Pawn blackPawn2 = new Pawn("bP2", 'b');
-        Pawn blackPawn3 = new Pawn("bP3", 'b');
-        Pawn blackPawn4 = new Pawn("bP4", 'b');
-        
-        boardTiles[3][3].setPiece(whitePawn2);
-        boardTiles[4][2].setPiece(blackPawn2);
-        boardTiles[4][3].setPiece(blackPawn3);
-        boardTiles[4][4].setPiece(blackPawn4);
-
-        System.out.println();
-        
-
-        System.out.println("\nBishop");
-        Tile[][] boardTiles = new Tile[8][8];
-        makeBoard(boardTiles);
-
-        Bishop blackBishop1 = new Bishop("bB1", 'b');
-        boardTiles[3][4].setPiece(blackBishop1);
-        arraylistStringForm(bPattern.moveHandler(boardTiles[3][4], boardTiles, 0));
-        
-
-        Rook whiteRook1 = new Rook("wR1", 'w');
-        Game game = new Game();
-        Tile[][] boardTiles = game.getBoardDeepCopyUsingSerialization();
-        boardTiles[3][3].setPiece(whiteRook1);
-
-        arraylistStringForm(wPattern.moveHandler(boardTiles[3][3], boardTiles, 0));
-        */
-        
-    }
+     
 }

@@ -3,9 +3,6 @@ package project;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import project.Board.Tile;
-import project.Game;
-
 public class BoardTileIterator implements Iterator<String[]> {
 
     private Game game;
@@ -21,7 +18,7 @@ public class BoardTileIterator implements Iterator<String[]> {
     }
 
     @Override
-    public String[] next() {  //TODO: Change from tile to give pieceinfo array directly from game
+    public String[] next() {
 
         if (!hasNext())
             throw new NoSuchElementException("The iterator is empty.");
@@ -35,13 +32,5 @@ public class BoardTileIterator implements Iterator<String[]> {
         
         ++col;
         return pieceInfo;
-    }
-    
-    public static void main(String[] args) {
-    //     Game game = new Game();
-    //     BoardTileIterator iterator = new BoardTileIterator(game.getBoardTiles());
-
-    //     iterator.manipulator();
-    //     System.out.println("yoyo");
     }
 }

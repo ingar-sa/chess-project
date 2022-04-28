@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-
 import project.Board.Tile;
 import project.Pieces.King;
 import project.Pieces.Pawn;
