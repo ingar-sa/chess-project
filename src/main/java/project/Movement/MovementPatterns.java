@@ -12,6 +12,7 @@ import project.Pieces.Piece;
 import project.Pieces.Queen;
 import project.Pieces.Rook;
 
+
 public class MovementPatterns {
 
     private char color;
@@ -386,25 +387,5 @@ public class MovementPatterns {
 
         return legalMoves;
     }
-
-    //TODO: Slett!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    public static void arraylistStringForm(ArrayList<int[]> allMoves) {
-
-        String stringOfAllMoves = new String();
-        for (int[] move : allMoves) {
-            stringOfAllMoves += "new " + "int[]" + "{" + move[0] + ", " + move[1] + "}" + ", ";
-        }
-    
-        System.out.println(stringOfAllMoves);
-        }
-    
-    public static void makeBoard(Tile[][] boardTiles) {
-        for (int row = 0; row < 8; ++row) {
-            for (int col = 0; col < 8; ++col) {
-
-                Tile tile = new Tile(row, col);
-                boardTiles[row][col] = tile;
-            }
-        }
-    }      
+     
 }

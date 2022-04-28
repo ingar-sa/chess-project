@@ -290,7 +290,7 @@ public class GameTest {
         //Tests that the king and rook can perform the move as expected 
         assertEquals(expectedCastlingString, this.game.moveChosenPiece(7, 4, 7, 6));
         Tile[][] castlingPerformed = this.game.getBoardTilesDeepCopy();
-        //Tests that the board is updaeted correctly 
+        //Tests that the board is updateed correctly 
         assertTrue(castlingPerformed[7][4].getPiece() == null);
         assertTrue(castlingPerformed[7][5].getPiece() instanceof Rook);
         assertTrue(castlingPerformed[7][6].getPiece() instanceof King);
@@ -478,8 +478,6 @@ public class GameTest {
         assertThrows(IllegalStateException.class, () -> game.promotePawn(0, 0, 'Q', 'b'));
 
     }
-
-
 
     private boolean compareStringArrays(String[] expected, String[] actual) {
         

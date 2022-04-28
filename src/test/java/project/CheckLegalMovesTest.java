@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -17,36 +16,28 @@ import org.junit.jupiter.api.Test;
 
 import project.Board.Tile;
 import project.Movement.CheckLegalMoves;
-import project.Movement.MovementPatterns;
 import project.Pieces.Bishop;
 import project.Pieces.King;
 import project.Pieces.Pawn;
-import project.Pieces.Piece;
 import project.Pieces.Queen;
 
 public class CheckLegalMovesTest {
 
-    //Key - brikke - int[]
-    //Expected keys
-
-    //for key.erlik == Expected keys:
-    //
-
-    //expectedValue = Arraylist<int[]> = [[2,1], [2,3], [4,4]]
-
     private Game game;
-    private MovementPatterns movementPattern;
     private CheckLegalMoves checklegalmoves;
+    private int negativeMovenumber = -1;
+    private int zeroMovenumber     =  0;
+    private int positiveMovenumber =  1;
 
     @BeforeEach
+    
     public void setup() {
         this.game = new Game();
-        this.movementPattern = new MovementPatterns('w');
         this.checklegalmoves = new CheckLegalMoves();
     }
 
     @Test
-    @DisplayName("Tests that only the correct pieces can move")
+    @DisplayName("Tests that only the correct pieces can move when check is considered")
     public void checkLegalMovesTest() {
 
         game.loadedGamePiecesPosition("wR=0-wK-wB-00-00-wB-wK-wR=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-00-wX=1-00-00-00-00-00-00-00-00-00-wP=1=1=0-00-wQ-00-00-00-00-bP=1=1=3-bP=1=1=1-bP=1=1=5-00-00-00-00-bQ-00-00-00-00-00-bP=0=0=0-bP=0=0=0-bP=0=0=0-00-00-00-bP=0=0=0-bP=0=0=0-bR=0-bK-bB-00-bX=0-bB-bK-bR=0-10");
@@ -76,8 +67,28 @@ public class CheckLegalMovesTest {
         ArrayList<int[]> expectedMovesKing = new ArrayList<int[]>(Arrays.asList(new int[]{2, 1}, new int[]{2, 3}));
         ArrayList<int[]> expectedMovesBishop = new ArrayList<int[]>(Arrays.asList(new int[]{3, 2}));
 
+        for (int[] piece : actualKeys) {
+            if (compareCoordinates(piece, new int[]{2, 2})) {
+                ArrayList<int[]> actualMovesWhiteKing = allMoves.get(piece);
+                assertEquals(expectedMovesKing.size(), actualMovesWhiteKing.size());
+                for (int move = 0; move < actualMovesWhiteKing.size(); move++) { //Test that the king only can preform moves that evades check 
+                    assertTrue(compareCoordinates(expectedMovesKing.get(move), actualMovesWhiteKing.get(move)));
+                }   
+            }
 
+            else if (compareCoordinates(piece, new int[]{0, 5})) {
+                ArrayList<int[]> actualMovesWhiteBishop = allMoves.get(piece);
+                assertEquals(expectedMovesBishop.size(), actualMovesWhiteBishop.size());
+                 for (int move = 0; move < actualMovesWhiteBishop.size(); move++) { //Test that the only move the bishop has is the one hindering check  
+                    assertTrue(compareCoordinates(expectedMovesBishop.get(move), actualMovesWhiteBishop.get(move)));
+                }   
 
+            }
+            else {
+                ArrayList<int[]> piecesWithNoMoves = allMoves.get(piece);
+                assertTrue(piecesWithNoMoves.isEmpty());
+            }
+        }
     }
     
     @Test
@@ -136,11 +147,10 @@ public class CheckLegalMovesTest {
 
     }   
 
-
-    //Muligens splitte opp i flere tester. Det er gjort i eksempelprosjektene
     @Test
-    @DisplayName("Tests that the validation of a position happens correctly")
-    public void validationOfGameStateTest() {
+    @DisplayName("Tests that the method doesn't accept illegal tile arrays")
+    public void testTileArrayInput() {
+        
         Tile[][] boardTiles = game.getBoardTilesDeepCopy();
     
         Tile[][] wrongDimensionsTiles1 = new Tile[8][7];
@@ -152,10 +162,6 @@ public class CheckLegalMovesTest {
         Tile[][] wrongDimensionsTiles3 = new Tile[5][1];
         makeBoardCustomSize(wrongDimensionsTiles3);
         
-        int negativeMovenumber = -1;
-        int zeroMovenumber     =  0;
-        int positiveMovenumber =  1;
-
         //Check that the method dosen't accept null values as input 
         assertThrows(IllegalArgumentException.class, () -> 
                         checklegalmoves.validationOfGameState(null, zeroMovenumber));
@@ -179,9 +185,15 @@ public class CheckLegalMovesTest {
         assertDoesNotThrow(() -> 
                         checklegalmoves.validationOfGameState(boardTiles, zeroMovenumber));
 
-        /**
-         * TESTS FOR KINGS
-         */
+    }
+
+    //The Tests below are connected to the method validationOfGameState()
+
+    @Test
+    @DisplayName("Tests that there are only two kings on the board and king attributes")
+    public void testValidationOfKing() {
+
+        Tile[][] boardTiles = game.getBoardTilesDeepCopy();
         
         boardTiles[5][7].setPiece(new King("w X", 'w'));
         boardTiles[5][7].getPiece().setHasMoved(true);
@@ -220,14 +232,16 @@ public class CheckLegalMovesTest {
         //Check that the board is now in a legal state
         assertDoesNotThrow(() -> 
                         checklegalmoves.validationOfGameState(boardTiles, positiveMovenumber));
-        
-        /**
-         * TESTS FOR PAWNS
-         */
 
-        //Reset board 
+    }
+
+    @Test
+    @DisplayName("Tests that there are no illegal pawns or pawns with illegal attributes")
+    public void testValidationOfPawns() {
+
         Tile[][] pawnBoardTiles = game.getBoardTilesDeepCopy(); //Hard reset board
-
+        
+        //Test that pawns on row 0 is not allowed 
         pawnBoardTiles[0][1].setPiece(new Pawn("w P", 'w'));
         pawnBoardTiles[0][1].getPiece().setHasMoved(true);
         
@@ -263,8 +277,8 @@ public class CheckLegalMovesTest {
                         
         //Removes pawn
         pawnBoardTiles[3][4].removePiece();
-        
-        /**
+
+          /**
          * TESTS FOR ILLEGAL MOVE NUMBERS
          */
 
@@ -285,7 +299,7 @@ public class CheckLegalMovesTest {
         
         //Tests that the pawn movenumber can be less than the game movenumber
         pawn.setMoveNumberEnPassant(3);
-        assertDoesNotThrow(() -> checklegalmoves.validationOfGameState(boardTiles, 4));
+        assertDoesNotThrow(() -> checklegalmoves.validationOfGameState(movenumberBoardTiles, 4));
 
         //Tests that two pawns cannot have the same movenumber
         Pawn pawn2 = (Pawn)movenumberBoardTiles[1][1].getPiece();
@@ -297,9 +311,11 @@ public class CheckLegalMovesTest {
         pawn2.setMoveNumberEnPassant(3);
         assertDoesNotThrow(() -> checklegalmoves.validationOfGameState(movenumberBoardTiles, 5));
         
-        /**
-         * TEST THAT THE PLAYER THAT ISN'T MOVING CAN'T BE IN CHECK
-         */
+    }
+
+    @Test
+    @DisplayName("Tests that the player that isn't moving can't be in check")
+    public void validationOfGameStateTest() {
 
         Tile[][] playerInCheckBoardTiles = game.getBoardTilesDeepCopy();
         

@@ -26,7 +26,6 @@ import javafx.scene.shape.Shape;
 import project.Files.SaveBoardState;
 
 
-
 public class ChessController implements Serializable {
 
     @FXML
@@ -76,10 +75,21 @@ public class ChessController implements Serializable {
     private void initialize()
     {    
         resetGame();
-        this.saveBoardState = new SaveBoardState();
+        saveBoardState = new SaveBoardState();
     }
 
     @FXML
+    private void resetGame() {
+        game = new Game();
+        gameIsOver = false;
+        pawnPromotion = "";
+        promotionName.setText("");
+        messageDisplay.setText("");
+        isPawnPromoted = false;
+        placeSprites();
+        colorTiles();
+    }
+
     private void colorTiles() {
 
         Color light = new Color(122.0/255, 74.0/255, 61.0/255, 1);
@@ -99,7 +109,6 @@ public class ChessController implements Serializable {
         }
     }
 
-    @FXML
     private void placeSprites() { 
         for (String[] tileInfo : game) {
             ImageView tileView = (ImageView)sprites.lookup("#" + tileInfo[0]);
@@ -111,16 +120,16 @@ public class ChessController implements Serializable {
     @FXML
     private void clickedOnBoard(MouseEvent event) {
 
-        if (this.gameIsOver) {
+        if (gameIsOver) {
             return;
         }
 
         if (isPawnPromoted) {
             messageDisplay.setText("");
-            this.isPawnPromoted = false;
+            isPawnPromoted = false;
         }
 
-        if (!(this.pawnPromotion.equals(""))) return;
+        if (!(pawnPromotion.equals(""))) return;
         
         messageDisplay.setText("");
         
@@ -134,8 +143,6 @@ public class ChessController implements Serializable {
             int col = GridPane.getColumnIndex(pieceImageView);
             int row = GridPane.getRowIndex(pieceImageView); 
             row = 7 - row;
-            
-            System.out.println(row + " " + col);
 
             //if legalMovesString is zero, there is no piece on the tile, and we exit the method
             legalMovesStrings = game.getLegalMoves(row, col);
@@ -143,14 +150,12 @@ public class ChessController implements Serializable {
                 return;
 
             drawCirclesForLegalMoves(legalMovesStrings);
-            System.out.println("Legal Move!");
             pieceHasBeenChosen = true;
             chosenPieceImageView = pieceImageView;
             chosenPieceSpriteUrl = sprite.getUrl();
 
         }
         else {
-            System.out.println("Check if the new piece is legal.");
 
             ImageView moveToImageView = (ImageView)event.getSource();
             String legalMoveId = moveToImageView.getId();
@@ -168,9 +173,9 @@ public class ChessController implements Serializable {
                     return;
                 }
                 else {
-                    this.chosenPieceImageView = (ImageView)event.getSource();
-                    Image sprite = this.chosenPieceImageView.getImage();
-                    this.chosenPieceSpriteUrl = sprite.getUrl();
+                    chosenPieceImageView = (ImageView)event.getSource();
+                    Image sprite = chosenPieceImageView.getImage();
+                    chosenPieceSpriteUrl = sprite.getUrl();
                 }
                 removeCirclesForLegalMoves();
                 drawCirclesForLegalMoves(legalMovesStrings);
@@ -206,9 +211,9 @@ public class ChessController implements Serializable {
             
             removeCirclesForLegalMoves();
 
-            this.pawnPromotion = game.pawnPromotionStringCoordinates();
+            pawnPromotion = game.pawnPromotionStringCoordinates();
 
-            if (!(this.pawnPromotion.equals(""))) {
+            if (!(pawnPromotion.equals(""))) {
                 messageDisplay.setText("Write name of piece in right field: bishop, knight, rook or queen.");
                 return;
             }
@@ -217,12 +222,40 @@ public class ChessController implements Serializable {
         }
     }
 
+    private void castling(String newRookPosition) {
+
+        //Moves the castling rook to the correct location after castling
+        HashMap<String, String> castlingMoves = new HashMap<>() {{
+            put("05", "07");
+            put("03", "00");
+            put("75", "77");
+            put("73", "70");
+        }};
+
+        if (newRookPosition.length() != 0) {
+            
+            String oldRookPosition = new String();
+            for (String move : castlingMoves.keySet()) {
+                if (move.equals(newRookPosition))
+                    oldRookPosition = castlingMoves.get(move);                
+            }
+        
+            ImageView rigthCastlingRookOriginalPos = (ImageView)sprites.lookup("#" + oldRookPosition);
+            Image sprite = rigthCastlingRookOriginalPos.getImage();
+            String urlRook = sprite.getUrl();
+            rigthCastlingRookOriginalPos.setImage(null);
+            ImageView rigthCastlingRookNewPos = (ImageView)sprites.lookup("#" + newRookPosition);
+            rigthCastlingRookNewPos.setImage(new Image(urlRook));
+        }
+    }
+
+
     @FXML
     private void pawnPromotion() {
 
         messageDisplay.setText("");
 
-        if (this.gameIsOver) {
+        if (gameIsOver) {
             messageDisplay.setText("The game is over, there are no pawns to promote!");
             promotionName.setText("");
             return;
@@ -236,7 +269,7 @@ public class ChessController implements Serializable {
 
         String userInput = promotionName.getText().toLowerCase();
         promotionName.setText("");
-        ImageView pawnImageView = (ImageView)sprites.lookup("#" + this.pawnPromotion);
+        ImageView pawnImageView = (ImageView)sprites.lookup("#" + pawnPromotion);
         char color = (pawnPromotion.charAt(0) == '0') ? 'b' : 'w';
         char pieceType = '\0';
         
@@ -267,60 +300,31 @@ public class ChessController implements Serializable {
 
         isPawnPromoted = true;
 
-        this.pawnPromotion = "";
+        pawnPromotion = "";
 
         isGameOver();
     }
 
-    @FXML
-    private void castling(String newRookPosition) {
-
-        //Moves the castling rook to the correct location after castling
-
-        HashMap<String, String> castlingMoves = new HashMap<>() {{
-            put("05", "07");
-            put("03", "00");
-            put("75", "77");
-            put("73", "70");
-        }};
-
-        if (newRookPosition.length() != 0) {
-            
-            String oldRookPosition = new String();
-            for (String move : castlingMoves.keySet()) {
-                if (move.equals(newRookPosition))
-                    oldRookPosition = castlingMoves.get(move);                
-            }
-        
-            ImageView rigthCastlingRookOriginalPos = (ImageView)sprites.lookup("#" + oldRookPosition);
-            Image sprite = rigthCastlingRookOriginalPos.getImage();
-            String urlRook = sprite.getUrl();
-            rigthCastlingRookOriginalPos.setImage(null);
-            ImageView rigthCastlingRookNewPos = (ImageView)sprites.lookup("#" + newRookPosition);
-            rigthCastlingRookNewPos.setImage(new Image(urlRook));
-        }
-    }
-
+  
     @FXML
     private void saveGame() {
 
         messageDisplay.setText("");
 
-        String saveName = this.saveNameField.getText();
-        System.out.println(saveName);
-        this.saveNameField.setText("");
+        String saveName = saveNameField.getText();
+        saveNameField.setText("");
 
         if (saveName.equals("") || (saveName.contains("\\")) || (saveName.contains("/"))) {
             messageDisplay.setText("Illegal character(s) in file name");
             return;
         }
 
-        if (!(this.pawnPromotion.equals(""))) {
+        if (!(pawnPromotion.equals(""))) {
             messageDisplay.setText("Promote pawn before saving");
             return;
         }
 
-        if (this.gameIsOver) {
+        if (gameIsOver) {
             messageDisplay.setText("Can't save a game that is over");
             return;
         }
@@ -342,9 +346,9 @@ public class ChessController implements Serializable {
 
         String fileName = loadNameField.getText();
         String saveGameString = new String();
-        this.loadNameField.setText("");
+        loadNameField.setText("");
 
-        if (!(this.pawnPromotion.equals(""))) {
+        if (!(pawnPromotion.equals(""))) {
             messageDisplay.setText("Promote pawn before loading game");
             return;
         }
@@ -360,7 +364,7 @@ public class ChessController implements Serializable {
                 game.loadedGamePiecesPosition(saveGameString);
             }
             catch(IllegalArgumentException e) {
-                this.pieceHasBeenChosen = false;
+                pieceHasBeenChosen = false;
                 messageDisplay.setText("The formatting for the file is wrong or the game is over (press reset)");
                 return;
             }
@@ -368,7 +372,7 @@ public class ChessController implements Serializable {
             saveNameField.setText("");
             messageDisplay.setText("");
 
-            this.pieceHasBeenChosen = false;
+            pieceHasBeenChosen = false;
             removeCirclesForLegalMoves();
             placeSprites();
         }
@@ -381,19 +385,6 @@ public class ChessController implements Serializable {
             e.printStackTrace();
         }  
     }
-
-    @FXML
-    private void resetGame() {
-        this.game = new Game();
-        this.gameIsOver = false;
-        this.pawnPromotion = "";
-        this.promotionName.setText("");
-        this.messageDisplay.setText("");
-        this.isPawnPromoted = false;
-        placeSprites();
-        colorTiles();
-    }
-    
     
     private void drawCirclesForLegalMoves(ArrayList<String> legalMovesStrings) {
         for (String legalMove : legalMovesStrings) {
@@ -444,17 +435,14 @@ public class ChessController implements Serializable {
         if (gameOver == Consts.PAT) {
             messageDisplay.setText("Pat");
             gameIsOver = true;
-            System.out.println("Pat");
         }
         else if (gameOver == Consts.CHECKMATE_FOR_BLACK) { 
             messageDisplay.setText("Check Mate for Black!");
             gameIsOver = true;
-            System.out.println("Checkmate for Black!");
         }
         else if (gameOver == Consts.CHECKMATE_FOR_WHITE) {
             messageDisplay.setText("Check Mate for White!");
             gameIsOver = true;
-            System.out.println("Checkmate for White!");
         }
     }
 

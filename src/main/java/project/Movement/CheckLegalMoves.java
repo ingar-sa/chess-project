@@ -537,20 +537,6 @@ public class CheckLegalMoves {
         return (moveNumber % 2 == 0) ? true : false;
     }
 
-    //TODO: HUSK å fjerne!
-    public void keyWriter(Tile[][] boardTiles) {
-        
-        HashMap<int[], ArrayList<int[]>> movesForAllOurPieces = eliminateChecks(boardTiles);
-        Set<int[]> keys = movesForAllOurPieces.keySet(); 
-
-        String keyString = new String();
-        
-        for (int[] key : keys) {
-            keyString += "new " + "int[]" + "{" + key[0] + ", " + key[1] + "}" + ", ";
-        }
-
-        System.out.println(keyString);
-    }
 }
 
 

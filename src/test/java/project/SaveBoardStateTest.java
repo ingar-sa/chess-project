@@ -2,7 +2,6 @@ package project;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -16,12 +15,10 @@ import java.nio.file.Path;
 import java.util.Arrays;
 
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import project.Movement.CheckLegalMoves;
 import project.Pieces.King;
 import project.Pieces.Knight;
 import project.Pieces.Queen;
@@ -85,10 +82,8 @@ public class SaveBoardStateTest {
 		return boardTiles;
 	}
 
-    
 	private Game game = new Game();
 	private static SaveBoardState saveBoard = new SaveBoardState(true);
-	private CheckLegalMoves checkLegalMoves = new CheckLegalMoves();
 
 	@BeforeEach
 	private void resetBoard() {
