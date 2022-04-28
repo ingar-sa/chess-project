@@ -62,18 +62,22 @@ public class ChessController implements Serializable {
     @FXML
     private ImageView sprite00, sprite01, sprite02, sprite03, sprite04, sprite05, sprite06, sprite07, sprite10, sprite11, sprite12, sprite13, sprite14, sprite15, sprite16, sprite17, sprite20, sprite21, sprite22, sprite23, sprite24, sprite25, sprite26, sprite27, sprite30, sprite31, sprite32, sprite33, sprite34, sprite35, sprite36, sprite37, sprite40, sprite41, sprite42, sprite43, sprite44, sprite45, sprite46, sprite47, sprite50, sprite51, sprite52, sprite53, sprite54, sprite55, sprite56, sprite57, sprite60, sprite61, sprite62, sprite63, sprite64, sprite65, sprite66, sprite67, sprite70, sprite71, sprite72, sprite73, sprite74, sprite75, sprite76, sprite77;
     
-    //TODO: filepath???
-
     private boolean pieceHasBeenChosen = false;
     private String pawnPromotion = "";
     private String chosenPieceSpriteUrl;
-    private String spritesFilePath = "file:src/main/resources/project/";
     private ImageView chosenPieceImageView;
     private ArrayList<String> legalMovesStrings;
     private boolean isPawnPromoted = false;
     private Game game;
     private SaveBoardState saveBoardState;
     private boolean gameIsOver = false;
+
+    @FXML
+    private void initialize()
+    {    
+        resetGame();
+        this.saveBoardState = new SaveBoardState();
+    }
 
     @FXML
     private void colorTiles() {
@@ -96,73 +100,16 @@ public class ChessController implements Serializable {
     }
 
     @FXML
-    private void placeSprites() {
+    private void placeSprites() { 
         for (String[] tileInfo : game) {
             ImageView tileView = (ImageView)sprites.lookup("#" + tileInfo[0]);
-            Image image = (tileInfo[1].equals("")) ? null : new Image(spritesFilePath + tileInfo[1] + ".png");
+            Image image = (tileInfo[1].equals("")) ? null : new Image(getSpriteFilepath() + tileInfo[1] + ".png");
             tileView.setImage(image);
         }        
     }
 
-
-    private void drawCirclesForLegalMoves(ArrayList<String> legalMovesStrings) {
-        for (String legalMove : legalMovesStrings) {
-            
-            ImageView legalMoveImageView = (ImageView)sprites.lookup("#" + legalMove);
-
-            Circle circle = new Circle(10);
-            Circle outerRim = new Circle(33);
-            Circle inside = new Circle(27);
-            Shape donut = Shape.subtract(outerRim, inside);
-            donut.setFill(Color.LIGHTGRAY);
-            circle.setFill(Color.LIGHTGRAY);
-            circle.setOpacity(0.5);
-            donut.setOpacity(0.5);
-            int row = GridPane.getRowIndex(legalMoveImageView);
-            int col = GridPane.getColumnIndex(legalMoveImageView);
-            
-            if (legalMoveImageView.getImage() != null) {
-                tileColors.add(donut, col, row);
-                GridPane.setHalignment(donut, HPos.CENTER);
-                GridPane.setValignment(donut, VPos.CENTER);
-            }
-            else {
-                tileColors.add(circle, col, row);
-                GridPane.setHalignment(circle, HPos.CENTER);
-                GridPane.setValignment(circle, VPos.CENTER);
-            }
-        }
-    }
-
     @FXML
-    private void castling(String newRookPosition) {
-
-        HashMap<String, String> castlingMoves = new HashMap<>() {{
-            put("05", "07");
-            put("03", "00");
-            put("75", "77");
-            put("73", "70");
-        }};
-
-        if (newRookPosition.length() != 0) {
-            
-            String oldRookPosition = new String();
-            for (String move : castlingMoves.keySet()) {
-                if (move.equals(newRookPosition))
-                    oldRookPosition = castlingMoves.get(move);                
-            }
-        
-            ImageView rigthCastlingRookOriginalPos = (ImageView)sprites.lookup("#" + oldRookPosition);
-            Image sprite = rigthCastlingRookOriginalPos.getImage();
-            String urlRook = sprite.getUrl();
-            rigthCastlingRookOriginalPos.setImage(null);
-            ImageView rigthCastlingRookNewPos = (ImageView)sprites.lookup("#" + newRookPosition);
-            rigthCastlingRookNewPos.setImage(new Image(urlRook));
-        }
-    }
-
-    @FXML
-    private void clickedOnPiece (MouseEvent event) {
+    private void clickedOnBoard(MouseEvent event) {
 
         if (this.gameIsOver) {
             return;
@@ -190,6 +137,7 @@ public class ChessController implements Serializable {
             
             System.out.println(row + " " + col);
 
+            //if legalMovesString is zero, there is no piece on the tile, and we exit the method
             legalMovesStrings = game.getLegalMoves(row, col);
             if (legalMovesStrings.size() == 0)
                 return;
@@ -211,6 +159,7 @@ public class ChessController implements Serializable {
             int moveToPieceCol = GridPane.getColumnIndex(moveToImageView);
             moveToPieceRow = 7 - moveToPieceRow;
 
+            //If the player clicks on a piece of the same color, it is chosen as the new piece if it can perform any moves
             if (game.allLegalPieces(moveToPieceRow, moveToPieceCol)) {
                 legalMovesStrings = game.getLegalMoves(moveToPieceRow, moveToPieceCol);
                 if (legalMovesStrings.size() == 0) {
@@ -234,6 +183,7 @@ public class ChessController implements Serializable {
             int chosenPieceCol = GridPane.getColumnIndex(chosenPieceImageView);
             chosenPieceRow = 7 - chosenPieceRow;
 
+            //Exits the method if the tile does not have piece on it
             if (!legalMovesStrings.contains(legalMoveId)) {
                 removeCirclesForLegalMoves(); 
                 return;
@@ -264,40 +214,6 @@ public class ChessController implements Serializable {
             }
 
             isGameOver();
-        }
-    }
-
-    private void removeCirclesForLegalMoves() {
-
-        ObservableList<Node> childeren = tileColors.getChildren();
-        ArrayList<Node> circlesToBeRemoved = new ArrayList<Node>();
-
-        for (Node node : childeren) {
-            if (!(node instanceof Rectangle)) {
-                circlesToBeRemoved.add(node);
-            }
-        }
-        tileColors.getChildren().removeAll(circlesToBeRemoved);
-    }
-
-    private void isGameOver() {
-
-        int gameOver = game.checkForGameOver();
-        
-        if (gameOver == Consts.PAT) {
-            messageDisplay.setText("Pat");
-            gameIsOver = true;
-            System.out.println("Pat");
-        }
-        else if (gameOver == Consts.CHECKMATE_FOR_BLACK) { 
-            messageDisplay.setText("Check Mate for Black!");
-            gameIsOver = true;
-            System.out.println("Checkmate for Black!");
-        }
-        else if (gameOver == Consts.CHECKMATE_FOR_WHITE) {
-            messageDisplay.setText("Check Mate for White!");
-            gameIsOver = true;
-            System.out.println("Checkmate for White!");
         }
     }
 
@@ -346,7 +262,7 @@ public class ChessController implements Serializable {
         int tileCol = GridPane.getColumnIndex(pawnImageView);
         game.promotePawn(tileRow, tileCol, pieceType, color);
 
-        pawnImageView.setImage(new Image(spritesFilePath + color + pieceType + ".png"));
+        pawnImageView.setImage(new Image(getSpriteFilepath() + color + pieceType + ".png"));
         promotionName.setText("");
 
         isPawnPromoted = true;
@@ -355,6 +271,36 @@ public class ChessController implements Serializable {
 
         isGameOver();
     }
+
+    @FXML
+    private void castling(String newRookPosition) {
+
+        //Moves the castling rook to the correct location after castling
+
+        HashMap<String, String> castlingMoves = new HashMap<>() {{
+            put("05", "07");
+            put("03", "00");
+            put("75", "77");
+            put("73", "70");
+        }};
+
+        if (newRookPosition.length() != 0) {
+            
+            String oldRookPosition = new String();
+            for (String move : castlingMoves.keySet()) {
+                if (move.equals(newRookPosition))
+                    oldRookPosition = castlingMoves.get(move);                
+            }
+        
+            ImageView rigthCastlingRookOriginalPos = (ImageView)sprites.lookup("#" + oldRookPosition);
+            Image sprite = rigthCastlingRookOriginalPos.getImage();
+            String urlRook = sprite.getUrl();
+            rigthCastlingRookOriginalPos.setImage(null);
+            ImageView rigthCastlingRookNewPos = (ImageView)sprites.lookup("#" + newRookPosition);
+            rigthCastlingRookNewPos.setImage(new Image(urlRook));
+        }
+    }
+
     @FXML
     private void saveGame() {
 
@@ -447,16 +393,73 @@ public class ChessController implements Serializable {
         placeSprites();
         colorTiles();
     }
+    
+    
+    private void drawCirclesForLegalMoves(ArrayList<String> legalMovesStrings) {
+        for (String legalMove : legalMovesStrings) {
+            
+            ImageView legalMoveImageView = (ImageView)sprites.lookup("#" + legalMove);
 
-    @FXML
-    private void initialize()
-    {    
-        resetGame();
-        this.saveBoardState = new SaveBoardState();
+            Circle circle = new Circle(10);
+            Circle outerRim = new Circle(33);
+            Circle inside = new Circle(27);
+            Shape donut = Shape.subtract(outerRim, inside);
+            donut.setFill(Color.LIGHTGRAY);
+            circle.setFill(Color.LIGHTGRAY);
+            circle.setOpacity(0.5);
+            donut.setOpacity(0.5);
+            int row = GridPane.getRowIndex(legalMoveImageView);
+            int col = GridPane.getColumnIndex(legalMoveImageView);
+            
+            if (legalMoveImageView.getImage() != null) {
+                tileColors.add(donut, col, row);
+                GridPane.setHalignment(donut, HPos.CENTER);
+                GridPane.setValignment(donut, VPos.CENTER);
+            }
+            else {
+                tileColors.add(circle, col, row);
+                GridPane.setHalignment(circle, HPos.CENTER);
+                GridPane.setValignment(circle, VPos.CENTER);
+            }
+        }
     }
 
+    private void removeCirclesForLegalMoves() {
 
-    public static void main(String[] args) {
+        ObservableList<Node> childeren = tileColors.getChildren();
+        ArrayList<Node> circlesToBeRemoved = new ArrayList<Node>();
 
+        for (Node node : childeren) {
+            if (!(node instanceof Rectangle)) {
+                circlesToBeRemoved.add(node);
+            }
+        }
+        tileColors.getChildren().removeAll(circlesToBeRemoved);
+    }
+
+    private void isGameOver() {
+
+        int gameOver = game.checkForGameOver();
+        
+        if (gameOver == Consts.PAT) {
+            messageDisplay.setText("Pat");
+            gameIsOver = true;
+            System.out.println("Pat");
+        }
+        else if (gameOver == Consts.CHECKMATE_FOR_BLACK) { 
+            messageDisplay.setText("Check Mate for Black!");
+            gameIsOver = true;
+            System.out.println("Checkmate for Black!");
+        }
+        else if (gameOver == Consts.CHECKMATE_FOR_WHITE) {
+            messageDisplay.setText("Check Mate for White!");
+            gameIsOver = true;
+            System.out.println("Checkmate for White!");
+        }
+    }
+
+    private String getSpriteFilepath() {
+        String separator = System.getProperty("file.separator"); //Gets correct filepath separator for the OS
+		return String.format("file:src%1$smain%1$sresources%1$sproject%1$s", separator);
     }
 }

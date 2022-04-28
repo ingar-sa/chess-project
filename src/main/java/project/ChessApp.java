@@ -10,8 +10,7 @@ import java.io.IOException;
 public class ChessApp extends Application {
 
     public static void main(String[] args) {
-
-        //do stuff before startup
+        
         Application.launch(args);
     }
 

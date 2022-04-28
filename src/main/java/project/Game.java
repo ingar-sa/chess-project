@@ -713,8 +713,4 @@ public class Game implements Serializable, Iterable<String[]> {
 
         return new BoardTileIterator(this);
     } 
-
-    public static void main(String[] args) {
-        Game game = new Game();
-    }
 }
