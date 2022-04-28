@@ -10,4 +10,6 @@ public interface ISaveHandler {
 
     public String loadGame(String saveName) throws IOException;
 
+    public String getFile(String filename);
+
 }

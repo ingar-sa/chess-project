@@ -36,6 +36,11 @@ public class Tile implements Serializable {
         this.piece = piece;
     }
 
+    public void removePiece() {
+        this.piece = null;
+        this.occupied = false;
+    }
+
     public int getRow() {
         return this.row;
     }
@@ -46,15 +51,6 @@ public class Tile implements Serializable {
 
     public boolean isOccupied() {
         return this.occupied;
-    }
-
-    // public void setOccupied(boolean occupied) {
-    //     this.occupied = occupied;
-    // }
-
-    public void removePiece() {
-        this.piece = null;
-        this.occupied = false;
     }
 
     public int[] getCoordinates() {

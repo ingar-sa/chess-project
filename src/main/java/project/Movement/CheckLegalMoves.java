@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import project.Consts;
-//import project.Board.Chessboard; TODO: Delete, right?
+import project.Game;
 import project.Board.Tile;
 import project.Pieces.King;
 import project.Pieces.Piece;
@@ -25,8 +25,6 @@ public class CheckLegalMoves {
     private MovementPatterns ourMovementPattern;
     private MovementPatterns opponentMovementPattern;
 
-    //private int[] kingLocationplayerThatMoves;
-
     //Important tiles for when white is Castling
     private final int[] whiteKingStartPos             = new int[]{0, 4};
     private final int[] whiteKingMoveCastlingRight    = new int[]{0, 6};
@@ -40,8 +38,6 @@ public class CheckLegalMoves {
     private final int[] blackKingMoveCastlingLeft     = new int[]{7, 2};
     private final int[] blackCastlingSkippedTileRight = new int[]{7, 5};
     private final int[] blackCastlingSkippedTileLeft  = new int[]{7, 3};
-
-    //TODO: legge til at man ikke kan kalle på metodene hvis spillet er over.
 
     //Turn number
     int moveNumber = 0; 
@@ -131,7 +127,7 @@ public class CheckLegalMoves {
             ArrayList<int[]> ourPieceMoves = movesForAllOurPieces.get(ourPiece);
             ArrayList<int[]> movesToRemove = new ArrayList<int[]>();
 
-            //Count for what move that should be removed from piece moves, move that is illegal because of CHECK
+            //Count for what move that should be removed from piece moves, move that is illegal because of check
             int deleteMoveAtIndex = 0;
 
             for (int[] ourMove : ourPieceMoves) {
@@ -296,7 +292,7 @@ public class CheckLegalMoves {
     
     //DOKUMENTASJON
     //TODO: Hva skjer hvis man sender inn et brett der hvit har vunnet men det er hvit sin tur
-    public HashMap<int[], ArrayList<int[]>> checkforCheckMateAndPat(Tile[][] currentGamePositionTiles) {
+    public HashMap<int[], ArrayList<int[]>> checkforCheckmateAndPat(Tile[][] currentGamePositionTiles) {
 
         this.validationOfGameState(currentGamePositionTiles, this.moveNumber);
 

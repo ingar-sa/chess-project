@@ -22,7 +22,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import project.Movement.CheckLegalMoves;
-import project.Movement.Game;
 import project.Pieces.King;
 import project.Pieces.Knight;
 import project.Pieces.Queen;

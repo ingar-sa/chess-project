@@ -1,4 +1,4 @@
-package project.Movement;
+package project;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -12,9 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-import project.BoardTileIterator;
-import project.Consts;
 import project.Board.Tile;
+import project.Movement.CheckLegalMoves;
 import project.Pieces.Bishop;
 import project.Pieces.King;
 import project.Pieces.Knight;
@@ -39,7 +38,7 @@ public class Game implements Serializable, Iterable<String[]> {
         makeBoard();
         placePieces();
         this.checkLegalMoves = new CheckLegalMoves(); 
-        this.allLegalMovesAfterControl = checkLegalMoves.checkforCheckMateAndPat(this.getBoardTilesDeepCopy()); //allLegalMovesAfterControl is initialized with whites available moves
+        this.allLegalMovesAfterControl = checkLegalMoves.checkforCheckmateAndPat(this.getBoardTilesDeepCopy()); //allLegalMovesAfterControl is initialized with whites available moves
     }
 
     public boolean getGameIsOver() {
@@ -432,7 +431,7 @@ public class Game implements Serializable, Iterable<String[]> {
 
         //allLegalMovesAfterControl is updated with the opposite player's moves here, as opposed to updating it 
         //during the next call of getLegalMoves. This allows us to use getGameStatus() to check for a mate or pat
-        this.allLegalMovesAfterControl = checkLegalMoves.checkforCheckMateAndPat(this.getBoardTilesDeepCopy());  
+        this.allLegalMovesAfterControl = checkLegalMoves.checkforCheckmateAndPat(this.getBoardTilesDeepCopy());  
         this.pieceReadyToMove = true;
 
         this.printBoard();
@@ -697,7 +696,7 @@ public class Game implements Serializable, Iterable<String[]> {
         this.gameIsOver = false;
         this.pieceReadyToMove = true;
         this.promotionPawn = false;
-        this.allLegalMovesAfterControl = checkLegalMoves.checkforCheckMateAndPat(this.getBoardTilesDeepCopy());
+        this.allLegalMovesAfterControl = checkLegalMoves.checkforCheckmateAndPat(this.getBoardTilesDeepCopy());
 
         printBoard();
     }

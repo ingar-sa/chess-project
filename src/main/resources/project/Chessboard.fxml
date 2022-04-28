@@ -461,10 +461,10 @@
       </Label>
       <Button fx:id="saveGame" layoutX="180.0" layoutY="81.0" mnemonicParsing="false" onMouseClicked="#saveGame" text="Save" />
       <Button fx:id="loadGame" layoutX="349.0" layoutY="81.0" mnemonicParsing="false" onMouseClicked="#loadGame" text="Load" />
-      <Button fx:id="pawnPromotion" layoutX="521.0" layoutY="81.0" mnemonicParsing="false" onMouseClicked="#pawnPromotion" text="Promotion" />
-      <Label layoutX="107.0" layoutY="62.0" text="Save name" />
+      <Button fx:id="pawnPromotion" layoutX="516.0" layoutY="81.0" mnemonicParsing="false" onMouseClicked="#pawnPromotion" text="Promotion" />
+      <Label layoutX="107.0" layoutY="62.0" text="Save game" />
       <TextField fx:id="saveNameField" layoutX="98.0" layoutY="81.0" prefHeight="25.0" prefWidth="76.0" />
-      <Label layoutX="278.0" layoutY="62.0" text="Save name" />
+      <Label layoutX="278.0" layoutY="62.0" text="Load game" />
       <TextField fx:id="loadNameField" layoutX="269.0" layoutY="81.0" prefHeight="25.0" prefWidth="76.0" />
       <Label layoutX="444.0" layoutY="62.0" text="Piece name" />
       <TextField fx:id="promotionName" layoutX="437.0" layoutY="81.0" prefHeight="25.0" prefWidth="76.0" />

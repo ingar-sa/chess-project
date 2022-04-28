@@ -4,6 +4,7 @@ package project.Movement;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import project.Game;
 import project.Board.Tile;
 import project.Pieces.Bishop;
 import project.Pieces.King;

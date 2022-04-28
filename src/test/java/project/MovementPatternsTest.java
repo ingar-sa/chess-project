@@ -12,7 +12,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import project.Board.Tile;
-import project.Movement.Game;
 import project.Movement.MovementPatterns;
 import project.Pieces.Bishop;
 import project.Pieces.King;

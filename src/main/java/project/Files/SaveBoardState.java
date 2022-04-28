@@ -35,13 +35,13 @@ public class SaveBoardState implements ISaveHandler {
 		if (!useForTest) 
 			throw new IllegalArgumentException("Use constructor with no parameter");
 
-		String separator = System.getProperty("file.separator"); //Gets correct filepath separator for the OS
+		String separator = System.getProperty("file.separator");
 		folderPath = String.format("src%1$smain%1$sjava%1$sproject%1$sFiles%1$stestsaves%1$s", separator);
 	}
 
 	@Override
 	public void saveGame(String saveName, Tile[][] chessboard, int moveNumber) throws IOException {
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(getFile(saveName)))) { //(new FileWriter("src/main/java/project/Files/savegames/" + saveName + ".txt"))) {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(getFile(saveName)))) { 
 
 			String saveGameData = new String();
 
@@ -90,11 +90,11 @@ public class SaveBoardState implements ISaveHandler {
 			return saveData;
 		}
 	}
-		
+	
+	@Override
 	public String getFile(String filename) {
 		String filePath = folderPath + filename + ".txt";
 		return filePath;
-		// return SaveBoardState.class.getResource("saves/").getFile() + filename + ".txt";
 	}
 	
 }

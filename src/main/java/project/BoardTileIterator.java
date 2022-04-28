@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import project.Board.Tile;
-import project.Movement.Game;
+import project.Game;
 
 public class BoardTileIterator implements Iterator<String[]> {
 
