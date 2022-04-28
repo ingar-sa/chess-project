@@ -47,9 +47,44 @@ public class CheckLegalMovesTest {
     }
 
     @Test
-    @DisplayName("Tests that the game dont allow illegal moves and tells you when the game is over")
-    public void checkforCheckMateAndPatTest() {
+    @DisplayName("Tests that only the correct pieces can move")
+    public void checkLegalMovesTest() {
 
+        game.loadedGamePiecesPosition("wR=0-wK-wB-00-00-wB-wK-wR=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-00-wX=1-00-00-00-00-00-00-00-00-00-wP=1=1=0-00-wQ-00-00-00-00-bP=1=1=3-bP=1=1=1-bP=1=1=5-00-00-00-00-bQ-00-00-00-00-00-bP=0=0=0-bP=0=0=0-bP=0=0=0-00-00-00-bP=0=0=0-bP=0=0=0-bR=0-bK-bB-00-bX=0-bB-bK-bR=0-10");
+        Tile[][] board = game.getBoardTilesDeepCopy();
+
+        ArrayList<int[]> expectedKeys = new ArrayList<int[]>(Arrays.asList(new int[]{3, 4}, new int[]{3, 6}, new int[]{2, 2}, new int[]{1, 0}, new int[]{1, 1}, new int[]{1, 2}, new int[]{1, 3}, new int[]{1, 5}, new int[]{1, 6}, new int[]{1, 7}, new int[]{0, 0}, new int[]{0, 1}, new int[]{0, 2}, new int[]{0, 5}, new int[]{0, 6}, new int[]{0, 7}));
+        checklegalmoves.setMoveNumber(10);
+        HashMap<int[], ArrayList<int[]>> allMoves = checklegalmoves.checkforCheckMateAndPat(board);
+        ArrayList<int[]> actualKeys = new ArrayList<int[]>(allMoves.keySet());
+
+        //Test the the ArrayList<int[]> have the same size
+        assertEquals(expectedKeys.size(), actualKeys.size());
+
+        //Sorts the lists in the same way so that they can be compared
+        Collections.sort(expectedKeys, new SortByCoordinates());
+        Collections.sort(actualKeys, new SortByCoordinates());
+
+        //The keys are the same 
+        for (int index = 0; index < actualKeys.size(); index++) {
+            assertTrue(compareCoordinates(expectedKeys.get(index), actualKeys.get(index)));
+        }
+        
+        assertEquals(Consts.GAME_NOT_OVER, checklegalmoves.getGameStatus());
+
+        //In the loaded position only the white king and bishop can move - all other moves break check
+
+        ArrayList<int[]> expectedMovesKing = new ArrayList<int[]>(Arrays.asList(new int[]{2, 1}, new int[]{2, 3}));
+        ArrayList<int[]> expectedMovesBishop = new ArrayList<int[]>(Arrays.asList(new int[]{3, 2}));
+
+
+
+    }
+    
+    @Test
+    @DisplayName("Tests that the game knows when it is check mate and that the correct pieces can move")
+    public void checkMateTest() {
+    
         game.loadedGamePiecesPosition("wR=0-wK-wB-00-wX=0-00-wK-wR=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-00-00-00-00-00-00-00-00-00-wB-00-wP=1=1=0-00-00-00-bP=1=0=5-00-00-00-bP=1=1=1-00-00-wQ-00-00-00-00-00-00-00-00-00-bP=0=0=0-bP=0=0=0-bP=0=0=0-00-bP=0=0=0-bP=0=0=0-bP=0=0=0-bR=0-bK-bB-bQ-bX=0-bB-bK-bR=0-6");
         Tile[][] board = game.getBoardTilesDeepCopy();
 
@@ -59,47 +94,18 @@ public class CheckLegalMovesTest {
         HashMap<int[], ArrayList<int[]>> allMoves = checklegalmoves.checkforCheckMateAndPat(board);
         ArrayList<int[]> actualKeys = new ArrayList<int[]>(allMoves.keySet());
 
+        //Test the the ArrayList<int[]> have the same size
         assertEquals(expectedKeys.size(), actualKeys.size());
 
         //Sorts the lists in the same way so that they can be compared
-        Collections.sort(expectedKeys, new Comparator<int[]>() {
-            @Override
-            public int compare(int[] o1, int[] o2) {
-                if (o1[0] == o2[0])
-                    return o1[1] - o2[1];
-                
-                return o1[0] - o2[0];
-            }
-        });
+        Collections.sort(expectedKeys, new SortByCoordinates());
+        Collections.sort(actualKeys, new SortByCoordinates());
         
-        Collections.sort(actualKeys, new Comparator<int[]>() {
-            @Override
-            public int compare(int[] o1, int[] o2) {
-                if (o1[0] == o2[0])
-                    return o1[1] - o2[1];
-                
-                return o1[0] - o2[0];
-            }
-        });
-        
+        //The keys are the same 
         for (int index = 0; index < actualKeys.size(); index++) {
             assertTrue(compareCoordinates(expectedKeys.get(index), actualKeys.get(index)));
         }
         
-        
-        //Look at this 
-        //Tests that the white pawn in the middle is stuck 
-        //TODO: this is wrong the player to move is black 
-        for (int[] key: actualKeys) {
-            if (compareCoordinates(key, new int[]{3, 4})) {
-                assertTrue(allMoves.get(key).isEmpty());
-            }
-
-            if (compareCoordinates(key, new int[]{4, 7})) {
-
-            }
-        }
-
         assertEquals(Consts.GAME_NOT_OVER, checklegalmoves.getGameStatus());
         
         //Moves the queen so white wins
@@ -110,6 +116,12 @@ public class CheckLegalMovesTest {
         
         //White won by checkmate 
         assertEquals(Consts.CHECKMATE, checklegalmoves.getGameStatus());
+    
+    }
+
+    @Test
+    @DisplayName("Tests that the game registers pat")
+    public void patTest() {
 
         game.loadedGamePiecesPosition("wR=0-00-wB-00-00-wX=1-wK-00-00-00-00-00-00-00-00-00-wK-00-00-wB-00-wR=0-00-00-bP=1=0=10001-00-00-00-00-00-00-00-00-00-00-wP=1=0=10002-wP=1=0=10004-00-00-wP=1=0=18-00-00-00-00-00-00-00-wQ-00-00-00-00-bX=1-00-00-00-wQ-00-00-00-00-00-00-00-10040");
         Tile[][] patBoard = game.getBoardTilesDeepCopy();
@@ -144,6 +156,10 @@ public class CheckLegalMovesTest {
         int negativeMovenumber = -1;
         int zeroMovenumber     =  0;
         int positiveMovenumber =  1;
+
+        //Check that the method dosen't accept null values as input 
+        assertThrows(IllegalArgumentException.class, () -> 
+                        checklegalmoves.validationOfGameState(null, zeroMovenumber));
         
         //Checks that the method doesn't accept tile arrays of the wrong dimension, or negative move numbers
         assertThrows(IllegalArgumentException.class, () -> 

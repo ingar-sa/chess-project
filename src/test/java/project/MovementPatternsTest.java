@@ -49,7 +49,7 @@ public class MovementPatternsTest {
     @Test
     @DisplayName("Tests that the method throws exception when there is illegal input")
     public void moveHandlerTest() {
-        Tile[][] wrongDimensionTiles = new Tile[7][];Tile[][] wrongDimensionsTiles1 = new Tile[8][7];
+        Tile[][] wrongDimensionsTiles1 = new Tile[8][7];
         makeEmptyBoard(wrongDimensionsTiles1);
                                         
         Tile[][] wrongDimensionsTiles2 = new Tile[7][8];
@@ -61,6 +61,17 @@ public class MovementPatternsTest {
         int negativeMovenumber = -1;
         int zeroMovenumber     =  0;
         int positiveMovenumber =  1;
+
+        assertThrows(IllegalArgumentException.class, 
+                     () -> whiteMovement.moveHandler(null, 
+                                        boardTiles, 
+                                        positiveMovenumber));
+
+         assertThrows(IllegalArgumentException.class, 
+                     () -> whiteMovement.moveHandler(boardTiles[1][1], 
+                                        null, 
+                                        positiveMovenumber));
+
 
         assertThrows(IllegalArgumentException.class, 
                      () -> whiteMovement.moveHandler(wrongDimensionsTiles1[0][0], 

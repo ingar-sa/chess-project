@@ -11,12 +11,8 @@ import java.util.Set;
 import project.Consts;
 //import project.Board.Chessboard; TODO: Delete, right?
 import project.Board.Tile;
-import project.Pieces.Bishop;
 import project.Pieces.King;
-import project.Pieces.Knight;
 import project.Pieces.Piece;
-import project.Pieces.Queen;
-import project.Pieces.Rook;
 import project.Pieces.Pawn;
 
 
@@ -421,6 +417,9 @@ public class CheckLegalMoves {
         int rowCount = -1;
         ArrayList<Integer> pawnMoveNumbers = new ArrayList<Integer>();
 
+        if (currentGamePosition == null) {
+           throw new IllegalArgumentException("Input cant be null"); 
+        }
 
         if (!(currentGamePosition.length == 8 && currentGamePosition[0].length == 8 && moveNumber >= 0))
             throw new IllegalArgumentException("Board size must be 8x8 and moveNumber must be greater than or equal to 0");
@@ -583,6 +582,7 @@ public class CheckLegalMoves {
         game.loadedGamePiecesPosition("wR=0-wK-wB-00-wX=0-00-wK-wR=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-wP=0=0=0-wP=0=0=0-wP=0=0=0-00-00-00-00-00-00-00-00-00-00-wB-00-wP=1=1=0-00-00-00-bP=1=0=5-00-00-00-bP=1=1=1-00-00-wQ-00-00-00-00-00-00-00-00-00-bP=0=0=0-bP=0=0=0-bP=0=0=0-00-bP=0=0=0-bP=0=0=0-bP=0=0=0-bR=0-bK-bB-bQ-bX=0-bB-bK-bR=0-6");
         Tile[][] board = game.getBoardTilesDeepCopy();
         checklegalmoves.keyWriter(board);
+        checklegalmoves.validationOfGameState(null, 3);
 
 
 
