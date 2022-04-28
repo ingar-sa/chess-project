@@ -4,7 +4,6 @@ package project.Movement;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import javafx.scene.input.MouseEvent;
 import project.Board.Tile;
 import project.Pieces.Bishop;
 import project.Pieces.King;
@@ -13,8 +12,6 @@ import project.Pieces.Pawn;
 import project.Pieces.Piece;
 import project.Pieces.Queen;
 import project.Pieces.Rook;
-
-// Husk en passant må skje rett etter motstander har flyttet + queen promotion
 
 public class MovementPatterns {
 
@@ -27,6 +24,10 @@ public class MovementPatterns {
     }
 
     public ArrayList<int[]> moveHandler(Tile tile, Tile[][] boardTiles, int moveNumber) {
+
+        if (tile == null || boardTiles == null) {
+            throw new IllegalArgumentException("Input cant be null");
+        }
 
         if (!(boardTiles.length == 8 && boardTiles[0].length == 8 && moveNumber >= 0))
             throw new IllegalArgumentException("Board size must be 8x8 and moveNumber must be greater than or equal to 0");
