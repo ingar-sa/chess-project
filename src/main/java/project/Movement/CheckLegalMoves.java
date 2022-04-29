@@ -371,18 +371,24 @@ public class CheckLegalMoves {
         
         /*
         EXPLANATION OF THE METHOD
-        This method validates that the loaded game position is valid according to the logic used to play the game.
-        Validating the string directly is much harder, therefore this method checks that game is in a legal state according to the game logic after loading a game.
-        This method will allow illegal chess positions, if they dont break the logic used in the program, and from the loaded position it will follow normal chess rules.
 
-        Exampels of positions that are allowed:
-        - The king can start at a chosen position, but there needs to be 1 white king and 1 black king, and the player not Moving cant be in check. 
-        - Pawns cant be placed at row 1 and 8.
+        This method validates that the loaded game position or that current position is valid according to the logic used to play the game.
+        The method makes sure that Tile[][] that are passed to checkforCheckmateAndPat() don't make the program crash uncontrolled. 
+
+        Since this method is quite lengthy, we decided to use it in Game as well, therefore its public. It might have been better to make two separate private methods, 
+        but in this case, we decided not to because of the size.
+
+        Validating the string directly when it comes to chess logic is quite hard.
+        Therefore, this method checks that game is in a legal state according to the game logic after loading a game.
+        This method will allow illegal chess positions, if they don’t break the logic used in the program, and from the loaded position it will follow normal chess rules.
+
+        Examples of positions that are allowed:
+        - The king can start at a chosen position, but there needs to be 1 white king and 1 black king, and the player not Moving can't be in check. 
+        - Pawns can't be placed at row 1 and 8.
         - And some other requirements that could/will break the game logic are checked.
         
         From this you can write your own chess positions as strings and make custom starts that follow normal chess rules from that point. 
         */
-
 
         int[] whiteKingLocation = new int[]{};
         int[] blackKingLocation = new int[]{};
