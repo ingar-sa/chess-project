@@ -165,7 +165,7 @@ public class ChessController implements Serializable {
             moveToPieceRow = 7 - moveToPieceRow;
 
             //If the player clicks on a piece of the same color, it is chosen as the new piece if it can perform any moves
-            if (game.allLegalPieces(moveToPieceRow, moveToPieceCol)) {
+        if (game.allLegalPieces(moveToPieceRow, moveToPieceCol)) {
                 legalMovesStrings = game.getLegalMoves(moveToPieceRow, moveToPieceCol);
                 if (legalMovesStrings.size() == 0) {
                     pieceHasBeenChosen = false;
